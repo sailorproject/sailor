@@ -33,3 +33,12 @@ http://mustache.github.io/
 http://flask.pocoo.org/
 
 http://pt.wikipedia.org/wiki/Erlang_(linguagem_de_programa%C3%A7%C3%A3o)
+
+sudo luarocks install LuaSocket
+sudo luarocks install luasec
+sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
+
+local page = sailor.init(bla)
+-- page contém o response para uso do render, e a função render!
+aí os contollers fazem page:render('myfile')
+

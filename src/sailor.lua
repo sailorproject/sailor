@@ -1,16 +1,16 @@
-local s = {}
+local sailor = {}
 local lp = require "lp"
-local request
+local response
 local path
 
-function s.init(r,p)
-	response = r
-	path = p
-	lp.setoutfunc("r:puts")
+function sailor.init(r,p)
+    response = r
+    path = p
+    lp.setoutfunc("r:puts")
 end
 
-function s.render(filename,parms) 
-	local fh = assert (io.open (path.."/views/"..filename..".lp", "rb"))
+function sailor.render(filename,parms) 
+    local fh = assert (io.open (path.."/views/"..filename..".lp", "rb"))
     local src = fh:read("*all")
     fh:close()
 
@@ -27,4 +27,4 @@ function s.render(filename,parms)
     f()
 end
 
-return s
+return sailor
