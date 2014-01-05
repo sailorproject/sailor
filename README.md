@@ -57,3 +57,27 @@ luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
 or
 luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/i386-linux-gnu
 ```
+
+### Using Sailor
+Go to /controllers and create your first controller! It should be a lua module. Name it whatever you want, our example is "site.lua". We will serve two pages, one accessible via <domain>/?r=site which will run site.index() by default and another one acessible via <domain>/?r=site/notindex.
+```
+local site = {}
+function site.index(page)
+  local foo = 'Hello world'
+  page:render('index',{foo=foo}) -- This will render /views/index.lp and pass the variable 'foo'
+end
+function site.notindex(page)
+  page:write('<b>Hey you!</b>')
+end
+return site
+```
+Go to /views and create your first page, our example is index.lp
+```
+<html>
+  <head><title>This is my first page!<title></head>
+  <body>
+    <%=foo%>
+  </body>
+</html>
+```
+For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates 
