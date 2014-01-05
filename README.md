@@ -27,12 +27,12 @@ Now you are ready to go!
 ```
 service apache2 restart
 ```
-Clone the contents of this repository in /var/www and access it at localhost/sailor
+Clone the contents of this repository to /var/www and access it at localhost/sailor
 
 
 #### Dependencies for the mailer module
 If you want to use our mailer module, however, you will need a couple more of tricks.
-Install LuaRocks and get some other modules so we are able to sent stuff via smtp
+Install LuaRocks and get some other modules so we are able to send stuff via smtp
 ```
 apt-get install luarocks
 luarocks install LuaSocket
