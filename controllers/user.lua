@@ -1,9 +1,7 @@
 local user = {}
 
-function user.index(sailor)
-
-	sailor.render('anotherpage')
-
+function user.index(page)
+	page:render('anotherpage')
 end
 
 return user

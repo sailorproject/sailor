@@ -1,16 +1,28 @@
 local sailor = {}
 local lp = require "lp"
-local response
-local path
+local lfs = require "lfs"
+
+local Page = {}
 
 function sailor.init(r,p)
-    response = r
-    path = p
+    local POST, POSTMULTI = r:parsebody()
+    local GET, GETMULTI = r:parseargs()
+    local page = {
+        r = r,
+        path = p,
+        render = Page.render,
+        write = function(_,...) r:write(...) end,
+        POST = POST,
+        GET = GET
+    }
+
     lp.setoutfunc("r:puts")
+
+    return page
 end
 
-function sailor.render(filename,parms) 
-    local fh = assert (io.open (path.."/views/"..filename..".lp", "rb"))
+function Page:render(filename,parms) 
+    local fh = assert (io.open (self.path.."/views/"..filename..".lp", "rb"))
     local src = fh:read("*all")
     fh:close()
 
@@ -21,34 +33,34 @@ function sailor.render(filename,parms)
     	parms = {}
     end
 
-    parms.r = response
+    parms.r = self.r
 
     setfenv(f,parms)
     f()
 end
 
-function sailor.route()
-    local GET, GETMULTI = response:parseargs()
-    local action, controller
+function sailor.route(page)
+    local GET, GETMULTI = page.r:parseargs()
+
     if GET['r'] ~= nil and GET['r'] ~= '' then
-        controller, action = string.match(GET['r'], "(%a+)/?(%a*)")
-        local route = lfs.attributes (path.."/controllers/"..controller..".lua")
+        local controller, action = string.match(GET['r'], "(%a+)/?(%a*)")
+        local route = lfs.attributes (page.path.."/controllers/"..controller..".lua")
 
         if not route then
-             response:write("error 404")       
+             page.r:write("error 404")       
         else
             local ctr = require(controller)
             if action == '' then
                 action = 'index'
             end
             if(ctr[action] == nil) then 
-                response:write('error 404')
+                page.r:write('error 404')
             else
-                ctr[action]()     
+                ctr[action](page)     
             end
         end
     else
-        sailor.render('default')
+        page:render('default')
     end
 
 end
