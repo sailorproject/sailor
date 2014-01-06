@@ -16,7 +16,7 @@ So far I have integrated with @mascarenhas's Lua Pages as a nice templater for v
 ### Installation for Debian-like systems
 Install apache2.4
 ```
-apt-get isntall apache2
+apt-get install apache2
 ```
 Some systems install apache2.2 by default, as Ubuntu, for example. You can get 2.4 by
 ```
