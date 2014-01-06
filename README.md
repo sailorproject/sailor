@@ -8,7 +8,7 @@ So far I have integrated with @mascarenhas's Lua Pages as a nice templater for v
 
 ### Directory tree info
 * /conf - configuration files
-* /constrollers - controllers!
+* /controllers - controllers!
 * /doc - this one is supposed to have documentation
 * /src - Lua modules with nice stuff
 * /views - this is where our .lp go
