@@ -49,7 +49,7 @@ luarocks install LuaSec
 ```
 LuaSec requires openssl as a dependency, if you don't already have it please install these and try getting luasec again
 ```
-apt-get install openssl libssql-dev
+apt-get install openssl libssl-dev
 ```
 If LuaSec can't find your openssl dir, try using these flags, depending on your system's architecture
 ```
