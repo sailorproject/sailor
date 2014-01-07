@@ -4,19 +4,24 @@ Sailor
 A Lua MVC Framework. www.sailorproject.org
 
 ### Development progress
-So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views and a mailer module. I'm now working on routes.
+So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module and routes. I'm now working on improving controller routes, getting sailor to connect with databases and building the M of your MVC.
 
 ### Directory tree info
 * /conf - configuration files
-* /constrollers - controllers!
+* /controllers - controllers!
 * /doc - this one is supposed to have documentation
 * /src - Lua modules with nice stuff
 * /views - this is where our .lp go
 
 ### Installation for Debian-like systems
+Install Lua 5.2
+```
+apt-get install lua5.2
+```
+
 Install apache2.4
 ```
-apt-get isntall apache2
+apt-get install apache2
 ```
 Some systems install apache2.2 by default, as Ubuntu, for example. You can get 2.4 by
 ```
@@ -49,7 +54,7 @@ luarocks install LuaSec
 ```
 LuaSec requires openssl as a dependency, if you don't already have it please install these and try getting luasec again
 ```
-apt-get install openssl libssql-dev
+apt-get install openssl libssl-dev
 ```
 If LuaSec can't find your openssl dir, try using these flags, depending on your system's architecture
 ```
@@ -81,3 +86,6 @@ Go to /views and create your first page, our example is index.lp
 </html>
 ```
 For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates 
+
+### Suggestions or questions
+dalcol@etiene.net
