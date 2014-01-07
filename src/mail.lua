@@ -34,12 +34,12 @@ function mail.sendMessage(to, subject, body)
     }
 
     local ok, err = smtp.send {
-        from = conf['smtp']['from'],
+        from = sailor.conf['smtp']['from'],
         rcpt = to,
         source = smtp.message(msg),
-        user = conf['smtp']['user'],
-        password = conf['smtp']['pass'],
-        server = conf['smtp']['server'],
+        user = sailor.conf['smtp']['user'],
+        password = sailor.conf['smtp']['pass'],
+        server = sailor.conf['smtp']['server'],
         port = 465,
         create = mail.sslCreate
     }
