@@ -4,7 +4,7 @@ Sailor
 A Lua MVC Framework. www.sailorproject.org
 
 ### Development progress
-So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module and routes. I'm now working on improving controller routes, getting sailor to connect with databases and build the M of your MVC.
+So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module and routes. I'm now working on improving controller routes, getting sailor to connect with databases and building the M of your MVC.
 
 ### Directory tree info
 * /conf - configuration files
