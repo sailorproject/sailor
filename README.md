@@ -14,6 +14,11 @@ So far I have integrated with @mascarenhas's Lua Pages as a nice templater for v
 * /views - this is where our .lp go
 
 ### Installation for Debian-like systems
+Install Lua 5.2
+```
+apt-get install lua5.2
+```
+
 Install apache2.4
 ```
 apt-get install apache2
