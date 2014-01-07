@@ -86,3 +86,6 @@ Go to /views and create your first page, our example is index.lp
 </html>
 ```
 For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates 
+
+### Suggestions or questions
+dalcol@etiene.net
