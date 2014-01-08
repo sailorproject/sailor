@@ -7,11 +7,12 @@ A Lua MVC Framework. www.sailorproject.org
 So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module and routes. I'm now working on improving controller routes, getting sailor to connect with databases and building the M of your MVC.
 
 ### Directory tree info
-* /conf - configuration files
-* /controllers - controllers!
+* /conf - configuration files, open and edit them.
+* /controllers - controllers you will make!
 * /doc - this one is supposed to have documentation
-* /src - Lua modules with nice stuff
-* /views - this is where our .lp go
+* /models - models you will make!
+* /src - Lua modules with nice stuff from sailor and other places.
+* /views - this is where your lua pages in .lp will go
 
 ### Installation for Debian-like systems
 Install Lua 5.2
