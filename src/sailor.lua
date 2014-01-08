@@ -1,8 +1,8 @@
 sailor = {
-    conf = require "conf"
+    conf = require "conf.conf"
 }
 
-local lp = require "lp"
+local lp = require "src.lp"
 local lfs = require "lfs"
 local Page = {}
 
@@ -51,7 +51,7 @@ function sailor.route(page)
         if not route then
              page.r:write("error 404")       
         else
-            local ctr = require(controller)
+            local ctr = require("controllers."..controller)
 
             if action == '' then
                 action = 'index'
@@ -69,7 +69,7 @@ function sailor.route(page)
 end
 
 function sailor.new(model)
-    local obj = require(model):new()
+    local obj = require("models."..model):new()
     return obj
 end
 

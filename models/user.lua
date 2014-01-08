@@ -1,4 +1,4 @@
-local model = require "model"
+local model = require "src.model"
 local user = {}
 
 -- Attributes, this will be used for better validation

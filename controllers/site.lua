@@ -1,6 +1,6 @@
 local site = {}
 
-local mail = require "mail"
+local mail = require "src.mail"
 
 function site.index(page)
 	local stringVariable = 'this variable is being passed from a "controller" to a "view"!'

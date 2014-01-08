@@ -1,7 +1,5 @@
 local path = ((debug.getinfo(1, 'S').source):match("^@?(.-)/index.lua$"))
-package.path = package.path .. ";"..path.."/src/?.lua;"..path.."/conf/?.lua;"..path.."/controllers/?.lua;"..path.."/models/?.lua" 
-require "sailor"
-
+require "src.sailor"
 function handle(r)
 	r.content_type = "text/html"
 
