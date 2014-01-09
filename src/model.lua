@@ -25,22 +25,35 @@ function model:save()
 
 	local attrs = {}
 	local values = {}
-    for attr,attr_type in pairs(attributes) do
-    	table.insert(attrs,attr)
-    	if not self[attr] then
-    		table.insert(values,"null")
-    	elseif attr_type == 'number' then
-    		table.insert(values,self[attr])
-    	else
-    		table.insert(values,"'"..self[attr].."'")
-    	end
-    end
-    attr_string = table.concat (attrs, ',')
-    value_string = table.concat (values, ',')
-	
+	for attr,attr_type in pairs(attributes) do
+		table.insert(attrs,attr)
+		if not self[attr] then
+			table.insert(values,"null")
+		elseif attr_type == 'number' then
+			table.insert(values,self[attr])
+		else
+			table.insert(values,"'"..self[attr].."'")
+		end
+	end
+	attr_string = table.concat (attrs, ',')
+	value_string = table.concat (values, ',')
+
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..");"
-	
+
 	return (db.query(query) ~= 0)
+end
+
+function model:find(id)
+	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..id.."';")
+	local res = {}
+	local row = cur:fetch ({}, "a")
+	cur:close()
+	if row then
+		local obj = self:new(row)
+		return obj
+	else
+		error("Not found")
+	end
 end
 
 function model:find_all()
