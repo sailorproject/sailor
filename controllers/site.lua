@@ -22,7 +22,7 @@ function site.index(page)
     local users = User:find_all()
 	for _, user in pairs(users) do 
         page:write(user.id.." - "..user.name.."<br/>")
-    end]]
+    end
 
 
     page:write("Finding user with id 1:<br/>")
@@ -32,7 +32,7 @@ function site.index(page)
     page:write("Finding user with id 47:<br/>")
     local some_user = User:find(47)
     page:write(some_user.id.." - "..some_user.name.."<br/>")
-
+	]]
 
 	if page.POST['email'] ~= nil then
 		mail.send_message("<test@example.com>","Yay! Somebody sent an email using your form!","This is the email: "..page.POST['email'])
