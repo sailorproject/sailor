@@ -6,6 +6,7 @@ function site.index(page)
 	local stringVariable = 'this variable is being passed from a "controller" to a "view"!'
     local anotherVar = 2342
 
+
     --[[
     	--Testing models
 	    local u = sailor.new("user")

@@ -39,6 +39,8 @@ sudo luarocks install luasec
 sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
 sudo luarocks install filesystem
 
+sudo luarocks install LuaSQL-MySQL MYSQL_INCDIR=/usr/include/mysql
+
 
 local page = sailor.init(bla)
 -- page contém o response para uso do render, e a função render!
