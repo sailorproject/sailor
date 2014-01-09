@@ -8,21 +8,18 @@ function site.index(page)
 
 
     --[[
-    	--Testing models
-	    local u = sailor.new("user")
-	    u.name = "234"
-		page:write(u.name) 
-		local u2 = sailor.new("user")
-	    u2.name = "567"
-		page:write(u2.name)  
-		page:write(u.name) 
-		u.test = function() return "jfjsdf" end
-		page:write(u.test())
-		page:write(u2.test())
-	]]
-	--[[page:write("All users:<br/>")
-	local User = sailor.model("user")
-	local users = User:find_all()
+    --Testing models
+    local User = sailor.model("user")
+    local u = User:new()
+
+    u.name = "fulana"
+    u.password = "blah"
+
+    if(u:save()) then
+    	page:write("saved!<br/>")
+    end
+
+    local users = User:find_all()
 	for _, user in pairs(users) do 
         page:write(user.id.." - "..user.name.."<br/>")
     end]]

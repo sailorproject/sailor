@@ -20,7 +20,27 @@ end
 
 
 function model:save()
-	--todo
+	local key = self.db.key
+	local attributes = self.attributes
+
+	local attrs = {}
+	local values = {}
+    for attr,attr_type in pairs(attributes) do
+    	table.insert(attrs,attr)
+    	if not self[attr] then
+    		table.insert(values,"null")
+    	elseif attr_type == 'number' then
+    		table.insert(values,self[attr])
+    	else
+    		table.insert(values,"'"..self[attr].."'")
+    	end
+    end
+    attr_string = table.concat (attrs, ',')
+    value_string = table.concat (values, ',')
+	
+	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..");"
+	
+	return (db.query(query) ~= 0)
 end
 
 function model:find_all()
@@ -30,8 +50,8 @@ function model:find_all()
 	local row = cur:fetch ({}, "a")
 	while row do
 		res[row[key]] = {}
-		for attribute,_ in pairs(self.attributes) do 
-			res[row[key]][attribute] = row[attribute]
+		for attr,_ in pairs(self.attributes) do 
+			res[row[key]][attr] = row[attr]
 		end
 		row = cur:fetch (row, "a")
 	end
