@@ -1,4 +1,5 @@
 local model = {}
+local db = require "src.db"
 
 function model:new(obj)
 	obj = obj or {}
@@ -20,6 +21,22 @@ end
 
 function model:save()
 	--todo
+end
+
+function model:find_all()
+	local key = self.db.key
+	local cur = db.query("select * from "..self.db.table..";")
+	local res = {}
+	local row = cur:fetch ({}, "a")
+	while row do
+		res[row[key]] = {}
+		for attribute,_ in pairs(self.attributes) do 
+			res[row[key]][attribute] = row[attribute]
+		end
+		row = cur:fetch (row, "a")
+	end
+	cur:close()
+	return res
 end
 
 return model

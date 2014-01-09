@@ -1,6 +1,5 @@
 sailor = {
     conf = require "conf.conf",
-    db = require "src.db"
 }
 
 local lp = require "src.lp"
@@ -74,5 +73,8 @@ function sailor.new(model)
     return obj
 end
 
+function sailor.model(model)
+    return sailor.new(model)
+end
 
 

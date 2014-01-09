@@ -4,7 +4,7 @@ local conf = require("conf.conf").db
 local luasql = require "luasql.mysql"
 
 local function connect()
-	env = assert (luasql.mysql())
+	env = assert (luasql[conf.driver]())
 	con = assert (env:connect(conf.dbname,conf.user,conf.pass,conf.host))
 end
 
@@ -15,8 +15,9 @@ end
 
 function db.query(query)
 	connect()
-	con:execute(query)
+	local cur = assert(con:execute(query))
 	close()
+	return cur
 end
 
 return db
