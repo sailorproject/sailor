@@ -73,6 +73,7 @@ function sailor.new(model)
     return obj
 end
 
+--Why another function that does the same thing? Beause I think it's ugly to use :new to just to find stuff
 function sailor.model(model)
     return sailor.new(model)
 end

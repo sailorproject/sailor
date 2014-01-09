@@ -5,8 +5,9 @@ local smtp = require 'socket.smtp'
 local ssl = require 'ssl'
 local https = require 'ssl.https'
 local ltn12 = require 'ltn12'
+local conf = require('conf.conf').smtp
 
-function mail.sslCreate()
+function mail.ssl_create()
     local sock = socket.tcp()
     return setmetatable({
         connect = function(_, host, port)
@@ -24,7 +25,7 @@ function mail.sslCreate()
     })
 end
 
-function mail.sendMessage(to, subject, body)
+function mail.send_essage(to, subject, body)
     local msg = {
         headers = {
             to = to,
@@ -34,20 +35,18 @@ function mail.sendMessage(to, subject, body)
     }
 
     local ok, err = smtp.send {
-        from = sailor.conf['smtp']['from'],
+        from = conf.from,
         rcpt = to,
         source = smtp.message(msg),
-        user = sailor.conf['smtp']['user'],
-        password = sailor.conf['smtp']['pass'],
-        server = sailor.conf['smtp']['server'],
+        user = conf.user,
+        password = conf.pass,
+        server = conf.server,
         port = 465,
-        create = mail.sslCreate
+        create = mail.ssl_create
     }
     if not ok then
         print("Mail send failed", err) -- better error handling required
     end
 end
- 
-
 
 return mail

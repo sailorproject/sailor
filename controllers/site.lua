@@ -20,15 +20,15 @@ function site.index(page)
 		page:write(u.test())
 		page:write(u2.test())
 	]]
-
 	--[[page:write("All users:<br/>")
-	local users = sailor.model("user"):find_all()
+	local User = sailor.model("user")
+	local users = User:find_all()
 	for _, user in pairs(users) do 
         page:write(user.id.." - "..user.name.."<br/>")
     end]]
 
 	if page.POST['email'] ~= nil then
-		mail.sendMessage("<test@example.com>","Yay! Somebody sent an email using your form!","This is the email: "..page.POST['email'])
+		mail.send_message("<test@example.com>","Yay! Somebody sent an email using your form!","This is the email: "..page.POST['email'])
 	end 
 
     page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
