@@ -11,7 +11,7 @@
 			var = 'this will print if "test" variable is true'
 		?>
 		<br>
-		<? --[[if POST['email'] ~= nil then	
+		<? --[[if POST['email'] ~= nil then
 			local email = POST['email']
 		?>
 		<%=email%>

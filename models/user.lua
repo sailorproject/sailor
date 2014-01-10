@@ -6,7 +6,7 @@ local user = {}
 user.attributes = {
 	id = 'number',
 	name = 'string',
-	password = 'string',	
+	password = 'string',
 }
 
 user.db = {
@@ -16,6 +16,5 @@ user.db = {
 
 -- Public Methods
 function user.test() return "test" end
-
 
 return model:new(user)
