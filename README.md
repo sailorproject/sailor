@@ -4,7 +4,7 @@ Sailor
 A Lua MVC Framework. www.sailorproject.org
 
 ### Development progress
-So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module and routes. I'm now working on improving controller routes, getting sailor to connect with databases and building the M of your MVC.
+So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module,  routes and basic models. I'm now working on how our models are related to a database.
 
 ### Directory tree info
 * /conf - configuration files, open and edit them.
@@ -44,12 +44,21 @@ service apache2 restart
 ```
 Clone the contents of this repository to /var/www and access it at localhost/sailor
 
+#### Dependencies for persisting models
+If you want to save your models in a database, you will need LuaSQL. I believe it should work with every db LuaSQL supports but so far I have only tested with MySQL. Install luarocks and get these rocks. LuaSQL-MySQL requires you to have mysql installed.
+```
+apt-get install luarocks
+luarocks install LuaSQL-MySQL
+```
+If LuaSQL-MySQL can't find its dir, try using these flags and specify MySQL dir.
+```
+luarocks install LuaSQL-MySQL MYSQL_INCDIR=/usr/include/mysql
+```
 
 #### Dependencies for the mailer module
 If you want to use our mailer module, however, you will need a couple more of tricks.
-Install LuaRocks and get some other modules so we are able to send stuff via SMTP.
+Get these rocks with luarocks so we are able to send stuff via SMTP.
 ```
-apt-get install luarocks
 luarocks install LuaSocket
 luarocks install LuaSec
 ```
@@ -57,7 +66,7 @@ LuaSec requires openssl as a dependency, if you don't already have it please ins
 ```
 apt-get install openssl libssl-dev
 ```
-If LuaSec can't find your openssl dir, try using these flags, depending on your system's architecture
+If LuaSec can't find your openssl dir, try using these flags, depending on your system's architecture.
 ```
 luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
 or
@@ -70,7 +79,11 @@ Go to /controllers and create your first controller! It should be a lua module. 
 local site = {}
 function site.index(page)
   local foo = 'Hello world'
-  page:render('index',{foo=foo}) -- This will render /views/index.lp and pass the variable 'foo'
+  local User = sailor.model("user")
+  local u = User:new()
+  u.name = "etiene"
+  u:save()
+  page:render('index',{foo=foo,name=u.name}) -- This will render /views/index.lp and pass the variable 'foo' and 'name'
 end
 function site.notindex(page)
   page:write('<b>Hey you!</b>')
@@ -82,7 +95,8 @@ Go to /views and create your first page, our example is index.lp
 <html>
   <head><title>This is my first page!<title></head>
   <body>
-    <%=foo%>
+    <%=foo%><br/>
+    Hi, <%=name%>
   </body>
 </html>
 ```
