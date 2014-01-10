@@ -32,7 +32,7 @@ function Page:render(filename,parms)
     
     local f = loadstring(string)
     if not parms then
-    	parms = {}
+        parms = {}
     end
 
     parms.r = self.r
@@ -49,13 +49,14 @@ function sailor.route(page)
         local route = lfs.attributes (page.path.."/controllers/"..controller..".lua")
 
         if not route then
-             page.r:write("error 404")       
+             page.r:write("error 404")
         else
             local ctr = require("controllers."..controller)
 
             if action == '' then
                 action = 'index'
             end
+
             if(ctr[action] == nil) then 
                 page.r:write('error 404')
             else
@@ -77,5 +78,4 @@ end
 function sailor.model(model)
     return sailor.new(model)
 end
-
 
