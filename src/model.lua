@@ -84,8 +84,7 @@ function model:update()
 	return (db.query(query) ~= 0)
 end
 
-function model:find(id)
-	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..id.."';")
+function model:fetch_object(cur)
 	local row = cur:fetch ({}, "a")
 	cur:close()
 	if row then
@@ -96,9 +95,24 @@ function model:find(id)
 	end
 end
 
-function model:find_all()
+function model:find_by_id(id)
+	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..id.."';")
+	return self:fetch_object(cur)
+end
+
+function model:find(where_string)
+	local cur = db.query("select * from "..self.db.table.." where "..where_string..";")
+	return self:fetch_object(cur)
+end
+
+function model:find_all(where_string)
 	local key = self.db.key
-	local cur = db.query("select * from "..self.db.table..";")
+	if where_string then
+		where_string = " where "..where_string
+	else
+		where_string = ''
+	end
+	local cur = db.query("select * from "..self.db.table..where_string..";")
 	local res = {}
 	local row = cur:fetch ({}, "a")
 	while row do
