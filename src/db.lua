@@ -20,4 +20,17 @@ function db.query(query)
 	return cur
 end
 
+function db.query_query(q1,q2)
+	connect()
+	local res
+	local rows = assert(con:execute(q1))
+	if rows == 0 then
+		res = 0
+	else
+		res = assert(con:execute(q2))
+	end
+	close()
+	return res
+end
+
 return db

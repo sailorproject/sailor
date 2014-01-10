@@ -18,8 +18,16 @@ function model:new(obj)
 	return obj
 end
 
-
 function model:save()
+	local id = self[self.db.key]
+	if not id or not self:find(id) then
+		return self:insert()
+	else
+		return self:update()
+	end
+end
+
+function model:insert()
 	local key = self.db.key
 	local attributes = self.attributes
 
@@ -35,24 +43,56 @@ function model:save()
 			table.insert(values,"'"..self[attr].."'")
 		end
 	end
-	attr_string = table.concat (attrs, ',')
-	value_string = table.concat (values, ',')
+	local attr_string = table.concat (attrs, ',')
+	local value_string = table.concat (values, ',')
 
-	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..");"
+	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
+	local query_id = "select @@IDENTITY as id;"
+	local cur = db.query_query(query,query_id)
+	local row = cur:fetch ({},"a")
+	cur:close()
+	if row then
+		if self.attributes[self.db.key] == 'number' then
+			row.id = tonumber(row.id)
+		end
+		self[self.db.key] = row.id
+	else
+		return false
+	end
+
+	return true
+end
+
+function model:update()
+	local attributes = self.attributes
+	local key = self.db.key
+	local updates = {}
+	for attr,attr_type in pairs(attributes) do
+		local string = attr.."="
+		if not self[attr] then
+			string = sting.."null"
+		elseif attr_type == 'number' then
+			string = string..self[attr]
+		else
+			string = string.."'"..self[attr].."'"
+		end
+		table.insert(updates,string)
+	end
+	local update_string = table.concat (updates, ', ')
+	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = '"..self[key].."';"
 
 	return (db.query(query) ~= 0)
 end
 
 function model:find(id)
 	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..id.."';")
-	local res = {}
 	local row = cur:fetch ({}, "a")
 	cur:close()
 	if row then
 		local obj = self:new(row)
 		return obj
 	else
-		error("Not found")
+		return false
 	end
 end
 
@@ -62,10 +102,11 @@ function model:find_all()
 	local res = {}
 	local row = cur:fetch ({}, "a")
 	while row do
-		res[row[key]] = {}
+		local obj = {}
 		for attr,_ in pairs(self.attributes) do 
-			res[row[key]][attr] = row[attr]
+			obj[attr] = row[attr]
 		end
+		res[row[key]] = self:new(obj)
 		row = cur:fetch (row, "a")
 	end
 	cur:close()

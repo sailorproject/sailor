@@ -9,23 +9,35 @@ function site.index(page)
 
     
     --Testing models
-    --[[local User = sailor.model("user")
+    local User = sailor.model("user")
     local u = User:new()
 
-    u.name = "fulana"
+    u.name = "jorge"
     u.password = "blah"
 
     if(u:save()) then
-    	page:write("saved!<br/>")
+    	page:write("saved! "..u.id.."<br/>")
     end
+
+
 
     local users = User:find_all()
 	for _, user in pairs(users) do 
         page:write(user.id.." - "..user.name.."<br/>")
     end
 
+    u.name = "roberto"
+     if(u:save()) then
+    	page:write("saved! "..u.id.."<br/>")
+    end
 
-    page:write("Finding user with id 1:<br/>")
+      local users = User:find_all()
+	for _, user in pairs(users) do 
+        page:write(user.id.." - "..user.name.."<br/>")
+    end
+
+
+    --[[page:write("Finding user with id 1:<br/>")
     local some_user = User:find(1)
     page:write(some_user.id.." - "..some_user.name.."<br/>")
 
