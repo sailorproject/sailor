@@ -127,6 +127,14 @@ function model:find_all(where_string)
 	return res
 end
 
+function model:delete()
+	local id = self[self.db.key]
+	if id and self:find(id) then
+		return (db.query("delete from "..self.db.table.." where "..self.db.key.."='"..id.."';") ~= 0)
+	end
+	return false
+end
+
 return model
 
 
