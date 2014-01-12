@@ -85,12 +85,11 @@ function sailor.route(page)
 end
 
 function sailor.new(model)
-    local obj = require("models."..model):new()
-    return obj
+    return sailor.model(model):new()
 end
 
---Why another function that does the same thing? Beause I think it's ugly to use :new to just to find stuff
 function sailor.model(model)
-    return sailor.new(model)
+    local model = require("models."..model)
+    return model
 end
 

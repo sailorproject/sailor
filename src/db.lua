@@ -3,25 +3,35 @@ local env,con
 local conf = require("conf.conf").db
 local luasql = require "luasql.mysql"
 
-local function connect()
+function db.connect()
 	env = assert (luasql[conf.driver]())
 	con = assert (env:connect(conf.dbname,conf.user,conf.pass,conf.host))
 end
 
-local function close()
+function db.close()
 	con:close()
 	env:close()
 end
 
 function db.query(query)
-	connect()
 	local cur = assert(con:execute(query))
-	close()
 	return cur
 end
 
+function db.escape(q)
+	if type(q) == "string" then
+		q = con:escape(q)
+		return q
+	elseif type(q) == "table" then
+		for k,v in pairs(q) do 
+			q[k] = con:escape(v)
+		end
+		return 
+	end
+	return q
+end
+
 function db.query_query(q1,q2)
-	connect()
 	local res
 	local rows = assert(con:execute(q1))
 	if rows == 0 then
@@ -29,15 +39,12 @@ function db.query_query(q1,q2)
 	else
 		res = assert(con:execute(q2))
 	end
-	close()
 	return res
 end
 
 function db.query_insert(query)
-	connect()
 	assert(con:execute(query))
 	local id = con:getlastautoid()
-	close()
 	return id
 end
 

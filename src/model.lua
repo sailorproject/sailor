@@ -1,7 +1,7 @@
 local model = {}
 local db = require "src.db"
 
---Warning: this is a tech preview and this model class does not avoid SQL injections yet.
+--Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
 	obj = obj or {}
 	setmetatable(obj,self)
@@ -29,6 +29,7 @@ function model:save()
 end
 
 function model:insert()
+	db.connect()
 	local key = self.db.key
 	local attributes = self.attributes
 
@@ -41,7 +42,7 @@ function model:insert()
 		elseif attr_type == 'number' then
 			table.insert(values,self[attr])
 		else
-			table.insert(values,"'"..self[attr].."'")
+			table.insert(values,"'"..db.escape(self[attr]).."'")
 		end
 	end
 	local attr_string = table.concat (attrs, ',')
@@ -53,11 +54,12 @@ function model:insert()
 		id = tonumber(id)
 	end
 	self[self.db.key] = id
-
+	db.close()
 	return true
 end
 
 function model:update()
+	db.connect()
 	local attributes = self.attributes
 	local key = self.db.key
 	local updates = {}
@@ -68,14 +70,16 @@ function model:update()
 		elseif attr_type == 'number' then
 			string = string..self[attr]
 		else
-			string = string.."'"..self[attr].."'"
+			string = string.."'"..db.escape(self[attr]).."'"
 		end
 		table.insert(updates,string)
 	end
 	local update_string = table.concat (updates, ', ')
-	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = '"..self[key].."';"
+	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = "..db.escape(self[key])..";"
 
-	return (db.query(query) ~= 0)
+	local u = (db.query(query) ~= 0)
+	db.close()
+	return u
 end
 
 function model:fetch_object(cur)
@@ -90,16 +94,25 @@ function model:fetch_object(cur)
 end
 
 function model:find_by_id(id)
-	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..id.."';")
-	return self:fetch_object(cur)
+	db.connect()
+	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';")
+	local f = self:fetch_object(cur)
+	db.close()
+	return f
 end
 
 function model:find(where_string)
+	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
+	db.connect()
 	local cur = db.query("select * from "..self.db.table.." where "..where_string..";")
-	return self:fetch_object(cur)
+	local f = self:fetch_object(cur)
+	db.close()
+	return f
 end
 
 function model:find_all(where_string)
+	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
+	db.connect()
 	local key = self.db.key
 	if where_string then
 		where_string = " where "..where_string
@@ -118,14 +131,19 @@ function model:find_all(where_string)
 		row = cur:fetch (row, "a")
 	end
 	cur:close()
+	db.close()
 	return res
 end
 
 function model:delete()
+	db.connect()
 	local id = self[self.db.key]
 	if id and self:find(id) then
-		return (db.query("delete from "..self.db.table.." where "..self.db.key.."='"..id.."';") ~= 0)
+		local d = (db.query("delete from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';") ~= 0)
+		db.close()
+		return d
 	end
+	db.close()
 	return false
 end
 
