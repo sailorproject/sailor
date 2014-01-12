@@ -7,13 +7,13 @@ function site.index(page)
     local anotherVar = 2342
 
     --Testing models
-    --[[local User = sailor.model("user")
+    --[[ local User = sailor.model("user")
     local u = User:new()
 
     u.name = "francisco"
     u.password = "blah"
 
-    if(u:save()) then
+    if u:save() then
         page:write("saved! "..u.id.."<br/>")
     end
 

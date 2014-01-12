@@ -48,18 +48,11 @@ function model:insert()
 	local value_string = table.concat (values, ',')
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
-	local query_id = "select @@IDENTITY as id;"
-	local cur = db.query_query(query,query_id)
-	local row = cur:fetch ({},"a")
-	cur:close()
-	if row then
-		if self.attributes[self.db.key] == 'number' then
-			row.id = tonumber(row.id)
-		end
-		self[self.db.key] = row.id
-	else
-		return false
+	local id = db.query_insert(query)
+	if self.attributes[self.db.key] == 'number' and type(id) ~= 'number' then
+		id = tonumber(id)
 	end
+	self[self.db.key] = id
 
 	return true
 end

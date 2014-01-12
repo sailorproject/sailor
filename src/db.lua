@@ -33,4 +33,12 @@ function db.query_query(q1,q2)
 	return res
 end
 
+function db.query_insert(query)
+	connect()
+	assert(con:execute(query))
+	local id = con:getlastautoid()
+	close()
+	return id
+end
+
 return db
