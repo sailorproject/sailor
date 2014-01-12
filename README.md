@@ -4,7 +4,7 @@ Sailor
 A Lua MVC Framework. www.sailorproject.org
 
 ### Development progress
-So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module,  routes and basic models. I'm now working on how our models are related to a database.
+So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module,  routes and basic models. I'm now working on how our models are related to a database. More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
 
 ### Directory tree info
 * /conf - configuration files, open and edit them.
@@ -75,7 +75,7 @@ luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/i386-linux-gnu
 
 ### Using Sailor
 Go to /controllers and create your first controller! It should be a lua module. Name it whatever you want, our example is "site.lua". We will serve two pages, one accessible via <domain>/?r=site which will run site.index() by default and another one acessible via <domain>/?r=site/notindex.
-```
+```lua
 local site = {}
 function site.index(page)
   local foo = 'Hello world'
@@ -83,6 +83,7 @@ function site.index(page)
   local u = User:new()
   u.name = "etiene"
   u:save()
+  -- Warning: this is a tech preview and the model class does not avoid SQL injections yet.
   page:render('index',{foo=foo,name=u.name}) -- This will render /views/index.lp and pass the variable 'foo' and 'name'
 end
 function site.notindex(page)
@@ -91,7 +92,7 @@ end
 return site
 ```
 Go to /views and create your first page, our example is index.lp
-```
+```html
 <html>
   <head><title>This is my first page!<title></head>
   <body>

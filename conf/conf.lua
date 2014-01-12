@@ -12,8 +12,7 @@ local conf = {
 		pass = '',
 		from = ''
 	}
-
-
 }
+
 return conf
 

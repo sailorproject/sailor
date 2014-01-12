@@ -1,6 +1,7 @@
 local model = {}
 local db = require "src.db"
 
+--Warning: this is a tech preview and this model class does not avoid SQL injections yet.
 function model:new(obj)
 	obj = obj or {}
 	setmetatable(obj,self)
@@ -136,5 +137,4 @@ function model:delete()
 end
 
 return model
-
 
