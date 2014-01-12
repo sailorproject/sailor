@@ -29,15 +29,21 @@ function Page:render(filename,parms)
     fh:close()
 
     local string = lp.translate(src)
-    
-    local f = loadstring(string)
+
     if not parms then
     	parms = {}
     end
 
     parms.r = self.r
 
-    setfenv(f,parms)
+    local f
+    if _VERSION == "Lua 5.1" then 
+        f = loadstring(string,'@'..filename)
+        setfenv(f,parms)
+    else
+        f = load(string,'@'..filename,'t',parms)
+    end
+
     f()
 end
 
