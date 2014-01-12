@@ -6,18 +6,18 @@ function site.index(page)
     local stringVariable = 'this variable is being passed from a "controller" to a "view"!'
     local anotherVar = 2342
 
-    --Testing models
+    --Testing Models
     --[[
     local User = sailor.model("user")
     local u = User:new()
 
-    u.name = "etiene"
+    u.name = "maria"
     u.password = "1234"
 
     if u:save() then
         page:write("saved! "..u.id.."<br/>")
     end
-
+     
     -- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
     local u2 = User:find("name ='francisco'")
 
@@ -29,14 +29,12 @@ function site.index(page)
     for _, user in pairs(users) do 
         page:write(user.id.." - "..user.name.."<br/>")
     end
-   
-
-   
+      
     u.name = "catarina"
     if u:save() then
         page:write("saved! "..u.id.."<br/>")
     end
-     
+
     local users = User:find_all()
     for _, user in pairs(users) do 
         page:write(user.id.." - "..user.name.."<br/>")
@@ -54,7 +52,8 @@ function site.index(page)
         page:write(some_user.id.." - "..some_user.name.."<br/>")
     else
         page:write("User not found!")
-    end]]
+    end
+    ]]
 
     if page.POST['email'] ~= nil then
         mail.send_message("<test@example.com>","Yay! Somebody sent an email using your form!","This is the email: "..page.POST['email'])
