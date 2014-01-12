@@ -14,11 +14,12 @@ function sailor.init(r,p)
         path = p,
         render = Page.render,
         write = function(_,...) r:write(...) end,
+        puts = function(_,...) r:puts(...) end,
         POST = POST,
         GET = GET
     }
 
-    lp.setoutfunc("r:puts")
+    lp.setoutfunc("page:puts")
 
     return page
 end
@@ -34,7 +35,7 @@ function Page:render(filename,parms)
         parms = {}
     end
 
-    parms.r = self.r
+    parms.page = self
 
     local f
     if _VERSION == "Lua 5.1" then 
