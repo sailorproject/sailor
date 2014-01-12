@@ -1,10 +1,11 @@
-sailor = {
-    conf = require "conf.conf",
-}
+sailor = {}
+
+
 
 local lp = require "src.lp"
 local lfs = require "lfs"
 local Page = {}
+local conf = require "conf.conf"
 
 function sailor.init(r,p)
     local POST, POSTMULTI = r:parsebody()
@@ -56,7 +57,7 @@ function sailor.route(page)
         local route = lfs.attributes (page.path.."/controllers/"..controller..".lua")
 
         if not route then
-             page.r:write("error 404")
+            return false
         else
             local ctr = require("controllers."..controller)
 
@@ -65,15 +66,22 @@ function sailor.route(page)
             end
 
             if(ctr[action] == nil) then 
-                page.r:write('error 404')
+                return false
             else
                 ctr[action](page)
             end
         end
     else
-        page:render('default')
+        if conf.sailor.default_static then
+            page:render(conf.sailor.default_static)
+            return true
+        elseif conf.sailor.default_controller and conf.sailor.default_action then
+            local ctr = require("controllers."..conf.sailor.default_controller)
+            ctr[conf.sailor.default_action](page)
+            return true
+        end
     end
-
+    return false
 end
 
 function sailor.new(model)
