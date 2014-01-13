@@ -1,7 +1,13 @@
+--- DB module for connecting and querying
+
 local db = {env,con}
 local conf = require("conf.conf").db
 local luasql = require "luasql.mysql"
 
+
+--- Creates an instance of a db.
+-- @param obj table: if given, is used to store the object
+-- @return table or (nil, string): the object
 function db:new(obj)
 	obj = obj or {}
 	setmetatable(obj,self)
@@ -9,21 +15,30 @@ function db:new(obj)
 	return obj
 end
 
+-- Creates the connection of the instance
 function db:connect()
 	self.env = assert (luasql[conf.driver]())
 	self.con = assert (self.env:connect(conf.dbname,conf.user,conf.pass,conf.host))
 end
 
+-- Closes the connection of the instance
 function db:close()
 	self.con:close()
 	self.env:close()
 end
 
+-- Runs a query
+-- @param query string: the query to be executed
+-- @return table: a cursor 
 function db:query(query)
 	local cur = assert(self.con:execute(query))
 	return cur
 end
 
+-- Escapes a string or a table (its values). Should be used before concatenating strings on a query.
+-- @param q string or table: the string or table to be escaped
+-- @return string or nil: if q is a string, returns the new escaped string. If q is a table
+--							it simply returns, since it already escaped the table's values 
 function db:escape(q)
 	if type(q) == "string" then
 		q = self.con:escape(q)
@@ -37,7 +52,14 @@ function db:escape(q)
 	return q
 end
 
-function db:query_query(q1,q2)
+
+--- Runs two queries and returns the result of the second query.
+-- It is no longer in use. It was used by src.model to insert and obtain the last id.
+-- It is now replaced by query_insert but it's still a valid method that could be used again.
+-- @param q1 string: first query to be executed
+-- @param q2 string: second query to be executed
+-- return table: the result of the second execution
+--[[function db:query_query(q1,q2)
 	local res
 	local rows = assert(self.con:execute(q1))
 	if rows == 0 then
@@ -46,8 +68,12 @@ function db:query_query(q1,q2)
 		res = assert(self.con:execute(q2))
 	end
 	return res
-end
+end]]
 
+--- Runs a query and returns the id of the last inserted row. Used for saving 
+-- a model and obtaining the model id.
+-- @param query string: the query to be executed
+-- return number or string: the id of the last inserted row.
 function db:query_insert(query)
 	assert(self.con:execute(query))
 	local id = self.con:getlastautoid()
