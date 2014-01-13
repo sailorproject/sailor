@@ -1,1 +1,0 @@
-This is the default page. You will find it in /views/default.lp

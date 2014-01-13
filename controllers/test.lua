@@ -1,9 +1,7 @@
-local site = {}
+local test = {}
 
-local mail = require "src.mail"
-
-function site.index(page)
-    local stringVariable = 'this variable is being passed from a "controller" to a "view"!'
+function test.index(page)
+	local stringVariable = 'this variable is being passed from a "controller" to a "view"!'
     local anotherVar = 2342
 
     --Testing Models
@@ -62,12 +60,8 @@ function site.index(page)
     page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
 end
 
-function site.people(page)
-    page:write("hahaha")
+function test.notindex(page)
+	page:write("Hello World!")
 end
 
-function site.notindex(page)
-    page:render('test/test')
-end
-
-return site
+return test

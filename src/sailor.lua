@@ -26,7 +26,12 @@ function sailor.init(r,p)
 end
 
 function Page:render(filename,parms) 
-    local fh = assert (io.open (self.path.."/views/"..filename..".lp", "rb"))
+    local dir = ''
+    if self.controller then
+        dir = '/'..self.controller
+    end
+
+    local fh = assert (io.open (self.path.."/views"..dir.."/"..filename..".lp", "rb"))
     local src = fh:read("*all")
     fh:close()
 
@@ -60,15 +65,16 @@ function sailor.route(page)
             return false
         else
             local ctr = require("controllers."..controller)
+            page.controller = controller
 
             if action == '' then
                 action = 'index'
             end
-
             if(ctr[action] == nil) then 
                 return false
             else
                 ctr[action](page)
+                return true
             end
         end
     else
@@ -76,7 +82,8 @@ function sailor.route(page)
             page:render(conf.sailor.default_static)
             return true
         elseif conf.sailor.default_controller and conf.sailor.default_action then
-            local ctr = require("controllers."..conf.sailor.default_controller)
+            page.controller = conf.sailor.default_controller
+            local ctr = require("controllers."..page.controller)
             ctr[conf.sailor.default_action](page)
             return true
         end
