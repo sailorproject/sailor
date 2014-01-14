@@ -28,6 +28,15 @@ end
 function test.models(page)
 	--Testing Models
     --[[
+		I'm using 'User' model for testing under a mysql db.	
+		If you want to check it out, you need to create this table:
+
+		create table user(
+			id int primary key auto_increment, 
+			name varchar(20), 
+			password varchar(20)
+		);
+    ]]
     local User = sailor.model("user")
     local u = User:new()
 
@@ -37,7 +46,7 @@ function test.models(page)
     if u:save() then
         page:write("saved! "..u.id.."<br/>")
     end
-     
+    
     -- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
     local u2 = User:find("name ='francisco'")
 
@@ -73,7 +82,6 @@ function test.models(page)
     else
         page:write("User not found!")
     end
-    ]]
 end
 
 return test
