@@ -84,4 +84,13 @@ function test.models(page)
     end
 end
 
+function test.form(page)
+	local form = require "src.form"
+	local User = sailor.model("user")
+    local u = User:new()
+    u.name="test"
+
+    page:render('form',{user=u,form = form})
+end
+
 return test
