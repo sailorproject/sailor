@@ -1,10 +1,32 @@
 local test = {}
 
 function test.index(page)
-	local stringVariable = 'this variable is being passed from a "controller" to a "view"!'
-    local anotherVar = 2342
+	local stringVariable = 'this variable is being passed from a controller to a view!'
+    local anotherVar = 2342 -- this one too! \o/
+    
+    page:write("Here we are testing basic functionalities, such as LP parsing and V-C communication.")
 
-    --Testing Models
+    page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
+end
+
+function test.mailer(page)
+	local mail = require "src.mail"
+
+	local message = "Hello!"
+	if page.POST['email'] then
+        local sent, err = mail.send_message("<"..page.POST['email']..">","This is the subject!","This is the body!")
+        if err then
+        	message = err
+        else
+        	message = "The email was sent!"
+        end
+    end
+
+    page:render('mailer',{msg = message})
+end
+
+function test.models(page)
+	--Testing Models
     --[[
     local User = sailor.model("user")
     local u = User:new()
@@ -52,16 +74,6 @@ function test.index(page)
         page:write("User not found!")
     end
     ]]
-
-    if page.POST['email'] ~= nil then
-        mail.send_message("<test@example.com>","Yay! Somebody sent an email using your form!","This is the email: "..page.POST['email'])
-    end 
-
-    page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
-end
-
-function test.notindex(page)
-	page:write("Hello World!")
 end
 
 return test

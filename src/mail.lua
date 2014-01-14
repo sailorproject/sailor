@@ -25,7 +25,7 @@ function mail.ssl_create()
     })
 end
 
-function mail.send_essage(to, subject, body)
+function mail.send_message(to, subject, body)
     local msg = {
         headers = {
             to = to,
@@ -45,8 +45,9 @@ function mail.send_essage(to, subject, body)
         create = mail.ssl_create
     }
     if not ok then
-        print("Mail send failed", err) -- better error handling required
+        return false, "SMTP settings failed: "..err.."." 
     end
+    return ok
 end
 
 return mail
