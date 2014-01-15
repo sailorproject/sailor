@@ -4,7 +4,7 @@ Sailor
 A Lua MVC Framework. www.sailorproject.org
 
 ### Development progress
-So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module,  routes and basic models. I'm now working on how our models are related to a database. More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
+So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have a mailer module,  routes, basic models and db connection. I'm now working on forms and validation. More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
 
 ### Directory tree info
 * /conf - configuration files, open and edit them.
@@ -15,7 +15,7 @@ So far I have integrated with @mascarenhas's Lua Pages as a nice templater for v
 * /views - this is where your lua pages in .lp will go
 
 ### Installation for Debian-like systems
-Install Lua 5.2
+If you don't have it already, install Lua. Sailor is compatible with both 5.1 and 5.2.
 ```
 apt-get install lua5.2
 ```
@@ -103,7 +103,12 @@ Go to /views and create your first page, our example is index.lp
 ```
 For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates 
 
+For more examples, you can check the test controller (/controllers/test.lua), the test views (/views/test/*) and the User model (/models/user.lua)
+
 ### Suggestions or questions
 dalcol@etiene.net
 
 http://twitter.com/MulherCerebro
+
+
+##### If you are having trouble to get it working or if you got it working using different specs, please contact me so we can exchange info and I can improve this manual. Thanks!
