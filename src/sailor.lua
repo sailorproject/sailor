@@ -92,12 +92,14 @@ function sailor.route(page)
 end
 
 function sailor.new(model)
-    return sailor.model(model):new({_name = model})
+    local obj = {}
+    obj["@name"] = model
+    return sailor.model(model):new(obj)
 end
 
 function sailor.model(model)
     local obj = require("models."..model)
-    obj._name = model
+    obj["@name"] = model
     return obj
 end
 

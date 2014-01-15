@@ -10,6 +10,7 @@ function test.index(page)
 end
 
 function test.mailer(page)
+
 	local mail = require "src.mail"
 
 	local message = "Hello!"
@@ -89,8 +90,47 @@ function test.form(page)
 	local User = sailor.model("user")
     local u = User:new()
     u.name="test"
-
     page:render('form',{user=u,form = form})
+end
+
+function test.validation(page)
+	local validation = require "src.validation"
+
+	local print = function(str,err,exp) 
+						page:write("Validation check on '"..str.."': ") 
+						if exp then page:write ("Expected ") end
+						if err then page:write("Error: value "..err) else page:write("Check!") end 
+						page:write("<br/>")
+					end
+
+	local test_string = "test string!"
+	local _,err = validation.check(test_string).type("string").len(3,5)
+    print(test_string,err,true)
+
+    _,err = validation.check(test_string).type("number").len(3,5)
+    print(test_string,err,true)
+    
+    test_string = "hey"
+    _,err = validation.check(test_string).not_empty()
+    print(test_string, err)
+   	_,err = validation.check(test_string).len(2,10)
+    print(test_string, err)
+
+    _,err = validation.check(test_string).type("number")
+    print(test_string,err,true)
+
+    test_string = ""
+    _,err = validation.check(test_string).empty()
+    print(test_string,err)
+    _,err = validation.check(test_string).not_empty()
+    print(test_string,err,true)
+
+    local test_value
+    _,err = validation.check(test_value).not_empty()
+    print('nil',err,true)
+    _,err = validation.check(test_value).empty()
+    print('nil',err)
+
 end
 
 return test

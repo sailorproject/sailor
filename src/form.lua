@@ -1,10 +1,9 @@
 local form = {}
 
-function form.input_text(model,attribute,htmlOptions)
+function form.input_text(model,attribute,html_options)
 	local value = model[attribute] or ''
-	local htmlOptions = htmlOptions or ''
-	local html = '<input type="text" value="'..value..'" name="'..model._name..'_'..attribute..'" '..htmlOptions..' />'
-	return html
+	html_options = html_options or ''
+	return '<input type="text" value="'..value..'" name="'..model['@name']..'_'..attribute..'" '..html_options..' />'
 end
 
 return form
