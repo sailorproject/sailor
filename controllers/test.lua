@@ -40,9 +40,16 @@ function test.models(page)
     ]]
     local User = sailor.model("user")
     local u = User:new()
-
+    
     u.name = "maria"
-    u.password = "1234"
+    u.password = "12345678"
+
+    local res,errs = u:validate()
+    if not res then
+    	page:write("failed test!<br/>")
+    else
+    	page:write("passed test!<br/>")
+    end
 
     if u:save() then
         page:write("saved! "..u.id.."<br/>")

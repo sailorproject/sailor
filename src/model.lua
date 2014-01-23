@@ -1,5 +1,5 @@
 local model = {}
---local db = require "src.db"
+local validation = require "src.validation"
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
@@ -10,8 +10,8 @@ function model:new(obj)
 		if key ~= '__newindex' then
 			if  not obj.attributes[key] and not obj[key] then
 				error(tostring(key).." is not a valid attribute for this model.")
-			elseif type(value) ~= obj.attributes[key] and type(value) ~= type(obj[key]) then
-				error("Attribute "..tostring(key).." should be of type "..tostring(obj.attributes[key])..".")
+			--elseif type(value) ~= obj.attributes[key] and type(value) ~= type(obj[key]) then
+			--	error("Attribute "..tostring(key).." should be of type "..tostring(obj.attributes[key])..".")
 			end
 		end
 		rawset(table,key,value)
@@ -36,11 +36,11 @@ function model:insert()
 
 	local attrs = {}
 	local values = {}
-	for attr,attr_type in pairs(attributes) do
+	for attr,_ in pairs(attributes) do
 		table.insert(attrs,attr)
 		if not self[attr] then
 			table.insert(values,"null")
-		elseif attr_type == 'number' then
+		elseif type(self[attr]) == 'number' then
 			table.insert(values,self[attr])
 		else
 			table.insert(values,"'"..db:escape(self[attr]).."'")
@@ -51,9 +51,9 @@ function model:insert()
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
 	local id = db:query_insert(query)
-	if self.attributes[self.db.key] == 'number' and type(id) ~= 'number' then
+	--[[if self.attributes[self.db.key] == 'number' and type(id) ~= 'number' then
 		id = tonumber(id)
-	end
+	end]]
 	self[self.db.key] = id
 	db:close()
 	return true
@@ -65,11 +65,11 @@ function model:update()
 	local attributes = self.attributes
 	local key = self.db.key
 	local updates = {}
-	for attr,attr_type in pairs(attributes) do
+	for attr,_ in pairs(attributes) do
 		local string = attr.."="
 		if not self[attr] then
 			string = sting.."null"
-		elseif attr_type == 'number' then
+		elseif type(self[attr]) == 'number' then
 			string = string..self[attr]
 		else
 			string = string.."'"..db:escape(self[attr]).."'"
@@ -153,5 +153,21 @@ function model:delete()
 	return false
 end
 
-return model
+function model:validate()
+	local check = true
+	local errs = {}
+	for attr,rules in pairs(self.attributes) do 
+		local val = validation:new()
+		for val_func,args in pairs(rules) do
+			val = val[val_func](unpack(args))
+		end
+		local res, err = val(self[attr])
+		check = check and res
+		if not res then
+			table.insert(errs,err)
+		end
+	end
+	return check,errs
+end
 
+return model

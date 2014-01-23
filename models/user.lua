@@ -1,12 +1,12 @@
 local model = require "src.model"
 local user = {}
 
--- Attributes, this will be used for better validation
--- So far, this is already used to determine what can be set for this model and basic Lua type validation
+-- Attributes and their validation rules
 user.attributes = {
-	id = 'number',
-	name = 'string',
-	password = 'string',
+	--<attribute> = { <valfunc> = {<args>}, <valfunc> = {<args>}...}
+	id = {},
+	name = { not_empty = {} },
+	password = { not_empty = {}, len = {6,10} }
 }
 
 user.db = {
@@ -16,5 +16,6 @@ user.db = {
 
 -- Public Methods
 function user.test() return "test" end
+
 
 return model:new(user)
