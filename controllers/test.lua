@@ -48,7 +48,7 @@ function test.models(page)
         page:write("saved! "..u.id.."<br/>")
     end
     
-    -- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
+    -- FIND() IS NOT YET ESCAPED, DONT USE IT UNLESS YOU WROTE THE 'WHERE' STRING YOURSELF
     local u2 = User:find("name ='francisco'")
 
     if u2 then
@@ -96,40 +96,37 @@ end
 function test.validation(page)
 	local validation = require "src.validation"
 
-	local print = function(str,err,exp) 
-						page:write("Validation check on '"..str.."': ") 
-						if exp then page:write ("Expected ") end
-						if err then page:write("Error: value "..err) else page:write("Check!") end 
+	local check = function(val_test, test_string, expected_error) 
+						local res,err = val_test(test_string)
+						page:write("Validation check on '"..(test_string or 'nil').."': ") 
+						if expected_error then page:write ("Expected ") end
+						if not res then page:write("Error: value "..(err or '')) else page:write("Check!"..(err or '')) end 
 						page:write("<br/>")
 					end
 
-	local test_string = "test string!"
-	local _,err = validation.check(test_string).type("string").len(3,5)
-    print(test_string,err,true)
 
-    _,err = validation.check(test_string).type("number").len(3,5)
-    print(test_string,err,true)
-    
-    test_string = "hey"
-    _,err = validation.check(test_string).not_empty()
-    print(test_string, err)
-   	_,err = validation.check(test_string).len(2,10)
-    print(test_string, err)
+	local tests = { validation:new().type("string").len(3,5),
+					validation:new().type("number").len(3,5),
+					validation:new().not_empty(),
+					validation:new().len(2,10),
+					validation:new().type("number"),
+					validation:new().empty(),
+					}
 
-    _,err = validation.check(test_string).type("number")
-    print(test_string,err,true)
+	local test_strings = {  "test string!",
+							"hey",
+							""
+						}
 
-    test_string = ""
-    _,err = validation.check(test_string).empty()
-    print(test_string,err)
-    _,err = validation.check(test_string).not_empty()
-    print(test_string,err,true)
-
-    local test_value
-    _,err = validation.check(test_value).not_empty()
-    print('nil',err,true)
-    _,err = validation.check(test_value).empty()
-    print('nil',err)
+	check(tests[1],test_strings[1],true)
+	check(tests[2],test_strings[1],true)
+	check(tests[3],test_strings[2])
+	check(tests[4],test_strings[2])
+	check(tests[5],test_strings[2],true)
+	check(tests[6],test_strings[3])
+	check(tests[3],test_strings[3],true)
+	check(tests[3],test_strings[4],true)
+	check(tests[6],test_strings[4])
 
 end
 
