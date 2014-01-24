@@ -65,12 +65,12 @@ end
 
 -- String
 function validation._empty(value)
-	if not empty(value) then return false,"not empty" end
+	if not empty(value) then return false,"must be empty" end
 	return true
 end
 
 function validation._not_empty(value)
-	if empty(value) then return false,"empty" end
+	if empty(value) then return false,"must not be empty" end
 	return true
 end
 

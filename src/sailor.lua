@@ -15,12 +15,13 @@ function sailor.init(r,p)
         path = p,
         render = Page.render,
         write = function(_,...) r:write(...) end,
-        puts = function(_,...) r:puts(...) end,
+        print = function(_,...) r:puts(...) end,
         POST = POST,
-        GET = GET
+        GET = GET,
+        POSTMULTI = POSTMULTI
     }
 
-    lp.setoutfunc("page:puts")
+    lp.setoutfunc("page:print")
 
     return page
 end

@@ -40,7 +40,7 @@ function test.models(page)
     ]]
     local User = sailor.model("user")
     local u = User:new()
-    
+
     u.name = "maria"
     u.password = "12345678"
 
@@ -92,14 +92,6 @@ function test.models(page)
     end
 end
 
-function test.form(page)
-	local form = require "src.form"
-	local User = sailor.model("user")
-    local u = User:new()
-    u.name="test"
-    page:render('form',{user=u,form = form})
-end
-
 function test.validation(page)
 	local validation = require "src.validation"
 
@@ -135,6 +127,38 @@ function test.validation(page)
 	check(tests[3],test_strings[4],true)
 	check(tests[6],test_strings[4])
 
+end
+
+function test.modelval(page)
+	local User = sailor.model("user")
+    local u = User:new()
+    u.name = ""
+    u.password = "12345"
+    local res,err = u:save()
+    page:print(unpack(err))
+    u.name = "Lala"
+    u.password = "12345"
+    local res,err = u:save()
+    page:print("<br/>",unpack(err))
+    u.name = "Lala"
+    u.password = "12345678"
+    local res,err = u:save()
+    page:print("<br/>",unpack(err or {}))
+end
+
+function test.form(page)
+	local form = require "src.form"
+	local User = sailor.model("user")
+	local u = User:new()
+	
+	u.name = "test"
+	
+	if next(page.POST) then
+		u:get_post(page.POST)
+		page:write(u.name)
+	end
+   
+    page:render('form',{user=u,form = form})
 end
 
 return test
