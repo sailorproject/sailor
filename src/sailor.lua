@@ -1,11 +1,11 @@
-sailor = {}
+local conf = require "conf.conf"
 
-
+sailor = {conf = conf.sailor}
 
 local lp = require "src.lp"
 local lfs = require "lfs"
 local Page = {}
-local conf = require "conf.conf"
+
 
 function sailor.init(r,p)
     local POST, POSTMULTI = r:parsebody()
@@ -18,7 +18,9 @@ function sailor.init(r,p)
         print = function(_,...) r:puts(...) end,
         POST = POST,
         GET = GET,
-        POSTMULTI = POSTMULTI
+        POSTMULTI = POSTMULTI,
+        layout = conf.sailor.layout,
+        title = conf.sailor.app_name,
     }
 
     lp.setoutfunc("page:print")
@@ -32,24 +34,28 @@ function Page:render(filename,parms)
         dir = '/'..self.controller
     end
 
-    local fh = assert (io.open (self.path.."/views"..dir.."/"..filename..".lp", "rb"))
-    local src = fh:read("*all")
-    fh:close()
+    self.layout_path = "layouts/"..self.layout
+    local lua_page = assert (io.open (self.path.."/views"..dir.."/"..filename..".lp", "rb"))
+    local layout = assert (io.open (self.path.."/"..self.layout_path.."/index.lp", "rb"))
+    local lp_src = lua_page:read("*all")
+    local layout_src = layout:read("*all")
+    lua_page:close()
+    layout:close()
 
-    local string = lp.translate(src)
+    local src = string.gsub(layout_src,"{{content}}",lp_src)
+    src = lp.translate(src)
 
-    if not parms then
-        parms = {}
-    end
-
+    parms = parms or {}
     parms.page = self
+
+    for k,v in pairs(_G) do parms[k] = v end
 
     local f
     if _VERSION == "Lua 5.1" then 
-        f = loadstring(string,'@'..filename)
+        f = loadstring(src,'@'..filename)
         setfenv(f,parms)
     else
-        f = load(string,'@'..filename,'t',parms)
+        f = load(src,'@'..filename,'t',parms)
     end
 
     f()
