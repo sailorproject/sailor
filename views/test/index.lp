@@ -31,7 +31,7 @@
 		<? end ?>
 		<br/>
 		<? for i = 0, 10, 1 do ?>
-			this is in a loop <%=i%><!-- This also prints --> <br/>
+			this is in a loop <%= i %><!-- This also prints --> <br/>
 		<? end ?>
 		<?= stringVariable ?>
 		<?= anotherVar ?>

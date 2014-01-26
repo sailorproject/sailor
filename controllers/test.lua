@@ -161,4 +161,8 @@ function test.form(page)
     page:render('form',{user=u,form = form})
 end
 
+function test.redirect(page)
+	return page:redirect('test',{hey="blah",hue = 2})
+end
+
 return test

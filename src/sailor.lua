@@ -14,6 +14,7 @@ function sailor.init(r,p)
         r = r,
         path = p,
         render = Page.render,
+        redirect = Page.redirect,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
         POST = POST,
@@ -61,15 +62,34 @@ function Page:render(filename,parms)
     f()
 end
 
+function Page:redirect(route,args)
+    local get = ''
+    for k,v in pairs(args) do
+        get = get.."&"..k.."="..v
+    end    
+    self.r.headers_out['Location'] = self.r.uri.."?r="..route..get
+    return apache2.HTTP_MOVED_TEMPORARILY
+    --r.uri
+    --[[local controller, action = string.match(route, "(%a+)/?(%a*)")
+    local ctr_route = lfs.attributes (self.path.."/controllers/"..controller..".lua")
+    if not ctr_route then return 404 end
+    local ctr = require("controllers."..controller)
+    self.controller
+    if action == '' then
+        action = 'index'
+    end]]
+
+end
+
 function sailor.route(page)
-    local GET, GETMULTI = page.r:parseargs()
+    local GET = page.r:parseargs()
 
     if GET['r'] ~= nil and GET['r'] ~= '' then
         local controller, action = string.match(GET['r'], "(%a+)/?(%a*)")
         local route = lfs.attributes (page.path.."/controllers/"..controller..".lua")
 
         if not route then
-            return false
+            return 404
         else
             local ctr = require("controllers."..controller)
             page.controller = controller
@@ -78,24 +98,24 @@ function sailor.route(page)
                 action = 'index'
             end
             if(ctr[action] == nil) then 
-                return false
+                return 404
             else
-                ctr[action](page)
-                return true
+                local res = ctr[action](page)
+                return res or apache2.OK
             end
         end
     else
         if conf.sailor.default_static then
             page:render(conf.sailor.default_static)
-            return true
+            return apache2.OK
         elseif conf.sailor.default_controller and conf.sailor.default_action then
             page.controller = conf.sailor.default_controller
             local ctr = require("controllers."..page.controller)
-            ctr[conf.sailor.default_action](page)
-            return true
+            local res = ctr[conf.sailor.default_action](page)
+            return res or apache2.OK
         end
     end
-    return false
+    return 404
 end
 
 function sailor.new(model)
