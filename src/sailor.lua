@@ -15,6 +15,7 @@ function sailor.init(r,p)
         path = p,
         render = Page.render,
         redirect = Page.redirect,
+        include = Page.include,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
         POST = POST,
@@ -27,6 +28,31 @@ function sailor.init(r,p)
     lp.setoutfunc("page:print")
 
     return page
+end
+
+local function render(page,filename,src,parms)
+    parms = parms or {}
+    parms.page = page
+
+    for k,v in pairs(_G) do parms[k] = v end
+
+    local f
+    if _VERSION == "Lua 5.1" then 
+        f = loadstring(src,'@'..filename)
+        setfenv(f,parms)
+    else
+        f = load(src,'@'..filename,'t',parms)
+    end
+
+    f()
+end
+
+function Page:include(path,parms)
+    local lua_page = assert (io.open (self.path.."/"..path..".lp", "rb"))
+    local incl_src = lua_page:read("*all")
+    lua_page:close()
+    incl_src = lp.translate(incl_src)
+    render(self,path,incl_src,parms)
 end
 
 function Page:render(filename,parms) 
@@ -46,21 +72,10 @@ function Page:render(filename,parms)
     local src = string.gsub(layout_src,"{{content}}",lp_src)
     src = lp.translate(src)
 
-    parms = parms or {}
-    parms.page = self
-
-    for k,v in pairs(_G) do parms[k] = v end
-
-    local f
-    if _VERSION == "Lua 5.1" then 
-        f = loadstring(src,'@'..filename)
-        setfenv(f,parms)
-    else
-        f = load(src,'@'..filename,'t',parms)
-    end
-
-    f()
+    render(self,filename,src,parms)
 end
+
+
 
 function Page:redirect(route,args)
     local get = ''
@@ -69,16 +84,6 @@ function Page:redirect(route,args)
     end    
     self.r.headers_out['Location'] = self.r.uri.."?r="..route..get
     return apache2.HTTP_MOVED_TEMPORARILY
-    --r.uri
-    --[[local controller, action = string.match(route, "(%a+)/?(%a*)")
-    local ctr_route = lfs.attributes (self.path.."/controllers/"..controller..".lua")
-    if not ctr_route then return 404 end
-    local ctr = require("controllers."..controller)
-    self.controller
-    if action == '' then
-        action = 'index'
-    end]]
-
 end
 
 function sailor.route(page)

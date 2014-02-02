@@ -165,4 +165,8 @@ function test.redirect(page)
 	return page:redirect('test',{hey="blah",hue = 2})
 end
 
+function test.include(page)
+    page:render('include')
+end
+
 return test
