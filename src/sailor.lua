@@ -14,6 +14,7 @@ function sailor.init(r,p)
         r = r,
         path = p,
         render = Page.render,
+        _render = Page._render,
         redirect = Page.redirect,
         include = Page.include,
         write = function(_,...) r:write(...) end,
@@ -30,9 +31,9 @@ function sailor.init(r,p)
     return page
 end
 
-local function render(page,filename,src,parms)
+function Page:_render(filename,src,parms)
     parms = parms or {}
-    parms.page = page
+    parms.page = self
 
     for k,v in pairs(_G) do parms[k] = v end
 
@@ -47,35 +48,46 @@ local function render(page,filename,src,parms)
     f()
 end
 
-function Page:include(path,parms)
-    local lua_page = assert (io.open (self.path.."/"..path..".lp", "rb"))
-    local incl_src = lua_page:read("*all")
+local function read_src(path)
+    local lua_page = assert (io.open (path..".lp", "rb"))
+    local src = lua_page:read("*all")
     lua_page:close()
-    incl_src = lp.translate(incl_src)
-    render(self,path,incl_src,parms)
+    return src
 end
 
-function Page:render(filename,parms) 
-    local dir = ''
-    if self.controller then
-        dir = '/'..self.controller
+function Page:include(path,parms)
+    local incl_src = read_src(self.path.."/"..path)
+    incl_src = lp.translate(incl_src)
+    self:_render(path,incl_src,parms)
+end
+
+function Page:render(filename,parms)
+    parms = parms or {} 
+    
+    local src
+    local filepath
+
+    if self.layout ~= nil and self.layout ~= '' then
+        self.layout_path = "layouts/"..self.layout
+        filepath = self.path.."/"..self.layout_path.."/index"
+        local layout_src = read_src(filepath)
+        local filename_var = "sailor_filename_"..tostring(math.random(1000))
+        local parms_var = "sailor_parms_"..tostring(math.random(1000))
+        src = string.gsub(layout_src,"{{content}}",' <? page.layout = nil; page:render('..filename_var..','..parms_var..') ?> ')
+        parms[filename_var] = filename
+        parms[parms_var] = parms
+    else
+        local dir = ''
+        if self.controller then
+            dir = '/'..self.controller
+        end
+        filepath = self.path.."/views"..dir.."/"..filename
+        src = read_src(filepath)
     end
 
-    self.layout_path = "layouts/"..self.layout
-    local lua_page = assert (io.open (self.path.."/views"..dir.."/"..filename..".lp", "rb"))
-    local layout = assert (io.open (self.path.."/"..self.layout_path.."/index.lp", "rb"))
-    local lp_src = lua_page:read("*all")
-    local layout_src = layout:read("*all")
-    lua_page:close()
-    layout:close()
-
-    local src = string.gsub(layout_src,"{{content}}",lp_src)
     src = lp.translate(src)
-
-    render(self,filename,src,parms)
+    self:_render(filepath..".lp",src,parms)
 end
-
-
 
 function Page:redirect(route,args)
     local get = ''

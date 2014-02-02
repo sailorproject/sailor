@@ -169,4 +169,9 @@ function test.include(page)
     page:render('include')
 end
 
+function test.error(page)
+    --cg()
+    page:render('error')
+end
+
 return test
