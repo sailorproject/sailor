@@ -31,9 +31,9 @@ function sailor.init(r,p)
     return page
 end
 
-function Page:_render(filename,src,parms)
+local function render(page,filename,src,parms)
     parms = parms or {}
-    parms.page = self
+    parms.page = page
 
     for k,v in pairs(_G) do parms[k] = v end
 
@@ -58,7 +58,7 @@ end
 function Page:include(path,parms)
     local incl_src = read_src(self.path.."/"..path)
     incl_src = lp.translate(incl_src)
-    self:_render(path,incl_src,parms)
+    render(self,path,incl_src,parms)
 end
 
 function Page:render(filename,parms)
@@ -86,7 +86,7 @@ function Page:render(filename,parms)
     end
 
     src = lp.translate(src)
-    self:_render(filepath..".lp",src,parms)
+    render(self,filepath..".lp",src,parms)
 end
 
 function Page:redirect(route,args)
