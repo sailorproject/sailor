@@ -170,7 +170,6 @@ function test.include(page)
 end
 
 function test.error(page)
-    --cg()
     page:render('error')
 end
 

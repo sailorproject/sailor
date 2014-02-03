@@ -14,7 +14,6 @@ function sailor.init(r,p)
         r = r,
         path = p,
         render = Page.render,
-        _render = Page._render,
         redirect = Page.redirect,
         include = Page.include,
         write = function(_,...) r:write(...) end,
@@ -31,7 +30,8 @@ function sailor.init(r,p)
     return page
 end
 
-local function render(page,filename,src,parms)
+
+local function render_page(page,filename,src,parms)
     parms = parms or {}
     parms.page = page
 
@@ -58,7 +58,7 @@ end
 function Page:include(path,parms)
     local incl_src = read_src(self.path.."/"..path)
     incl_src = lp.translate(incl_src)
-    render(self,path,incl_src,parms)
+    render_page(self,path,incl_src,parms)
 end
 
 function Page:render(filename,parms)
@@ -86,7 +86,7 @@ function Page:render(filename,parms)
     end
 
     src = lp.translate(src)
-    render(self,filepath..".lp",src,parms)
+    render_page(self,filepath..".lp",src,parms)
 end
 
 function Page:redirect(route,args)
@@ -100,6 +100,9 @@ end
 
 function sailor.route(page)
     local GET = page.r:parseargs()
+    local function error_handler(msg)
+        page:write("<pre>"..debug.traceback(msg,2).."</pre>")
+    end
 
     if GET['r'] ~= nil and GET['r'] ~= '' then
         local controller, action = string.match(GET['r'], "(%a+)/?(%a*)")
@@ -117,18 +120,18 @@ function sailor.route(page)
             if(ctr[action] == nil) then 
                 return 404
             else
-                local res = ctr[action](page)
+                local res = xpcall(function() ctr[action](page) end, error_handler)
                 return res or apache2.OK
             end
         end
     else
         if conf.sailor.default_static then
-            page:render(conf.sailor.default_static)
+            xpcall(function () page:render(conf.sailor.default_static) end, error_handler)
             return apache2.OK
         elseif conf.sailor.default_controller and conf.sailor.default_action then
             page.controller = conf.sailor.default_controller
             local ctr = require("controllers."..page.controller)
-            local res = ctr[conf.sailor.default_action](page)
+            local res = xpcall(function() ctr[conf.sailor.default_action](page) end, error_handler)
             return res or apache2.OK
         end
     end
@@ -146,4 +149,3 @@ function sailor.model(model)
     obj["@name"] = model
     return obj
 end
-
