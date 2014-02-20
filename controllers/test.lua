@@ -1,3 +1,8 @@
+local session = require "src.session"
+local mail = require "src.mail"
+local validation = require "src.validation"
+local form = require "src.form"
+
 local test = {}
 
 function test.index(page)
@@ -10,9 +15,6 @@ function test.index(page)
 end
 
 function test.mailer(page)
-
-	local mail = require "src.mail"
-
 	local message = "Hello!"
 	if page.POST['email'] then
         local sent, err = mail.send_message("<"..page.POST['email']..">","This is the subject!","This is the body!")
@@ -93,7 +95,6 @@ function test.models(page)
 end
 
 function test.validation(page)
-	local validation = require "src.validation"
 
 	local check = function(val_test, test_string, expected_error) 
 						local res,err = val_test(test_string)
@@ -147,7 +148,6 @@ function test.modelval(page)
 end
 
 function test.form(page)
-	local form = require "src.form"
 	local User = sailor.model("user")
 	local u = User:new()
 	
@@ -171,6 +171,29 @@ end
 
 function test.error(page)
     page:render('error')
+end
+
+function test.newsession(page) 
+    session.open(page.r)
+    session.save({username = "john lennon"})             
+    if session.data then
+        for k,v in pairs(session.data) do
+            page:write(v)
+        end
+    end
+end
+
+function test.opensession(page) 
+    session.open(page.r)
+    if session.data then
+        for k,v in pairs(session.data) do
+            page:write(v)
+        end
+    end
+end
+
+function test.destroysession(page) 
+    session.destroy(page.r)
 end
 
 return test

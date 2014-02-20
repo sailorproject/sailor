@@ -1,18 +1,21 @@
 local conf = require "conf.conf"
 
-sailor = {conf = conf.sailor}
+sailor = {
+    conf = conf.sailor, 
+}
 
-local lp = require "src.lp"
+local lp = require "src.web_utils.lp"
 local lfs = require "lfs"
 local Page = {}
 
 
 function sailor.init(r,p)
+    sailor.path = p
+
     local POST, POSTMULTI = r:parsebody()
     local GET, GETMULTI = r:parseargs()
     local page = {
         r = r,
-        path = p,
         render = Page.render,
         redirect = Page.redirect,
         include = Page.include,
@@ -56,7 +59,7 @@ local function read_src(path)
 end
 
 function Page:include(path,parms)
-    local incl_src = read_src(self.path.."/"..path)
+    local incl_src = read_src(sailor.path.."/"..path)
     incl_src = lp.translate(incl_src)
     render_page(self,path,incl_src,parms)
 end
@@ -69,7 +72,7 @@ function Page:render(filename,parms)
 
     if self.layout ~= nil and self.layout ~= '' then
         self.layout_path = "layouts/"..self.layout
-        filepath = self.path.."/"..self.layout_path.."/index"
+        filepath = sailor.path.."/"..self.layout_path.."/index"
         local layout_src = read_src(filepath)
         local filename_var = "sailor_filename_"..tostring(math.random(1000))
         local parms_var = "sailor_parms_"..tostring(math.random(1000))
@@ -81,7 +84,7 @@ function Page:render(filename,parms)
         if self.controller then
             dir = '/'..self.controller
         end
-        filepath = self.path.."/views"..dir.."/"..filename
+        filepath = sailor.path.."/views"..dir.."/"..filename
         src = read_src(filepath)
     end
 
@@ -106,7 +109,7 @@ function sailor.route(page)
 
     if GET['r'] ~= nil and GET['r'] ~= '' then
         local controller, action = string.match(GET['r'], "(%a+)/?(%a*)")
-        local route = lfs.attributes (page.path.."/controllers/"..controller..".lua")
+        local route = lfs.attributes (sailor.path.."/controllers/"..controller..".lua")
 
         if not route then
             return 404
