@@ -123,7 +123,7 @@ function sailor.route(page)
             if(ctr[action] == nil) then 
                 return 404
             else
-                local res = xpcall(function() ctr[action](page) end, error_handler)
+                local _, res = xpcall(function() return ctr[action](page) end, error_handler)
                 return res or apache2.OK
             end
         end
@@ -134,7 +134,7 @@ function sailor.route(page)
         elseif conf.sailor.default_controller and conf.sailor.default_action then
             page.controller = conf.sailor.default_controller
             local ctr = require("controllers."..page.controller)
-            local res = xpcall(function() ctr[conf.sailor.default_action](page) end, error_handler)
+            local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) end, error_handler)
             return res or apache2.OK
         end
     end
