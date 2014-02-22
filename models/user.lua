@@ -5,7 +5,7 @@ local user = {}
 user.attributes = {
 	--<attribute> = { <valfunc> = {<args>}, <valfunc> = {<args>}...}
 	id = {},
-	name = { not_empty = {} },
+	username = { not_empty = {} },
 	password = { not_empty = {}, len = {6,10} }
 }
 

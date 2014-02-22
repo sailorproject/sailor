@@ -36,14 +36,14 @@ function test.models(page)
 
 		create table user(
 			id int primary key auto_increment, 
-			name varchar(20), 
+			username varchar(20), 
 			password varchar(20)
 		);
     ]]
     local User = sailor.model("user")
     local u = User:new()
 
-    u.name = "maria"
+    u.username = "maria"
     u.password = "12345678"
 
     local res,errs = u:validate()
@@ -61,34 +61,34 @@ function test.models(page)
     local u2 = User:find("name ='francisco'")
 
     if u2 then
-        page:write(u2.id.." - "..u2.name.."<br/>")
+        page:write(u2.id.." - "..u2.username.."<br/>")
     end
 
     local users = User:find_all()
     for _, user in pairs(users) do 
-        page:write(user.id.." - "..user.name.."<br/>")
+        page:write(user.id.." - "..user.username.."<br/>")
     end
       
-    u.name = "catarina"
+    u.username = "catarina"
     if u:save() then
         page:write("saved! "..u.id.."<br/>")
     end
 
     local users = User:find_all()
     for _, user in pairs(users) do 
-        page:write(user.id.." - "..user.name.."<br/>")
+        page:write(user.id.." - "..user.username.."<br/>")
     end
 
     page:write("Finding user with id 1:<br/>")
     local some_user = User:find_by_id(1)
     if some_user then
-        page:write(some_user.id.." - "..some_user.name.."<br/>")
+        page:write(some_user.id.." - "..some_user.username.."<br/>")
     end
 
     page:write("Finding user with id 47:<br/>")
     local some_user = User:find_by_id(47)
     if some_user then
-        page:write(some_user.id.." - "..some_user.name.."<br/>")
+        page:write(some_user.id.." - "..some_user.username.."<br/>")
     else
         page:write("User not found!")
     end
@@ -133,15 +133,15 @@ end
 function test.modelval(page)
 	local User = sailor.model("user")
     local u = User:new()
-    u.name = ""
+    u.username = ""
     u.password = "12345"
     local res,err = u:save()
     page:print(unpack(err))
-    u.name = "Lala"
+    u.username = "Lala"
     u.password = "12345"
     local res,err = u:save()
     page:print("<br/>",unpack(err))
-    u.name = "Lala"
+    u.username = "Lala"
     u.password = "12345678"
     local res,err = u:save()
     page:print("<br/>",unpack(err or {}))
@@ -151,11 +151,11 @@ function test.form(page)
 	local User = sailor.model("user")
 	local u = User:new()
 	
-	u.name = "test"
+	u.username = "test"
 	
 	if next(page.POST) then
 		u:get_post(page.POST)
-		page:write(u.name)
+		page:write(u.username)
 	end
    
     page:render('form',{user=u,form = form})
@@ -195,5 +195,17 @@ end
 function test.destroysession(page) 
     session.destroy(page.r)
 end
+
+function test.login(page)
+    local access = require "src.access"
+    if access.is_guest() then
+        page:print("Logging in...<br/>")
+        local _,err = access.login("demo","demo")
+        page:print(err or "Logged in.")
+    else
+        page:print("You are already logged in.")
+    end
+end
+
 
 return test

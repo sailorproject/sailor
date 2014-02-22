@@ -1,12 +1,17 @@
 local utils = require "src.web_utils.utils"
 local session = require "src.web_utils.session"
 local cookie = require "src.cookie"
+
 local ID_NAME = "SAILORSESSID"
 
 session.id = nil
-session.setsessiondir (sailor.path..'/runtime')
+session.setsessiondir (sailor.path..'/runtime/sessions')
 
 function session.open (r)
+	if session.id then
+		return session.id
+	end
+
 	local id = cookie.get(r,ID_NAME )
     if not id then
         session.new(r)
@@ -29,6 +34,7 @@ function session.destroy (r)
 		session.data = {}
 		session.delete (id)
 	end
+	session.id = nil
 end
 
 local new = session.new
@@ -42,6 +48,12 @@ local save = session.save
 function session.save(data)
 	save(session.id,data)
 	session.data = data
+	return true
 end
+
+function session.is_active()
+	return session.id ~= nil
+end
+
 
 return session

@@ -27,7 +27,7 @@ function sailor.init(r,p)
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
     }
-
+    sailor.r = r
     lp.setoutfunc("page:print")
 
     return page
