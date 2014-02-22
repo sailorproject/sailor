@@ -104,6 +104,28 @@ function model:find_by_id(id)
 	return f
 end
 
+function model:find_by_attributes(attributes)
+	local db = require("src.db"):new()
+	db:connect()
+
+	local n = 0
+    local where = ' where '
+    for k,v in pairs(attributes) do
+        if n > 0 then
+            where = where..' and '
+        end
+        v = db:escape(v)
+        where = where..k.." = '"..v.."' "
+        n = n+1
+    end
+
+    local cur = db:query("select * from "..self.db.table..where..";")
+	local f = self:fetch_object(cur)
+	db:close()
+	return f
+	
+end
+
 function model:find(where_string)
 	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
 	local db = require("src.db"):new()
