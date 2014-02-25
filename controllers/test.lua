@@ -32,13 +32,7 @@ function test.models(page)
 	--Testing Models
     --[[
 		I'm using 'User' model for testing under a mysql db.	
-		If you want to check it out, you need to create this table:
-
-		create table user(
-			id int primary key auto_increment, 
-			username varchar(20), 
-			password varchar(20)
-		);
+		If you want to check it out, you must import the sql files under /sql		
     ]]
     local User = sailor.model("user")
     local u = User:new()
@@ -135,15 +129,15 @@ function test.modelval(page)
     local u = User:new()
     u.username = ""
     u.password = "12345"
-    local res,err = u:save()
-    page:print(unpack(err))
+    local res,err = u:validate()
+    page:print(table.concat(err,'<br/>'), '<br/>')
     u.username = "Lala"
     u.password = "12345"
-    local res,err = u:save()
+    local res,err = u:validate()
     page:print("<br/>",unpack(err))
     u.username = "Lala"
     u.password = "12345678"
-    local res,err = u:save()
+    local res,err = u:validate()
     page:print("<br/>",unpack(err or {}))
 end
 
