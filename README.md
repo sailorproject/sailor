@@ -94,7 +94,7 @@ function site.notindex(page)
 end
 return site
 ```
-Go to /views and create your first page, our example is index.lp
+Go to /views, create a dir named 'site' to match your controller name and create your first page, our example is index.lp
 
 ```html
 <?=foo?>
