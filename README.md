@@ -83,10 +83,11 @@ function site.index(page)
   local foo = 'Hello world'
   local User = sailor.model("user")
   local u = User:new()
-  u.name = "etiene"
+  u.username = "etiene"
+  u.password = "a_password"
   u:save()
-  -- Warning: this is a tech preview and the model class does not avoid SQL injections yet.
-  page:render('index',{foo=foo,name=u.name}) -- This will render /views/site/index.lp and pass the variable 'foo' and 'name'
+  -- Warning: this is a tech preview and some methods of model class do not avoid SQL injections yet.
+  page:render('index',{foo=foo,name=u.username}) -- This will render /views/site/index.lp and pass the variables 'foo' and 'name'
 end
 function site.notindex(page)
   page:write('<b>Hey you!</b>')
@@ -98,8 +99,8 @@ Go to /views and create your first page, our example is index.lp
 <html>
   <head><title>This is my first page!<title></head>
   <body>
-    <%=foo%><br/>
-    Hi, <%=name%>
+    <?=foo?><br/>
+    Hi, <?=name?>
   </body>
 </html>
 ```
