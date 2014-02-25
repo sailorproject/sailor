@@ -5,7 +5,7 @@ local cookie = require "src.cookie"
 local ID_NAME = "SAILORSESSID"
 
 session.id = nil
-session.setsessiondir (sailor.path..'/runtime/sessions')
+session.setsessiondir (sailor.path..'/runtime/tmp')
 
 function session.open (r)
 	if session.id then
