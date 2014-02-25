@@ -95,14 +95,12 @@ end
 return site
 ```
 Go to /views and create your first page, our example is index.lp
+
 ```html
-<html>
-  <head><title>This is my first page!<title></head>
-  <body>
-    <?=foo?><br/>
-    Hi, <?=name?>
-  </body>
-</html>
+<?=foo?>
+<p>
+  Hi, <?=name?>
+</p>
 ```
 For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates 
 
