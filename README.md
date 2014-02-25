@@ -86,7 +86,7 @@ function site.index(page)
   u.name = "etiene"
   u:save()
   -- Warning: this is a tech preview and the model class does not avoid SQL injections yet.
-  page:render('index',{foo=foo,name=u.name}) -- This will render /views/index.lp and pass the variable 'foo' and 'name'
+  page:render('index',{foo=foo,name=u.name}) -- This will render /views/site/index.lp and pass the variable 'foo' and 'name'
 end
 function site.notindex(page)
   page:write('<b>Hey you!</b>')
