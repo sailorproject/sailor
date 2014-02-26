@@ -12,8 +12,11 @@ local Page = {}
 function sailor.init(r,p)
     sailor.path = p
 
-    local POST, POSTMULTI = r:parsebody()
     local GET, GETMULTI = r:parseargs()
+    local POST, POSTMULTI = {}, {}
+    if r.parsebody ~= nil then -- only present in Apache 2.4.3 or higher
+        POST, POSTMULTI = r:parsebody()
+    end
     local page = {
         r = r,
         render = Page.render,
@@ -21,8 +24,8 @@ function sailor.init(r,p)
         include = Page.include,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
-        POST = POST,
         GET = GET,
+        POST = POST,
         POSTMULTI = POSTMULTI,
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
