@@ -208,7 +208,6 @@ function test.form(page)
 	
 	if next(page.POST) then
 		u:get_post(page.POST)
-		page:write(u.username)
 	end
    
     page:render('form',{user=u,form = form})
