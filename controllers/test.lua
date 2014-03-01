@@ -118,6 +118,8 @@ function test.validation(page)
                     validation:new().integer(),
                     validation:new().string(),
                     validation:new().string().alnum(),
+                    validation:new().contains(" "),
+                    validation:new().no_white()
 				}
 
 	local test_values = {  "test string!",
@@ -174,6 +176,10 @@ function test.validation(page)
     check(tests[18],test_values[14],true)
     check(tests[18],test_values[1])
     check(tests[19],test_values[6],true)
+    check(tests[20],test_values[1])
+    check(tests[20],test_values[2],true)
+    check(tests[21],test_values[1])
+    check(tests[21],test_values[2],true)
 
 end
 

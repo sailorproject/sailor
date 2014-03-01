@@ -101,6 +101,16 @@ function validation._alnum(value)
 	if value:match("%W") then return false, "constains improper characters" end
 	return true
 end
+
+function validation._contains(value,find)
+	if not value:find(find) then return false, "does not contain '"..find.."'" end
+	return true
+end
+
+function validation._no_white(value)
+	if value:find("%s") then return false, "must not contain white spaces" end
+	return true
+end
 --
 
 -- Numbers
