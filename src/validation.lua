@@ -79,11 +79,108 @@ function validation._len(value,min,max)
 	if len < min or len >max then return false,"should have "..min.."-"..max.." characters" end
 	return true
 end
+
+function validation._compare(value,another_value)
+	if value ~= another_value then return false, "values are not equal" end
+	return true
+end
+
+function validation._email(value)
+	if not value:match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?") then
+  		return false, "is not a valid email address" 
+  	end
+  	return true
+end
+
+function validation._match(value,pattern)
+	if not value:match(pattern) then return false, "does not match pattern" end
+	return true
+end
+
+function validation._alnum(value)
+	if value:match("%W") then return false, "constains improper characters" end
+	return true
+end
+--
+
+-- Numbers
+function validation._min(value,min)
+	if value < min then return false,"must be greater than "..min end
+	return true
+end
+
+function validation._max(value,max)
+	if value > max then return false,"must not be greater than "..max end
+	return true
+end
+
+function validation._integer(value)
+	if math.floor(value) ~= value then return false, "must be an integer" end
+	return true
+end
+--
+
+-- Date
+
+--  Check for a UK date pattern dd/mm/yyyy , dd-mm-yyyy, dd.mm.yyyy
+--  or US pattern mm/dd/yyyy, mm-dd-yyyy, mm.dd.yyyy
+--  Default is UK
+function validation._date(value,format)
+    local valid = true
+    if (string.match(value, "^%d+%p%d+%p%d%d%d%d$")) then
+        local d, m, y
+        if format == 'us' then
+        	m, d, y = string.match(value, "(%d+)%p(%d+)%p(%d+)")
+        else
+        	d, m, y = string.match(value, "(%d+)%p(%d+)%p(%d+)")
+        end
+        d, m, y = tonumber(d), tonumber(m), tonumber(y)
+
+        local dm2 = d*m*m
+        if  d>31 or m>12 or dm2==116 or dm2==120 or dm2==124 or dm2==496 or dm2==1116 or dm2==2511 or dm2==3751 then
+            -- invalid unless leap year
+            if not (dm2==116 and (y%400 == 0 or (y%100 ~= 0 and y%4 == 0))) then
+                valid = false
+            end
+        end
+    else
+        valid = false
+    end
+    if not valid then return false, "is not a valid date" end
+    return true
+end
 --
 
 -- Abstract
 function validation._type(value,value_type)
 	if type(value) ~= value_type then return false,"must be a "..value_type end
+	return true
+end
+
+function validation._boolean(value)
+	if type(value) ~= 'boolean' then return false,"must be a boolean" end
+	return true
+end
+
+function validation._number(value)
+	if type(value) ~= 'number' then return false,"must be a number" end
+	return true
+end
+
+function validation._string(value)
+	if type(value) ~= 'string' then return false,"must be a string" end
+	return true
+end
+
+function validation._in_list(value,list)
+	local valid = false
+	for _,v in ipairs(list) do
+		if value == v then
+			valid = true
+			break
+		end
+	end
+	if not valid then return false,"is not in the list" end
 	return true
 end
 --
