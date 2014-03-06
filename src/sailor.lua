@@ -106,12 +106,13 @@ end
 
 function sailor.route(page)
     local GET = page.r:parseargs()
+    local route_name = GET[conf.sailor.route_parameter]
     local function error_handler(msg)
         page:write("<pre>"..debug.traceback(msg,2).."</pre>")
     end
 
-    if GET['r'] ~= nil and GET['r'] ~= '' then
-        local controller, action = string.match(GET['r'], "([%a_]+)/?([%a_]*)")
+    if route_name ~= nil and route_name ~= '' then
+        local controller, action = string.match(route_name, "([%a_]+)/?([%a_]*)")
         local route = lfs.attributes (sailor.path.."/controllers/"..controller..".lua")
 
         if not route then

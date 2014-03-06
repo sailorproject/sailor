@@ -5,7 +5,8 @@ local conf = {
 							  -- Example: 'maintenance' will render /views/maintenance.lp
 		default_controller = 'main', 
 		default_action = 'index',
-		layout = 'default'
+		layout = 'default',
+		route_parameter = 'r'
 	},
 	db = {
 		driver = 'mysql',
