@@ -86,7 +86,7 @@ function validation._compare(value,another_value)
 end
 
 function validation._email(value)
-	if not value:match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?") then
+	if not value:match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w+") then
   		return false, "is not a valid email address" 
   	end
   	return true
@@ -134,13 +134,16 @@ end
 
 --  Check for a UK date pattern dd/mm/yyyy , dd-mm-yyyy, dd.mm.yyyy
 --  or US pattern mm/dd/yyyy, mm-dd-yyyy, mm.dd.yyyy
+--  or ISO pattern yyyy/mm/dd, yyyy-mm-dd, yyyy.mm.dd 
 --  Default is UK
 function validation._date(value,format)
     local valid = true
     if (string.match(value, "^%d+%p%d+%p%d%d%d%d$")) then
         local d, m, y
-        if format == 'us' then
+        if format and format:lower() == 'us' then
         	m, d, y = string.match(value, "(%d+)%p(%d+)%p(%d+)")
+        elseif format and format:lower() == 'iso' then
+        	y, m, d = string.match(value, "(%d+)%p(%d+)%p(%d+)")
         else
         	d, m, y = string.match(value, "(%d+)%p(%d+)%p(%d+)")
         end
