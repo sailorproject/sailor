@@ -1,4 +1,5 @@
 local form = {}
+local tinsert, tconcat = table.insert, table.concat
 
 local function defaults(model,attribute,html_options)
 	return model[attribute] or '', model['@name']..':'..attribute, html_options or ''
@@ -18,20 +19,21 @@ function form.dropdown(model,attribute,list,prompt,html_options)
 	local value, name, html_options = defaults(model,attribute,html_options)
 	list = list or {}
 
-	local html = '<select name="'..name..'" '..html_options..'>'
+	local html = {}
+	tinsert(html,'<select name="'..name..'" '..html_options..'>')
 	if prompt then
-		html = html..'<option value="" selected>'..prompt..'</option>'
+		tinsert(html,'<option value="" selected>'..prompt..'</option>')
 	end
 	for k,v in pairs(list) do
 		local selected = ''
 		if k == value then
 			selected = ' selected'
 		end
-	html = html..'<option value="'..k..'"'..selected..'>'..v..'</option>'
+	tinsert(html,'<option value="'..k..'"'..selected..'>'..v..'</option>')
 	end	
-	html = html..'</select>'
+	tinsert(html,'</select>')
 
-	return html
+	return tconcat(html)
 end
 
 function form.password(model,attribute,html_options)
@@ -39,25 +41,23 @@ function form.password(model,attribute,html_options)
 	return '<input type="password" value="'..value..'" name="'..name..'" '..html_options..' />'
 end
 
---layout: horizontal(default) or vertical
+-- layout: horizontal(default) or vertical
 function form.radio_list(model,attribute,list,default,layout,html_options)
 	local value, name, html_options = defaults(model,attribute,html_options)
 	list = list or {}
 
-	local html = ''
+	local html = {}
 	for k,v in pairs(list) do
 		local check = ''
 		if k == value  or (value == '' and k == default) then
 			check = ' checked'
 		end
-		html = html..'<input type="radio" name="'..name..'" '.. 
-			'value="'..k..'" '..check..html_options..'/> '..v..' '
-		if layout == 'vertical' then
-			html = html..'<br/>'
-		end
+		tinsert(html, '<input type="radio" name="'..name..'" '..'value="'..k..'" '..check..html_options..'/> '..v)
 	end
-
-	return html
+	if layout == 'vertical' then
+		return tconcat(html,'<br/>')
+	end
+	return tconcat(html,' ')
 end
 
 -- checked: boolean
@@ -72,4 +72,5 @@ function form.checkbox(model,attribute,label,checked,html_options)
 
 	return '<input type="checkbox" name="'..name..'"'..check..html_options..'/> '..label
 end
+
 return form

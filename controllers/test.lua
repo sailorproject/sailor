@@ -178,8 +178,8 @@ function test.validation(page)
     check(tests[19],test_values[6],true)
     check(tests[20],test_values[1])
     check(tests[20],test_values[2],true)
-    check(tests[21],test_values[1])
-    check(tests[21],test_values[2],true)
+    check(tests[21],test_values[1],true)
+    check(tests[21],test_values[2])
 
 end
 
