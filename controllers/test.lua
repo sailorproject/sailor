@@ -259,5 +259,13 @@ function test.login(page)
     end
 end
 
+function test.runat_client(page)
+    page:render('runat_client')
+end
+
+function test.runat_both(page)
+    page:render('runat_both')
+end
+
 
 return test

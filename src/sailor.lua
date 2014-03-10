@@ -4,7 +4,7 @@ sailor = {
     conf = conf.sailor, 
 }
 
-local lp = require "src.web_utils.lp"
+local lp = require "src.web_utils.lp_ex"
 local lfs = require "lfs"
 local Page = {}
 
