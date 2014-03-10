@@ -112,7 +112,7 @@ function sailor.route(page)
     end
 
     if route_name ~= nil and route_name ~= '' then
-        local controller, action = string.match(route_name, "([%a_]+)/?([%a_]*)")
+        local controller, action = string.match(route_name, "([^/]+)/?([^/]*)")
         local route = lfs.attributes (sailor.path.."/controllers/"..controller..".lua")
 
         if not route then
