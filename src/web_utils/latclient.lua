@@ -1,5 +1,5 @@
 --[[
-Lua@Client 0.1
+Lua@Client 0.1.1
 Lua Pages Template Preprocessor Extension and Script Provider
 Copyright (c) 2014 Felipe Daragon
 
@@ -27,7 +27,7 @@ function M.get_header(s)
 		local header = [[
 		<script src="{url}/lib/lua5.1.5.min.js"></script>
 		<script src="{url}/latclient.js"></script>
-		<script src="{url}/js.lua.js"></script>
+		<script src="{url}/js-lua.js"></script>
 		]]
 		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
@@ -56,8 +56,8 @@ function M.get_provide_script(fn,path,filename)
 		return string.format(js, path, filename, src)
 	end
 
-	-- File provider for mod_lua
-	function M.handle(r,path,filename)
+-- File provider for mod_lua
+function M.handle(r,path,filename)
 		r.content_type = "text/javascript"
 		if filename == nil then
 			filename = r.uri:match( "([^/]+)$")
@@ -67,10 +67,10 @@ function M.get_provide_script(fn,path,filename)
 		end
 		r:puts(M.get_provide_script(r.filename,path,filename))
 		return apache2.OK
-	end
+end
 
-	-- File provider for CGI-Lua
-	function M.cgilua_exit(path,filename)
+-- File provider for CGI-Lua
+function M.cgilua_exit(path,filename)
 		if cgilua ~= nil then
 			cgilua.contentheader("text","javascript")
 			if filename == nil then
@@ -82,9 +82,9 @@ function M.get_provide_script(fn,path,filename)
 			cgilua.put(M.get_provide_script(cgilua.script_path,path,filename))
 			os.exit()
 		end
-	end
+end
 
-	function M.js_string_escape(s)
+function M.js_string_escape(s)
 		-- This code is a part of lua5.1.js project:
 		-- Copyright (c) LogicEditor <info@logiceditor.com>
 		-- Copyright (c) lua5.1.js authors
@@ -113,6 +113,6 @@ function M.get_provide_script(fn,path,filename)
 
 		return '"' .. s:gsub('[\\"/%z\1-\031\128-\255]', matches) .. '"'
 
-	end
+end
 
-	return M
+return M
