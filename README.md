@@ -38,7 +38,9 @@ a2enmod lua
 ```
 Open /etc/apache2/mods-enabled/lua.load and add at the end of file
 ```
+<FilesMatch "\.lua$">
 AddHandler lua-script .lua
+</FilesMatch>
 ```
 Now you are ready to go!
 ```
