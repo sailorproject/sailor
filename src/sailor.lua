@@ -10,14 +10,40 @@ local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,set
 local match,tostring,gsub = string.match,tostring,string.gsub
 local traceback,xpcall = debug.traceback,xpcall
 local Page = {}
+local httpd = {}
 
+-- Cross-environment compatible launcher. Makes Sailor adapt to
+-- different web server environments
+function sailor.launch()
+    if apr_table ~= nil then 
+        -- This is Apache with mod_lua
+        -- Sets a handle function to be called by mod_lua
+        httpd = apache2
+        handle = sailor.handle_request
+    else
+        -- This is a non-Apache or Apache server with CGILua
+        -- Or Apache with mod_pLua
+        require "remy"
+        httpd = remy.httpd
+        remy.init()
+        remy.contentheader('text/html')
+        remy.run(sailor.handle_request)
+    end
+end
 
--- Encapsulates apache/mod_lua functions inside the Page object
+function sailor.handle_request(r)
+    r.content_type = "text/html"
+    local page = sailor.init(r)
+    return sailor.route(page)
+end
+
+-- Encapsulates request_rec functions inside the Page object
 -- Useful for posterior compatibility with other servers
 -- r: webserver's request object
 function sailor.init(r)
+    local filename = r.uri:match( "([^/]+)$")
     r.content_type = "text/html"
-    sailor.path = r.filename:match("^@?(.-)/index.lua$")
+    sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
     local GET, GETMULTI = r:parseargs()
     local POST, POSTMULTI = {}, {}
     if r.parsebody ~= nil then -- only present in Apache 2.4.3 or higher
@@ -122,7 +148,7 @@ function Page:redirect(route,args)
         get = get.."&"..k.."="..v
     end    
     self.r.headers_out['Location'] = self.r.uri.."?r="..route..get
-    return apache2.HTTP_MOVED_TEMPORARILY
+    return 302
 end
 
 -- Reads route GET var to decide which controller/action or default page to run.
@@ -139,7 +165,7 @@ function sailor.route(page)
     -- If a default static page is configured, run it and prevent routing
     if conf.sailor.default_static then
         xpcall(function () page:render(conf.sailor.default_static) end, error_handler)
-        return apache2.OK
+        return httpd.OK
     -- If there is a route path, find the correspondent controller/action
     elseif route_name ~= nil and route_name ~= '' then
         local controller, action = match(route_name, "([^/]+)/?([^/]*)")
@@ -161,7 +187,7 @@ function sailor.route(page)
             else
                 -- run action
                 local _, res = xpcall(function() return ctr[action](page) end, error_handler)
-                return res or apache2.OK
+                return res or httpd.OK
             end
         end
     -- If no route var is defined, run default controller action
@@ -169,7 +195,7 @@ function sailor.route(page)
         page.controller = conf.sailor.default_controller
         local ctr = require("controllers."..page.controller)
         local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) end, error_handler)
-        return res or apache2.OK
+        return res or httpd.OK
     end
     -- No route specified and no defaults
     return 500

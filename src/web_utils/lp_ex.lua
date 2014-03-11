@@ -1,5 +1,5 @@
 local lp = require"src.web_utils.lp"
-local lat = require"src.web_utils.latclient"
+local lat = require"src.lib.latclient"
 
 local M = {
 	lat = lat
@@ -7,6 +7,7 @@ local M = {
 
 function M.translate (s)
 	lat.js_url = "pub/latclient/js"
+	lat.js_served = false
 	s = lat.translate(s)
 	return lp.translate(s)
 end
