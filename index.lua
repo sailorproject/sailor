@@ -1,9 +1,10 @@
 require "src.sailor"
 
+-- This handle is called by mod_lua
+-- It returns an http response
+-- r: request object
 function handle(r)
-    local path = r.filename:match("^@?(.-)/index.lua$")
-    r.content_type = "text/html"
-    local page = sailor.init(r,path)
+    local page = sailor.init(r)
     return sailor.route(page)
 end
  
