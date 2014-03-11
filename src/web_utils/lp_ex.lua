@@ -7,12 +7,12 @@ local M = {
 
 function M.translate (s)
 	lat.js_url = "pub/latclient/js"
-	lat.js_served = false
 	s = lat.translate(s)
 	return lp.translate(s)
 end
 
 function M.setoutfunc (f)
+	lat.js_served = false
 	lp.setoutfunc(f)
 end
 
