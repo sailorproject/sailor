@@ -1,5 +1,5 @@
 local model = {}
-local validation = require "src.validation"
+local validation = require "src.valua"
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)

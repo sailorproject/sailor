@@ -1,6 +1,6 @@
 local session = require "src.session"
 local mail = require "src.mail"
-local validation = require "src.validation"
+local validation = require "src.valua"
 local form = require "src.form"
 
 local test = {}
