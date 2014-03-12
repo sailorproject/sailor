@@ -1,5 +1,5 @@
 --[[
-Lua@Client 0.1.1
+Lua@Client 0.1.2
 Lua Pages Template Preprocessor Extension and Script Provider
 Copyright (c) 2014 Felipe Daragon
 
@@ -11,7 +11,7 @@ local M = {
 	js_served = false
 }
 
---M.js_url = "http://127.0.0.1/sailor/pub/latclient/js"
+--M.js_url = "http://127.0.0.1/sailor/pub/thirdparty/latclient/js"
 
 function M.translate(src)
 	local get_both = function(s) return '<? '..s..' ?>'..M.get_client_js(s) end
@@ -54,7 +54,7 @@ function M.get_provide_script(fn,path,filename)
 		path = M.js_string_escape(path)
 		filename = M.js_string_escape(filename)
 		return string.format(js, path, filename, src)
-	end
+end
 
 -- File provider for mod_lua
 function M.handle(r,path,filename)
