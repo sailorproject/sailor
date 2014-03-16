@@ -1,6 +1,6 @@
-local utils = require "src.web_utils.utils"
-local session = require "src.web_utils.session"
-local cookie = require "src.cookie"
+local utils = require "web_utils.utils"
+local session = require "web_utils.session"
+local cookie = require "sailor.cookie"
 
 local ID_NAME = "SAILORSESSID"
 

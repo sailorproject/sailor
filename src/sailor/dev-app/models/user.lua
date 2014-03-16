@@ -1,4 +1,4 @@
-local model = require "src.model"
+local model = require "sailor.model"
 local user = {}
 
 -- Attributes and their validation rules

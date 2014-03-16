@@ -1,5 +1,5 @@
-local lp = require"src.web_utils.lp"
-local lat = require"src.lib.latclient"
+local lp = require"web_utils.lp"
+local lat = require"latclient"
 
 local M = {
 	lat = lat

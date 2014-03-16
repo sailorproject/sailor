@@ -1,7 +1,7 @@
-local session = require "src.session"
-local mail = require "src.mail"
-local validation = require "src.valua"
-local form = require "src.form"
+local session = require "sailor.session"
+local mail = require "sailor.mail"
+local validation = require "valua"
+local form = require "sailor.form"
 
 local test = {}
 

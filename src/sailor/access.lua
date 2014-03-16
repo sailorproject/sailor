@@ -1,4 +1,4 @@
-local session = require "src.session"
+local session = require "sailor.session"
 local access = {}
 
 session.open(sailor.r)

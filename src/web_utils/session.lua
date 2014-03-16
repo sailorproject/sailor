@@ -4,9 +4,9 @@
 -- @release $Id: session.lua,v 1.29 2007/11/21 16:33:20 carregal Exp $
 ----------------------------------------------------------------------------
 
-local cgilua = require"src.web_utils.utils"
+local cgilua = require"web_utils.utils"
 local lfs = require"lfs"
-local serialize = require"src.web_utils.serialize".serialize
+local serialize = require"web_utils.serialize".serialize
 
 local assert, error, ipairs, loadfile, next, tostring, type = assert, error, ipairs, loadfile, next, tostring, type
 local format, gsub, strfind, strsub = string.format, string.gsub, string.find, string.sub

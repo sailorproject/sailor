@@ -4,7 +4,7 @@ sailor = {
     conf = conf.sailor, 
 }
 
-local lp = require "src.web_utils.lp_ex"
+local lp = require "web_utils.lp_ex"
 local lfs = require "lfs"
 local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
 local match,tostring,gsub = string.match,tostring,string.gsub

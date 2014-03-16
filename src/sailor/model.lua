@@ -1,5 +1,5 @@
 local model = {}
-local validation = require "src.valua"
+local validation = require "valua"
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
@@ -31,7 +31,7 @@ function model:save()
 end
 
 function model:insert()
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 	local key = self.db.key
 	local attributes = self.attributes
@@ -60,7 +60,7 @@ function model:insert()
 end
 
 function model:update()
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 	local attributes = self.attributes
 	local key = self.db.key
@@ -96,7 +96,7 @@ function model:fetch_object(cur)
 end
 
 function model:find_by_id(id)
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 	local cur = db:query("select * from "..self.db.table.." where "..self.db.key.."='"..db:escape(id).."';")
 	local f = self:fetch_object(cur)
@@ -105,7 +105,7 @@ function model:find_by_id(id)
 end
 
 function model:find_by_attributes(attributes)
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 
 	local n = 0
@@ -128,7 +128,7 @@ end
 
 function model:find(where_string)
 	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 	local cur = db:query("select * from "..self.db.table.." where "..where_string..";")
 	local f = self:fetch_object(cur)
@@ -138,7 +138,7 @@ end
 
 function model:find_all(where_string)
 	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 	local key = self.db.key
 	if where_string then
@@ -163,7 +163,7 @@ function model:find_all(where_string)
 end
 
 function model:delete()
-	local db = require("src.db"):new()
+	local db = require("sailor.db"):new()
 	db:connect()
 	local id = self[self.db.key]
 	if id and self:find(id) then
