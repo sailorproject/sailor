@@ -6,6 +6,9 @@ local function help()
 	print("\t\tsailor_create.lua <app name> {<dir>} - Generates web files in a directory.")
 	print("\t\t   <app name>: The name of your application.")
 	print("\t\t   <dir>: Optional. The directory you wish your files to be created or current dir.\n")
+	print("\n\t\27[31mExample:\27[0m\n")
+	print("\t\tsailor_create.lua 'Hey Arnold' /var/www")
+	print("\t\t   This will create your web app under /var/www/hey_arnold.\n")
 end
 
 local function get_sailor_path(current_dir)
@@ -71,7 +74,7 @@ local function create()
 end
 
 local function run()
-	if not arg[1] or arg[1] == 'help' or arg[1] == 'h' then
+	if not arg[1] or arg[1] == '--help' or arg[1] == '-h' then
 		help()
 	else
 		create()
