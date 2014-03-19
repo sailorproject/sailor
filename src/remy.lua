@@ -1,14 +1,14 @@
--- Remy 0.2.3
+-- Remy 0.2.5
 -- Copyright (c) 2014 Felipe Daragon
 -- License: MIT (http://opensource.org/licenses/mit-license.php)
 --
--- Remy runs web applications built for mod_lua in different web server
--- environments, such as: a non-Apache server with CGILua, or an Apache
--- server with mod_pLua or CGILua instead of the mod_lua module.
+-- Remy runs Lua-based web applications in alternative web server
+-- environments that allow to run Lua code.
 
 remy = {
 	MODE_CGILUA = 0,
-	MODE_MOD_PLUA = 1
+	MODE_MOD_PLUA = 1,
+	MODE_NGINX = 2
 }
 
 local emu = {}
@@ -61,8 +61,8 @@ local request_rec_fields = {
 	err_headers_out = {},
 	filename = nil,
 	handler = "lua-script",
-	headers_in = {},
-	headers_out = {},
+	headers_in = {}, -- request headers
+	headers_out = {}, -- response headers
 	hostname = remy.config.hostname,
 	is_https = false,
 	is_initial_req = true,
@@ -96,6 +96,8 @@ function remy.init(mode)
 	end
 	if mode == remy.MODE_CGILUA then
 		emu = require "remy.cgilua"
+	elseif mode == remy.MODE_NGINX then
+		emu = require "remy.nginx"
 	elseif mode == remy.MODE_MOD_PLUA then
 		emu = require "remy.mod_plua"
 	end
@@ -113,6 +115,8 @@ function remy.detect()
 	local mode = nil
 	if cgilua ~= nil then
 		mode = remy.MODE_CGILUA
+  elseif ngx ~= nil then
+    mode = remy.MODE_NGINX
 	elseif getEnv ~= nil then
 		local env = getEnv()
 		if env["pLua-Version"] ~= nil then
