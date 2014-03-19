@@ -11,7 +11,7 @@ More about this project's motivation can be found here: http://etiene.net/sailor
 ### Directory tree info
 * /docs - this one is supposed to have documentation
 * /src - Lua modules with nice stuff from sailor and other places.
- * /sailor - core Sailor library
+ * /sailor - Sailor modules
  * /sailor/demo-app - default Sailor web app
 * /test - apps for testing and demonstration purposes
 
