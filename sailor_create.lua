@@ -46,7 +46,7 @@ local function create()
 	
 	local sailor_path = get_sailor_path(current_dir)
 	
-	local raw_app = sailor_path.."/sailor/web-app"
+	local raw_app = sailor_path.."/sailor/demo-app"
 	local app = sailor_path.."/sailor/"..name
 	local new_app = destiny.."/"..name
 	os.execute("mv "..raw_app.." "..app)
