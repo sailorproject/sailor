@@ -9,12 +9,11 @@ So far I have integrated with @mascarenhas's Lua Pages as a nice templater for v
 More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
 
 ### Directory tree info
-* /conf - configuration files, open and edit them.
-* /controllers - controllers you will make!
-* /doc - this one is supposed to have documentation
-* /models - models you will make!
+* /docs - this one is supposed to have documentation
 * /src - Lua modules with nice stuff from sailor and other places.
-* /views - this is where your lua pages in .lp will go
+ * /sailor - Sailor modules
+ * /sailor/demo-app - default Sailor web app
+* /test - apps for testing and demonstration purposes
 
 ### Installation for Debian-like systems
 If you don't have it already, install Lua. Sailor is compatible with both 5.1 and 5.2.
@@ -46,7 +45,9 @@ Now you are ready to go!
 ```
 service apache2 restart
 ```
-Clone the contents of this repository to /var/www and access it at localhost/sailor
+Use sailor_create.lua to create your app
+
+Alternatively, you can manually copy the files in the /src/sailor/demo-app directory of this repository to /var/www and access it at localhost/sailor
 
 #### Dependencies for persisting models
 If you want to save your models in a database, you will need LuaSQL. I believe it should work with every db LuaSQL supports but so far I have only tested with MySQL. Install luarocks and get these rocks. LuaSQL-MySQL requires you to have mysql installed.
@@ -78,6 +79,16 @@ luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/i386-linux-gnu
 ```
 
 ### Using Sailor
+A default Sailor app will have the following directory tree structure:
+* /conf - configuration files, open and edit them.
+* /controllers - controllers you will make!
+* /layouts - default layout files. 
+* /models - models you will make!
+* /pub - publicly accessible files (js libraries, for example)
+* /runtime - temporary files generated during runtime.
+* /views - this is where your lua pages in .lp will go
+
+#### Creating Pages #
 Go to /controllers and create your first controller! It should be a lua module. Name it whatever you want, our example is "site.lua". We will serve two pages, one accessible via <domain>/?r=site which will run site.index() by default and another one acessible via <domain>/?r=site/notindex.
 ```lua
 local site = {}
