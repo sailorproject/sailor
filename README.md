@@ -18,6 +18,7 @@ More about this project's motivation can be found here: http://etiene.net/sailor
 ### Installation
 
 For Linux, see [INSTALL_LINUX.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_LINUX.md)
+
 For Windows, see [INSTALL_WIN.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_WIN.md)
 
 ### Using Sailor
