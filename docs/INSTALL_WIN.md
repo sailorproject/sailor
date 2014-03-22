@@ -84,19 +84,19 @@ Copy the files in the `src/sailor/demo-app` directory of this repository to the 
 
 Rename the `conf\nginx-win.conf` file to `nginx.conf`.
 
-Open the nginx.conf file and add to http block:
+Open the nginx.conf file and add to the http block:
 
     lua_package_path 'C:/Program Files/Lua/5.1/lua/?.lua;html/sailor/?.lua;';
     lua_package_cpath 'C:/Program Files/Lua/5.1/clibs/?.dll;';
 
-Add to the server block:
+You must also add to the server block:
+
     location ~ ^/sailor/(.+) {
         lua_need_request_body on;
         lua_code_cache off;
         content_by_lua_file html/sailor/$1;
         index  index.lua index.lp;
     }
-    
     location ~* ^.+\.(?:css|eot|js|json|png|svg|ttf|woff)$ { }
     
 ####Done!
