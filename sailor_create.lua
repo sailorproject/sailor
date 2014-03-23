@@ -53,12 +53,12 @@ local function create()
 	os.execute("cp -a "..app.." "..new_app)
 	os.execute("mv "..app.." "..raw_app)
 
-	local index = io.open (new_app.."/index.lua" , "r")
+	local index = io.open (new_app.."/.htaccess" , "r")
 	local src = index:read("*a")
 	index:close()
 
-	index = io.open (new_app.."/index.lua" , "w")
-	src = string.gsub(src,"{{path}}","'"..sailor_path.."'")
+	index = io.open (new_app.."/.htaccess" , "w")
+	src = string.gsub(src,"{{path}}",sailor_path)
 	index:write(src)
 	index:close()
 
