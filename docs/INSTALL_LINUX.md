@@ -64,7 +64,28 @@ or
 
     luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/i386-linux-gnu
 
-###Installation for Nginx
+###Alternative Installation with Nginx
 
-TODO
+Install Nginx as explained at <http://wiki.nginx.org/Install#Official_Debian.2FUbuntu_packages>
+
+Install the ngx_lua module (aka HttpLuaModule) as explained at <http://wiki.nginx.org/HttpLuaModule#Installation>
+
+Open the nginx.conf file and add to the http block:
+
+    lua_package_path 'path/to/lua/?.lua;path/to/html/hey_arnold/?.lua;';
+    lua_package_cpath 'path/to/clibs/?.so;';
+    
+Don't forget to replace path/to with the actual path to your Lua installation and the Nginx document root.
+    
+You must also add to the server block:
+
+    location ~ ^/hey_arnold/(.+) {
+        lua_need_request_body on;
+        lua_code_cache off;
+        content_by_lua_file html/hey_arnold/$1;
+        index  index.lua index.lp;
+    }
+    location ~* ^.+\.(?:css|eot|js|json|png|svg|ttf|woff)$ { }
+    
+Now run nginx and go to http://localhost/hey_arnold/index.lua?r=main in your browser.
 
