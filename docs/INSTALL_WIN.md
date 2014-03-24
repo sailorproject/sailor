@@ -58,6 +58,16 @@ Add the LuaPackage* directives:
      LuaPackagePath "C:/Apache24/htdocs/sailor/?/init.lua"
     </IfModule>
     
+####Alternative Installation with mod_plua
+
+Download mod_plua from <http://sourceforge.net/projects/modplua/files/>
+
+Install and configure it as explained at <http://sourceforge.net/p/modplua/wiki/Setting%20up%20mod_pLua/>
+
+####Alternative Installation with CGILua
+
+TODO
+
 ####Done!
     
 Run bin\httpd.exe in the Apache24 directory.
@@ -101,4 +111,4 @@ You must also add to the server block:
     
 ####Done!
     
-Now run nginx.exe and go to <http://localhost/sailor/?r=main> in your browser.
+Now run nginx.exe and go to <http://localhost/sailor/index.lua?r=main> in your browser.
