@@ -15,6 +15,20 @@ More about this project's motivation can be found here: http://etiene.net/sailor
  * /sailor/demo-app - default Sailor web app
 * /test - apps for testing and demonstration purposes
 
+### Supported Environments
+
+Sailor is currently compatible with the environments listed below and was tested under Linux, Windows and Mac OS X.
+
+* Apache with mod_lua <http://www.modlua.org/>
+* Apache with mod_plua <https://github.com/Humbedooh/mod_pLua>
+* Nginx with ngx_lua (HttpLuaModule) <https://github.com/nginx/nginx>
+* Any web server with CGILua <https://github.com/keplerproject/cgilua> Tested with:
+ * Apache
+ * Civetweb <https://github.com/sunsetbrew/civetweb>
+ * Mongoose <https://github.com/cesanta/mongoose>
+
+Lighttpd is planned for the future.
+
 ### Installation
 
 For Linux, see [INSTALL_LINUX.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_LINUX.md)
