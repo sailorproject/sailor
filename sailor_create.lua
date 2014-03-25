@@ -14,20 +14,26 @@ end
 local function get_sailor_path(current_dir)
 	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor_create.lua$"))
 
-	local f = io.open(sailor_path.."/src/sailor.lua", "r")
+	local f = sailor_path and io.open(sailor_path.."/src/sailor.lua", "r")
 	if not f then 
+		print("caiu no not f")
 		local datafile = require("datafile")
 		sailor_path = datafile.path("sailor/cookie.lua"):match("^@?(.-)/sailor/cookie.lua$")
 	else
+		print("caiu no f")
 		f:close() 
 		if sailor_path == '.' then
+			print("aaaa")
 			sailor_path = current_dir.."/src"
 		elseif sailor_path:match("^.") then
+			print("bbbb")
 			local path = sailor_path:match(".(.-)")
 			sailor_path = current_dir.."/sailor"..tostring(path).."/src"
 		elseif not sailor_path:match("^/") then 
+			print("cccc")
 			sailor_path = current_dir.."/src/"..sailor_path 
 		else
+			print("dddd")
 			sailor_path = sailor_path.."/src"
 		end
 	end
@@ -47,11 +53,8 @@ local function create()
 	local sailor_path = get_sailor_path(current_dir)
 	
 	local raw_app = sailor_path.."/sailor/demo-app"
-	local app = sailor_path.."/sailor/"..name
 	local new_app = destiny.."/"..name
-	os.execute("mv "..raw_app.." "..app)
-	os.execute("cp -a "..app.." "..new_app)
-	os.execute("mv "..app.." "..raw_app)
+	os.execute("cp -a "..raw_app.." "..new_app)
 
 	local index = io.open (new_app.."/.htaccess" , "r")
 	local src = index:read("*a")
