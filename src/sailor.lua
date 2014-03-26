@@ -101,6 +101,9 @@ end
 -- parms: table, vars being passed ahead
 function Page:include(path,parms)
     local incl_src = read_src(sailor.path.."/"..path)
+    if parms == nil then
+        parms = {}
+    end
     incl_src = lp.translate(incl_src)
     parms.page = self
     render_page(path,incl_src,parms)
