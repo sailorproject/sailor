@@ -40,7 +40,6 @@ build = {
       ['sailor.mail'] = "src/sailor/mail.lua",
       ['sailor.model'] = "src/sailor/model.lua",
       ['sailor.session'] = "src/sailor/session.lua",
-      valua = "src/valua.lua",
       ['web_utils.lp'] = "src/web_utils/lp.lua",
       ['web_utils.lp_ex'] = "src/web_utils/lp_ex.lua",
       ['web_utils.serialize'] = "src/web_utils/serialize.lua",
