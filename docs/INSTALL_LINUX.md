@@ -30,19 +30,23 @@ Restart Apache
     service apache2 restart
     
 ### Installing Sailor
-You can either clone it directly from the repository, download the zip containing the master branch or download and install it through LuaRocks. We will go through LuaRocks since it will also download and install all the required dependencies. But if you decide for other ways, follow the next section 'Dependencies'.
+You can either clone it directly from the repository, download the zip containing the master branch or download and install it through LuaRocks. We will go through LuaRocks since it will also download and install almost all the required dependencies except for luasql-mysql if you want to persist your models.
 
     sudo apt-get install luarocks
     luarocks install sailor
     
-We are almost done! You can now use `sailor_create.lua` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on http://localhost/hey_arnold
+We are almost done! You can now use `sailor_create` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on http://localhost/hey_arnold
 
-    sailor_create.lua 'Hey Arnold' /var/www
+    sailor_create 'Hey Arnold' /var/www
 
 Alternatively, you can manually copy the files in the /src/sailor/demo-app directory of this repository to /var/www/hey_arnold and access it at <http://localhost/hey_arnold> and if you didn't install sailor through LuaRocks, you must open .htaccess and replace {{path}} with the full path on your system to Sailor's src directory. 
 
 #### Dependencies
-If you installed Sailor through LuaRocks, there is no need to worry, all dependencies will be installed with it. If you just cloned the repository or downloaded the zip, you should install these dependencies:
+If you want to persist your models you need luasql. Sailor could work with other drivers but so far we've only tested with mysql and don't offer support for others. 
+
+    luarocks install luasql-mysql
+
+If you installed Sailor through LuaRocks, there is no need to worry, all next dependencies will be installed with it and you can ignore the rest of this section. If you just cloned the repository or downloaded the zip, you should install these dependencies:
 
 Lua File System is required.
 
