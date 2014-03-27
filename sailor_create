@@ -3,37 +3,31 @@ local lfs = require "lfs"
 
 local function help()
 	print("\n\t\27[31mUsage:\27[0m\n")
-	print("\t\tsailor_create.lua <app name> {<dir>} - Generates web files in a directory.")
+	print("\t\tsailor_create <app name> {<dir>} - Generates web files in a directory.")
 	print("\t\t   <app name>: The name of your application.")
 	print("\t\t   <dir>: Optional. The directory you wish your files to be created or current dir.\n")
 	print("\n\t\27[31mExample:\27[0m\n")
-	print("\t\tsailor_create.lua 'Hey Arnold' /var/www")
+	print("\t\tsailor_create 'Hey Arnold' /var/www")
 	print("\t\t   This will create your web app under /var/www/hey_arnold.\n")
 end
 
 local function get_sailor_path(current_dir)
-	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor_create.lua$"))
+	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor_create$"))
 
 	local f = sailor_path and io.open(sailor_path.."/src/sailor.lua", "r")
 	if not f then 
-		print("caiu no not f")
 		local datafile = require("datafile")
 		sailor_path = datafile.path("sailor/cookie.lua"):match("^@?(.-)/sailor/cookie.lua$")
 	else
-		print("caiu no f")
 		f:close() 
 		if sailor_path == '.' then
-			print("aaaa")
 			sailor_path = current_dir.."/src"
 		elseif sailor_path:match("^.") then
-			print("bbbb")
 			local path = sailor_path:match(".(.-)")
 			sailor_path = current_dir.."/sailor"..tostring(path).."/src"
 		elseif not sailor_path:match("^/") then 
-			print("cccc")
 			sailor_path = current_dir.."/src/"..sailor_path 
 		else
-			print("dddd")
 			sailor_path = sailor_path.."/src"
 		end
 	end
@@ -56,14 +50,14 @@ local function create()
 	local new_app = destiny.."/"..name
 	os.execute("cp -a "..raw_app.." "..new_app)
 
-	local index = io.open (new_app.."/.htaccess" , "r")
-	local src = index:read("*a")
-	index:close()
+	local htaccess = io.open (new_app.."/.htaccess" , "r")
+	local src = htaccess:read("*a")
+	htaccess:close()
 
-	index = io.open (new_app.."/.htaccess" , "w")
+	htaccess = io.open (new_app.."/.htaccess" , "w")
 	src = string.gsub(src,"{{path}}",sailor_path)
-	index:write(src)
-	index:close()
+	htaccess:write(src)
+	htaccess:close()
 
 	local conf = io.open (new_app.."/conf/conf.lua" , "r")
 	src = conf:read("*a")
