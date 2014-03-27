@@ -1,3 +1,11 @@
+--------------------------------------------------------------------------------
+-- sailor.lua, v0.2: core functionalities of the framework
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
+
 local conf = require "conf.conf"
 
 sailor = {

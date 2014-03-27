@@ -1,3 +1,11 @@
+--------------------------------------------------------------------------------
+-- cookie.lua, v0.2: lib for cookies
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
+
 local cookie = {}
 
 function cookie.set(r, key, value)

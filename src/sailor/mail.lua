@@ -1,3 +1,11 @@
+--------------------------------------------------------------------------------
+-- mail.lua, v0.2: sends email messages
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
+
 local mail = {}
 
 local socket = require 'socket'

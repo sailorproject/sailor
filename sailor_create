@@ -1,4 +1,13 @@
 #!/usr/bin/lua
+
+--------------------------------------------------------------------------------
+-- sailor_create, v0.2: deploys sailor apps
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
+
 local lfs = require "lfs"
 
 local function help()

@@ -1,3 +1,11 @@
+--------------------------------------------------------------------------------
+-- model.lua, v0.2: basic model creator, uses db module
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
+
 local model = {}
 local validation = require "valua"
 

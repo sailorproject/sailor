@@ -1,4 +1,10 @@
---- DB module for connecting and querying
+--------------------------------------------------------------------------------
+-- db.lua, v0.2: DB module for connecting and querying through LuaSQL
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
 
 local db = {env,con}
 local conf = require("conf.conf").db
