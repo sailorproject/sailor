@@ -216,6 +216,26 @@ var LuaCS_Browser = {
     if (m == 'back') { history.back(); } else
     if (m == 'forward') { history.forward(); } else
     if (m == 'go') { history.go(C.luaL_checkstring(L, 3)); }
+  } else
+  // TODO -
+  // * Make the msg methods support the full syntax like:
+  //  console.log(obj1 [, obj2, ..., objN);
+  //  console.log(msg [, subst1, ..., substN);
+  // * Implement dir()
+  if (o == 'console') {
+    if (m == 'count') { console.count(C.luaL_checkstring(L, 3)); } else
+    if (m == 'debug') { console.debug(C.luaL_checkstring(L, 3)); } else
+    if (m == 'error') { console.error(C.luaL_checkstring(L, 3)); } else
+    if (m == 'exception') { console.exception(C.luaL_checkstring(L, 3)); } else
+    if (m == 'group') { console.group(); } else
+    if (m == 'groupCollapsed') { console.groupCollapsed(); } else
+    if (m == 'groupEnd') { console.groupEnd(); } else
+    if (m == 'info') { console.info(C.luaL_checkstring(L, 3)); } else
+    if (m == 'log') { console.log(C.luaL_checkstring(L, 3)); } else
+    if (m == 'time') { console.time(C.luaL_checkstring(L, 3)); } else
+    if (m == 'timeEnd') { console.timeEnd(C.luaL_checkstring(L, 3)); } else
+    if (m == 'trace') { console.trace(); } else
+    if (m == 'warn') { console.warn(C.luaL_checkstring(L, 3)); }
   }
   return ret;
  }
