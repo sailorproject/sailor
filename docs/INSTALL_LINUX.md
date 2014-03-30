@@ -48,9 +48,10 @@ If you want to persist your models you need luasql. Sailor could work with other
 
 If you installed Sailor through LuaRocks, there is no need to worry, all next dependencies will be installed with it and you can ignore the rest of this section. If you just cloned the repository or downloaded the zip, you should install these dependencies:
 
-Lua File System is required.
+Lua File System and valua are required.
 
     luarocks install luafilesystem
+    luarocks install valua
 
 If you want to save your models in a database, you will need LuaSQL. I believe it should work with every database LuaSQL supports, but so far I have only tested with MySQL. LuaSQL-MySQL requires you to have mysql installed.
 
