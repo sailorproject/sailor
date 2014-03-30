@@ -108,10 +108,9 @@ end
 -- path: string, full file path
 -- parms: table, vars being passed ahead
 function Page:include(path,parms)
+    parms = parms or {}
     local incl_src = read_src(sailor.path.."/"..path)
-    if parms == nil then
-        parms = {}
-    end
+
     incl_src = lp.translate(incl_src)
     parms.page = self
     render_page(path,incl_src,parms)
@@ -150,15 +149,20 @@ function Page:render(filename,parms)
     render_page(filepath..".lp",src,parms)
 end
 
--- Redirects to another action
+-- Redirects to another action or another address
 -- route: string, '<controller name>/<action_name>'
 -- args: table, vars to be passed in url get style
 function Page:redirect(route,args)
-    local get = ''
-    for k,v in pairs(args) do
-        get = get.."&"..k.."="..v
-    end    
-    self.r.headers_out['Location'] = self.r.uri.."?r="..route..get
+    args = args or {}
+    if not route:match('^http://') then
+        local get = ''
+        for k,v in pairs(args) do
+            get = get.."&"..k.."="..v
+        end  
+        route = self.r.uri.."?r="..route..get
+    end
+      
+    self.r.headers_out['Location'] = route
     return 302
 end
 
