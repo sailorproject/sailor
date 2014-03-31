@@ -10,7 +10,6 @@
 <h3><?=getlastmsg()?></h3>
 
 <?lua@client
- require("js")
  js.window.alert(msg..' '..getlastmsg())
 ?>
 

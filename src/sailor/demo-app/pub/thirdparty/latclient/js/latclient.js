@@ -11,6 +11,9 @@ var C = Lua5_1.C;
 
 var LuaCS =
 {
+ settings : {
+  enableJS: true
+ },
  ready : false,
  init : function ()
  {
@@ -18,8 +21,11 @@ var LuaCS =
   LuaCS.C = C;
   LuaCS.L = C.lua_open();
   C.luaL_openlibs(LuaCS.L);
-  LuaCS_Browser.register(LuaCS.L);
-  LuaCS_Libs.load()
+  LuaCS_Libs.load();
+  if (LuaCS.settings.enableJS == true) {
+   LuaCS_Browser.register(LuaCS.L);
+   LuaCS.runLua(LuaCS.L,"require('js')");
+  }
  },
  addFunction : function(L,func_name,func) 
  {

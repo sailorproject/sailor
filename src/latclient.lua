@@ -1,5 +1,5 @@
 --[[
-Lua@Client 0.1.4
+Lua@Client 0.1.5
 Lua Pages Template Preprocessor Extension and Script Provider
 Copyright (c) 2014 Felipe Daragon
 
@@ -37,7 +37,7 @@ end
 
 function M.get_client_js(s)
 	local s = M.js_string_escape(s)
-	s = '<script type="text/javascript">LuaCS.runString('..s..')</script>'
+	s = '<script>LuaCS.runString('..s..')</script>'
 	return M.get_header(s)
 end
 

@@ -1,6 +1,5 @@
 <?lua@client
- require('js')
- 
+
  print('Today is: '..os.date()..'<br>')
  print('Your User-Agent is: '..js.navigator.userAgent..'<br>')
  if js.navigator.cookieEnabled == true then
@@ -12,6 +11,7 @@
  function say_bye()
       print('Bye! :)')
  end
+ 
 ?>
 
 <?lua@client
