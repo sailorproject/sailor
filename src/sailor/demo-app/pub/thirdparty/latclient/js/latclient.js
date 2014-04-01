@@ -79,12 +79,18 @@ var LuaCS_Browser = {
   document.write(str);
   return 0;
  },
+ runOnLoad : function(L)
+ {
+  window.onload = LuaCS.runScripts;
+  return 0;
+ },
  register : function(L)
  {
   LuaCS.addFunction(L,'print',LuaCS_Browser.print);
   LuaCS.addFunction(L,'js_getprop',LuaCS_Browser.jsGetProp);
   LuaCS.addFunction(L,'js_setprop',LuaCS_Browser.jsSetProp);
   LuaCS.addFunction(L,'js_method',LuaCS_Browser.jsMethod);
+  LuaCS.addFunction(L,'runonload',LuaCS_Browser.runOnLoad);
  },
  jsSetProp : function(L)
  {
