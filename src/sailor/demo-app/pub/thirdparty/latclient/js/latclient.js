@@ -8,6 +8,7 @@
 */
 
 var C = Lua5_1.C;
+var L = C.lua_open();
 
 var LuaCS =
 {
@@ -18,16 +19,14 @@ var LuaCS =
  init : function ()
  {
   LuaCS.ready = true;
-  LuaCS.C = C;
-  LuaCS.L = C.lua_open();
-  C.luaL_openlibs(LuaCS.L);
+  C.luaL_openlibs(L);
   LuaCS_Libs.load();
   if (LuaCS.settings.enableJS == true) {
-   LuaCS_Browser.register(LuaCS.L);
-   LuaCS.runLua(LuaCS.L,"require('js')");
+   LuaCS_Browser.register(L);
+   LuaCS.runLua(L,"require('js')");
   }
  },
- addFunction : function(L,func_name,func) 
+ addFunction : function(func_name,func) 
  {
   C.lua_pushcfunction(L,Lua5_1.Runtime.addFunction(func));
   C.lua_setglobal(L, func_name);
@@ -45,7 +44,7 @@ var LuaCS =
  runString : function (script)
  {
   if (LuaCS.ready == false) LuaCS.init();
-  LuaCS.runLua(LuaCS.L,script);
+  LuaCS.runLua(L,script);
  },
  runB64 : function (s)
  {
@@ -86,11 +85,11 @@ var LuaCS_Browser = {
  },
  register : function(L)
  {
-  LuaCS.addFunction(L,'print',LuaCS_Browser.print);
-  LuaCS.addFunction(L,'js_getprop',LuaCS_Browser.jsGetProp);
-  LuaCS.addFunction(L,'js_setprop',LuaCS_Browser.jsSetProp);
-  LuaCS.addFunction(L,'js_method',LuaCS_Browser.jsMethod);
-  LuaCS.addFunction(L,'runonload',LuaCS_Browser.runOnLoad);
+  LuaCS.addFunction('print',LuaCS_Browser.print);
+  LuaCS.addFunction('js_getprop',LuaCS_Browser.jsGetProp);
+  LuaCS.addFunction('js_setprop',LuaCS_Browser.jsSetProp);
+  LuaCS.addFunction('js_method',LuaCS_Browser.jsMethod);
+  LuaCS.addFunction('runonload',LuaCS_Browser.runOnLoad);
  },
  jsSetProp : function(L)
  {
