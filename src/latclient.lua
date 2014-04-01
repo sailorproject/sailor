@@ -1,5 +1,5 @@
 --[[
-Lua@Client 0.1.6
+Lua@Client 0.1.7
 Lua Pages Template Preprocessor Extension and Script Provider
 Copyright (c) 2014 Felipe Daragon
 

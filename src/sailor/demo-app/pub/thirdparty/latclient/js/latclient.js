@@ -76,7 +76,7 @@ var LuaCS =
  },
  runScripts : function ()
  {
-    Array.prototype.forEach.call(document.querySelectorAll('script[language=\"lua\"]'), function(tag) {
+    Array.prototype.forEach.call(document.querySelectorAll('script[type=\"text\/lua\"]'), function(tag) {
       LuaCS.runString(tag.innerHTML)
     });
  },
