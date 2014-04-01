@@ -10,6 +10,12 @@
 var C = Lua5_1.C;
 var L = C.lua_open();
 
+// Adds the missing luaL_register
+// C.luaL_register = F("luaL_register", void_t, [lua_State, const_char_ptr_t, luaL_Reg]);
+if (!C.luaL_register) {
+ C.luaL_register = Module.cwrap("luaL_register", null, ["number", "string", "number"]);
+}
+
 var LuaCS =
 {
  settings : {
@@ -30,6 +36,18 @@ var LuaCS =
  {
   C.lua_pushcfunction(L,Lua5_1.Runtime.addFunction(func));
   C.lua_setglobal(L, func_name);
+ },
+ addLibrary : function(libname,funcs) {
+  C.luaL_register(L,libname,null);
+  if (funcs != undefined) {
+   for (i=0;i<funcs.length;i++) {
+    var f = funcs[i];
+    if (f[0] != null) {
+     C.lua_pushcfunction(L,Lua5_1.Runtime.addFunction(f[1]));
+     C.lua_setfield(L, -2, f[0]);
+    }
+   }
+  }
  },
  runLua : function(L,script) {
   if (C.luaL_dostring(L, script) !== 0)
