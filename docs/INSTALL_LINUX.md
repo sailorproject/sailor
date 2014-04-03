@@ -9,7 +9,11 @@ If you don't have it already, install Lua. Sailor is compatible with both 5.1 an
     
 ### Installing Apache 2.4
 
-The official Ubuntu repository has Apache 2.2 as default, but you can't use Lua scripts on it. It is recommended that you use the most recent version of Apache you can. You can follow the instructions at http://apache.org. If that sounds a bit too complicated, you can get Apache 2.4.2 adding the following repository and then installing it via apt-get:
+On Ubuntu 13.10 and above, use the following command to install Apache 2.4.x:
+
+    sudo apt-get install apache2
+
+Ubuntu 13.04 and below have Apache 2.2 as default, but you can't use Lua scripts on it. It is recommended that you use the most recent version of Apache you can. You can follow the instructions at http://httpd.apache.org. If that sounds a bit too complicated, you can get Apache 2.4.2 adding the following repository and then installing it via apt-get:
 
     sudo apt-add-repository ppa:ptn107/apache
     sudo apt-get update
