@@ -42,11 +42,16 @@ Change the DirectoryIndex directive to:
 
     DirectoryIndex index.lua index.html
     
-Add the AddHandler directive:
+Add the SetHandler directive:
 
     <FilesMatch "\.lua$">
-    AddHandler lua-script .lua
+      SetHandler lua-script
     </FilesMatch>
+    
+Optionally, tweak mod_lua for high performance:
+
+    LuaScope thread
+    LuaCodeCache stat
     
 Add the LuaPackage* directives:
 
