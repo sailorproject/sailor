@@ -154,7 +154,7 @@ end
 -- args: table, vars to be passed in url get style
 function Page:redirect(route,args)
     args = args or {}
-    if not route:match('^http://') then
+    if not route:match('^https?://') then
         local get = ''
         for k,v in pairs(args) do
             get = get.."&"..k.."="..v
