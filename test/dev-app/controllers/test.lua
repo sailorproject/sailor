@@ -267,5 +267,13 @@ function test.runat_both(page)
     page:render('runat_both')
 end
 
+function test.client_module(page)
+    page:render('client_module')
+end
+
+function test.client_module_js(page)
+    page:render('client_module_js')
+end
+
 
 return test
