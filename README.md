@@ -73,7 +73,7 @@ For more examples, you can check the test controller (/controllers/test.lua), th
 ### Suggestions or questions
 dalcol@etiene.net
 
-http://twitter.com/MulherCerebro
+http://twitter.com/etiene_d
 
 
 ##### If you are having trouble to get it working or if you got it working using different specs, please contact me so we can exchange info and I can improve this manual. Thanks!
