@@ -86,10 +86,10 @@ local function render_page(path,src,parms)
 
     local f
     if _VERSION == "Lua 5.1" then 
-        f = loadstring(src,'@'..path)
+        f = assert(loadstring(src,'@'..path))
         setfenv(f,parms)
     else
-        f = load(src,'@'..path,'t',parms)
+        f = assert(load(src,'@'..path,'t',parms))
     end
 
     f()
