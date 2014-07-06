@@ -52,7 +52,7 @@ function test.models(page)
     end
     
     -- FIND() IS NOT YET ESCAPED, DONT USE IT UNLESS YOU WROTE THE 'WHERE' STRING YOURSELF
-    local u2 = User:find("name ='francisco'")
+    local u2 = User:find("username ='francisco'")
 
     if u2 then
         page:write(u2.id.." - "..u2.username.."<br/>")
