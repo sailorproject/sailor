@@ -63,10 +63,10 @@ function M.init()
 end
 
 function M.getpathinfo()
-	local p = cgilua.servervariable("PATH_INFO")
-  if p == nil then
-    p = cgilua.servervariable("SCRIPT_NAME")
-  end
+	local p = cgilua.urlpath
+  	if p == nil then
+  		p = cgilua.servervariable("SCRIPT_NAME")
+  	end
   return p
 end
 
