@@ -1,8 +1,8 @@
 package = "Sailor"
-version = "0.2-1"
+version = "0.2-2"
 source = {
    url = "git://github.com/Etiene/sailor",
-   tag = "v0.2"
+   tag = "v0.2.2”
 }
 description = {
    summary = "A Lua MVC Framework",
@@ -16,9 +16,10 @@ dependencies = {
    "lua >= 5.1, < 5.3",
    'datafile >= 0.1',
    'luafilesystem >= 1.6.2',
-   'luasec >= 0.5',
-   'luasocket >= 3.0rc1',
-   'valua >= 0.2.2'
+   'valua >= 0.2.2',
+   'lbase64 >= 20120820',
+   'cgilua >= 5.1.4',
+    
 }
 build = {
    type = "builtin",
@@ -34,10 +35,10 @@ build = {
       ['sailor.cookie'] = "src/sailor/cookie.lua",
       ['sailor.db'] = "src/sailor/db.lua",
       ['sailor.demo-app.conf.conf'] = "src/sailor/demo-app/conf/conf.lua",
+      ['sailor.demo-app.start-server'] = "src/sailor/demo-app/start-server.lua",
       ['sailor.demo-app.controllers.main'] = "src/sailor/demo-app/controllers/main.lua",
       ['sailor.demo-app.index'] = "src/sailor/demo-app/index.lua",
       ['sailor.form'] = "src/sailor/form.lua",
-      ['sailor.mail'] = "src/sailor/mail.lua",
       ['sailor.model'] = "src/sailor/model.lua",
       ['sailor.session'] = "src/sailor/session.lua",
       ['web_utils.lp'] = "src/web_utils/lp.lua",
