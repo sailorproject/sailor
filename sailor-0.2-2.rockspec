@@ -2,7 +2,7 @@ package = "Sailor"
 version = "0.2-2"
 source = {
    url = "git://github.com/Etiene/sailor",
-   tag = "v0.2.2”
+   tag = "v0.2.2"
 }
 description = {
    summary = "A Lua MVC Framework",
