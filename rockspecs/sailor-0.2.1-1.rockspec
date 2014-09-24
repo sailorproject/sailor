@@ -1,8 +1,8 @@
 package = "Sailor"
-version = "0.2-2"
+version = "0.2.1-1"
 source = {
    url = "git://github.com/Etiene/sailor",
-   tag = "v0.2.2"
+   tag = "v0.2.1"
 }
 description = {
    summary = "A Lua MVC Framework",
@@ -17,9 +17,10 @@ dependencies = {
    'datafile >= 0.1',
    'luafilesystem >= 1.6.2',
    'valua >= 0.2.2',
-   'lbase64 >= 20120820',
+   'lbase64 >= 20120807',
    'cgilua >= 5.1.4',
-    
+   'xavante >= 2.3',
+   'wsapi-xavante >= 1.6.1' 
 }
 build = {
    type = "builtin",
