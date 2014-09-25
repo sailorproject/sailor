@@ -76,7 +76,7 @@ function model:update()
 	for attr,_ in pairs(attributes) do
 		local string = attr.."="
 		if not self[attr] then
-			string = sting.."null"
+			string = string.."null"
 		elseif type(self[attr]) == 'number' then
 			string = string..self[attr]
 		else
