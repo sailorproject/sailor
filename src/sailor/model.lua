@@ -259,4 +259,47 @@ return model:new(]]..table_name..[[)
 	file:close()
 end
 
+function model:generate_mysql()
+	local query = "create table "..self.db.table.."("
+
+	for attr,rules in pairs(self.attributes) do 
+		query = query..attr.." "
+		local attr_type
+		local not_null = ""
+		if attr ~= self.db.key and rules ~= "safe" then
+			for rule,parms in pairs(rules) do
+
+				if rule == "integer" or rule == "boolean" then
+					attr_type = "int"
+				elseif rule == "number" then
+					attr_type = "double"
+				elseif rule == "email" then
+					attr_type = "varchar(255)"
+				elseif rule == "date" then
+					attr_type = "date"
+				elseif rule == "not_empty" then
+					not_null = " not null"
+				elseif rule == "len" then
+					attr_type = "varchar("..parms[2]..")"
+				end
+
+			end
+		elseif attr == self.db.key then
+			attr_type = "int auto_increment primary key"
+		end
+
+		if not attr_type then
+			attr_type = "text"
+		end
+		
+		query = query..attr_type..not_null..", "
+	end
+
+	query = query:sub(1, -3)..");"
+
+	db.connect()
+	db.query(query)
+	db.close()
+end
+
 return model
