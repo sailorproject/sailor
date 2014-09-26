@@ -1,5 +1,4 @@
 local session = require "sailor.session"
-local mail = require "sailor.mail"
 local validation = require "valua"
 local form = require "sailor.form"
 
@@ -14,6 +13,8 @@ function test.index(page)
     page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
 end
 
+--This will be recovered once I reorganize the mailer module
+--[[
 function test.mailer(page)
 	local message = "Hello!"
 	if page.POST['email'] then
@@ -26,7 +27,7 @@ function test.mailer(page)
     end
 
     page:render('mailer',{msg = message})
-end
+end]]
 
 function test.models(page)
 	--Testing Models
@@ -249,7 +250,7 @@ function test.destroysession(page)
 end
 
 function test.login(page)
-    local access = require "src.access"
+    local access = require "sailor.access"
     if access.is_guest() then
         page:print("Logging in...<br/>")
         local _,err = access.login("demo","demo")
