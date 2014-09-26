@@ -8,36 +8,25 @@
 
 local db = {env,con}
 local conf = require("conf.conf").db
-local luasql = require "luasql.mysql"
-
-
---- Creates an instance of a db.
--- @param obj table: if given, is used to store the object
--- @return table or (nil, string): the object
-function db:new(obj)
-	obj = obj or {}
-	setmetatable(obj,self)
-	self.__index = self
-	return obj
-end
+local luasql = require("luasql."..conf.driver)
 
 -- Creates the connection of the instance
-function db:connect()
-	self.env = assert (luasql[conf.driver]())
-	self.con = assert (self.env:connect(conf.dbname,conf.user,conf.pass,conf.host))
+function db.connect()
+	db.env = assert (luasql[conf.driver]())
+	db.con = assert (db.env:connect(conf.dbname,conf.user,conf.pass,conf.host))
 end
 
 -- Closes the connection of the instance
-function db:close()
-	self.con:close()
-	self.env:close()
+function db.close()
+	db.con:close()
+	db.env:close()
 end
 
 -- Runs a query
 -- @param query string: the query to be executed
 -- @return table: a cursor 
-function db:query(query)
-	local cur = assert(self.con:execute(query))
+function db.query(query)
+	local cur = assert(db.con:execute(query))
 	return cur
 end
 
@@ -45,13 +34,13 @@ end
 -- @param q string or table: the string or table to be escaped
 -- @return string or nil: if q is a string, returns the new escaped string. If q is a table
 --							it simply returns, since it already escaped the table's values 
-function db:escape(q)
+function db.escape(q)
 	if type(q) == "string" then
-		q = self.con:escape(q)
+		q = db.con:escape(q)
 		return q
 	elseif type(q) == "table" then
 		for k,v in pairs(q) do 
-			q[k] = self.con:escape(v)
+			q[k] = db.con:escape(v)
 		end
 		return 
 	end
@@ -65,13 +54,13 @@ end
 -- @param q1 string: first query to be executed
 -- @param q2 string: second query to be executed
 -- return table: the result of the second execution
---[[function db:query_query(q1,q2)
+--[[function db.query_query(q1,q2)
 	local res
-	local rows = assert(self.con:execute(q1))
+	local rows = assert(db.con:execute(q1))
 	if rows == 0 then
 		res = 0
 	else
-		res = assert(self.con:execute(q2))
+		res = assert(db.con:execute(q2))
 	end
 	return res
 end]]
@@ -80,9 +69,9 @@ end]]
 -- a model and obtaining the model id.
 -- @param query string: the query to be executed
 -- return number or string: the id of the last inserted row.
-function db:query_insert(query)
-	assert(self.con:execute(query))
-	local id = self.con:getlastautoid()
+function db.query_insert(query)
+	assert(db.con:execute(query))
+	local id = db.con:getlastautoid()
 	return id
 end
 

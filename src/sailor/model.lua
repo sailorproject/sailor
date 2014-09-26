@@ -8,6 +8,7 @@
 
 local model = {}
 local validation = require "valua"
+local db = require("sailor.db")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
@@ -39,8 +40,7 @@ function model:save()
 end
 
 function model:insert()
-	local db = require("sailor.db"):new()
-	db:connect()
+	db.connect()
 	local key = self.db.key
 	local attributes = self.attributes
 
@@ -53,23 +53,22 @@ function model:insert()
 		elseif type(self[attr]) == 'number' then
 			table.insert(values,self[attr])
 		else
-			table.insert(values,"'"..db:escape(self[attr]).."'")
+			table.insert(values,"'"..db.escape(self[attr]).."'")
 		end
 	end
 	local attr_string = table.concat (attrs, ',')
 	local value_string = table.concat (values, ',')
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
-	local id = db:query_insert(query)
+	local id = db.query_insert(query)
 
 	self[self.db.key] = id
-	db:close()
+	db.close()
 	return true
 end
 
 function model:update()
-	local db = require("sailor.db"):new()
-	db:connect()
+	db.connect()
 	local attributes = self.attributes
 	local key = self.db.key
 	local updates = {}
@@ -80,15 +79,15 @@ function model:update()
 		elseif type(self[attr]) == 'number' then
 			string = string..self[attr]
 		else
-			string = string.."'"..db:escape(self[attr]).."'"
+			string = string.."'"..db.escape(self[attr]).."'"
 		end
 		table.insert(updates,string)
 	end
 	local update_string = table.concat (updates, ', ')
-	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = "..db:escape(self[key])..";"
+	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = "..db.escape(self[key])..";"
 
-	local u = (db:query(query) ~= 0)
-	db:close()
+	local u = (db.query(query) ~= 0)
+	db.close()
 	return u
 end
 
@@ -104,17 +103,15 @@ function model:fetch_object(cur)
 end
 
 function model:find_by_id(id)
-	local db = require("sailor.db"):new()
-	db:connect()
-	local cur = db:query("select * from "..self.db.table.." where "..self.db.key.."='"..db:escape(id).."';")
+	db.connect()
+	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';")
 	local f = self:fetch_object(cur)
-	db:close()
+	db.close()
 	return f
 end
 
 function model:find_by_attributes(attributes)
-	local db = require("sailor.db"):new()
-	db:connect()
+	db.connect()
 
 	local n = 0
     local where = ' where '
@@ -122,39 +119,37 @@ function model:find_by_attributes(attributes)
         if n > 0 then
             where = where..' and '
         end
-        v = db:escape(v)
+        v = db.escape(v)
         where = where..k.." = '"..v.."' "
         n = n+1
     end
 
-    local cur = db:query("select * from "..self.db.table..where..";")
+    local cur = db.query("select * from "..self.db.table..where..";")
 	local f = self:fetch_object(cur)
-	db:close()
+	db.close()
 	return f
 	
 end
 
 function model:find(where_string)
 	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
-	local db = require("sailor.db"):new()
-	db:connect()
-	local cur = db:query("select * from "..self.db.table.." where "..where_string..";")
+	db.connect()
+	local cur = db.query("select * from "..self.db.table.." where "..where_string..";")
 	local f = self:fetch_object(cur)
-	db:close()
+	db.close()
 	return f
 end
 
 function model:find_all(where_string)
 	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
-	local db = require("sailor.db"):new()
-	db:connect()
+	db.connect()
 	local key = self.db.key
 	if where_string then
 		where_string = " where "..where_string
 	else
 		where_string = ''
 	end
-	local cur = db:query("select * from "..self.db.table..where_string..";")
+	local cur = db.query("select * from "..self.db.table..where_string..";")
 	local res = {}
 	local row = cur:fetch ({}, "a")
 	while row do
@@ -166,20 +161,19 @@ function model:find_all(where_string)
 		row = cur:fetch (row, "a")
 	end
 	cur:close()
-	db:close()
+	db.close()
 	return res
 end
 
 function model:delete()
-	local db = require("sailor.db"):new()
-	db:connect()
+	db.connect()
 	local id = self[self.db.key]
 	if id and self:find(id) then
-		local d = (db:query("delete from "..self.db.table.." where "..self.db.key.."='"..db:escape(id).."';") ~= 0)
-		db:close()
+		local d = (db.query("delete from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';") ~= 0)
+		db.close()
 		return d
 	end
-	db:close()
+	db.close()
 	return false
 end
 
@@ -188,6 +182,7 @@ function model:validate()
 	local errs = {}
 	for attr,rules in pairs(self.attributes) do 
 		local val = validation:new()
+		
 		for val_func,args in pairs(rules) do
 			val = val[val_func](unpack(args))
 		end
@@ -217,6 +212,51 @@ function model:get_post(POST)
    		sub(k,self["@name"]..":(.*)",apply)
    	end
    	return res
+end
+
+function model.generate_model(table_name)
+	local query = [[SELECT *
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE table_name = ']]..table_name..[[';]]
+
+	local code = [[local model = require "sailor.model"
+local ]]..table_name..[[ = {}
+
+-- Attributes and their validation rules
+]]..table_name..[[.attributes = {
+	--<attribute> = { <valfunc> = {<args>}, <valfunc> = {<args>}...}
+]]
+
+	db.connect()
+	local key
+	local cur = db.query(query)
+	local res = {}
+	local row = cur:fetch ({}, "a")
+	while row do
+		if row.COLUMN_KEY == "PRI" then
+			key = row.COLUMN_NAME
+		end
+		code = code..[[
+	]]..row.COLUMN_NAME..[[ = "safe",
+]]
+		row = cur:fetch (row, "a")
+	end
+	code = code..[[
+}
+
+]]..table_name..[[.db = {
+	key = ']]..key..[[',
+	table = ']]..table_name..[['
+}
+
+return model:new(]]..table_name..[[)
+
+]]
+	cur:close()
+	db.close()
+	local file = io.open("models/"..table_name..".lua", "w")
+	file:write(code)
+	file:close()
 end
 
 return model
