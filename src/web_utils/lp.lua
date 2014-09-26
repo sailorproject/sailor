@@ -101,12 +101,12 @@ local cache = {}
 -- @return Function with the resulting translation.
 
 function M.compile (string, chunkname, env)
-        local s, err = cache[string]
+        local s = cache[string]
         if not s then
                 s = M.translate (string)
                 cache[string] = s
         end
-        f, err = load (s, chunkname, "bt", env)
+        local f, err = load (s, chunkname, "bt", env)
         if not f then error (err, 3) end
         return f
 end
