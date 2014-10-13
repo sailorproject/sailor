@@ -7,7 +7,6 @@
 --------------------------------------------------------------------------------
 
 local model = {}
-local validation = require "valua"
 local db = require("sailor.db")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
@@ -17,7 +16,13 @@ function model:new(obj)
 	self.__index = self
 	obj.__newindex = function (table, key, value)
 		if key ~= '__newindex' then
-			if  not obj.attributes[key] and not obj[key] then
+			local found = false
+			for _,attr in pairs(obj.attributes) do
+				if attr == key or attr[key] then
+					found = true
+				end
+			end
+			if not found and not obj[key] then
 				error(tostring(key).." is not a valid attribute for this model.")
 			end
 		end
@@ -180,16 +185,30 @@ end
 function model:validate()
 	local check = true
 	local errs = {}
-	for attr,rules in pairs(self.attributes) do 
-		local val = validation:new()
+
+	for _,n in pairs(self.attributes) do 
 		
-		for val_func,args in pairs(rules) do
-			val = val[val_func](unpack(args))
+		for attr,rules in pairs(n) do
+		
+		if rules and rules ~= "safe" then 
+
+			local res, err = rules(self[attr])
+
+			check = check and res
+			if not res then
+				table.insert(errs,"'"..attr.."' "..tostring(err))
+			end
+		--[[	local val = validation:new()
+
+			for val_func,args in pairs(rules) do
+				val = val[val_func](unpack(args))
+			end
+			local res, err = val(self[attr])
+			check = check and res
+			if not res then
+				table.insert(errs,"'"..attr.."' "..err)
+			end]]
 		end
-		local res, err = val(self[attr])
-		check = check and res
-		if not res then
-			table.insert(errs,"'"..attr.."' "..err)
 		end
 	end
 	return check,errs
