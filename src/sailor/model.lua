@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.2: basic model creator, uses db module
+-- model.lua, v0.3: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -278,7 +278,7 @@ return model:new(]]..table_name..[[)
 	file:close()
 end
 
-function model:generate_mysql()
+--[[function model:generate_mysql()
 	local query = "create table "..self.db.table.."("
 
 	for attr,rules in pairs(self.attributes) do 
@@ -319,6 +319,6 @@ function model:generate_mysql()
 	db.connect()
 	db.query(query)
 	db.close()
-end
+end]]
 
 return model
