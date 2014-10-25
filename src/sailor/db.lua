@@ -49,7 +49,7 @@ end
 
 
 --- Runs two queries and returns the result of the second query.
--- It is no longer in use. It was used by src.model to insert and obtain the last id.
+-- It is no longer in use. It was used by sailor.model to insert and obtain the last id.
 -- It is now replaced by query_insert but it's still a valid method that could be used again.
 -- @param q1 string: first query to be executed
 -- @param q2 string: second query to be executed

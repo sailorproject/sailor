@@ -238,12 +238,14 @@ function model.generate_model(table_name)
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE table_name = ']]..table_name..[[';]]
 
-	local code = [[local model = require "sailor.model"
+	local code = [[-- Uncomment this to use validation rules
+-- local val = require "valua"
 local ]]..table_name..[[ = {}
 
 -- Attributes and their validation rules
 ]]..table_name..[[.attributes = {
-	--<attribute> = { <valfunc> = {<args>}, <valfunc> = {<args>}...}
+	-- {<attribute> = <validation function, valua required>}
+	-- Ex. {id = val:new().integer()}
 ]]
 
 	db.connect()
@@ -268,7 +270,7 @@ local ]]..table_name..[[ = {}
 	table = ']]..table_name..[['
 }
 
-return model:new(]]..table_name..[[)
+return ]]..table_name..[[
 
 ]]
 	cur:close()

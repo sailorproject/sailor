@@ -1,12 +1,11 @@
-local model = require "sailor.model"
 local user = {}
-
+local val = require "valua"
 -- Attributes and their validation rules
 user.attributes = {
-	--<attribute> = { <valfunc> = {<args>}, <valfunc> = {<args>}...}
-	id = {},
-	username = { not_empty = {} },
-	password = { not_empty = {}, len = {6,10} }
+	--{<attribute> =  < "safe" or validation function, requires valua >}
+	{id = "safe"},
+	{username = val:new().not_empty() },
+	{password = val:new().not_empty().len(6,10) }
 }
 
 user.db = {
@@ -18,4 +17,4 @@ user.db = {
 function user.test() return "test" end
 
 
-return model:new(user)
+return user

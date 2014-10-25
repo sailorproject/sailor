@@ -218,18 +218,20 @@ end
 
 -- Creates a sailor model and returns an instantiated object
 -- There must be a .lua file with the model's name under /model
--- model: string, model's name. 
-function sailor.new(model)
+-- model_name: string, model's name. 
+function sailor.new(model_name)
+    local model = require "sailor.model"
     local obj = {}
-    obj["@name"] = model
-    return sailor.model(model):new(obj)
+    obj["@name"] = model_name
+    return sailor.model_name(model_name):new(obj)
 end
 
 -- Creates a sailor model that can be instantiated in objects with :new()
 -- There must be a .lua file with the model's name under /model
--- model: string, model's name. 
-function sailor.model(model)
-    local obj = require("models."..model)
-    obj["@name"] = model
-    return obj
+-- model_name: string, model's name. 
+function sailor.model(model_name)
+    local model = require "sailor.model"
+    local obj = require("models."..model_name)
+    obj["@name"] = model_name
+    return model:new(obj)
 end
