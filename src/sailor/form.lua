@@ -23,6 +23,11 @@ function form.textarea(model,attribute,html_options)
 	return '<textarea name="'..name..'" '..html_options..'>'..value..'</textarea>'
 end
 
+function form.file(model,attribute,html_options)
+	local value, name, html_options = defaults(model,attribute,html_options)
+	return '<input type="file" name="'..name..'" '..html_options..'>'..value..'</textarea>'
+end
+
 function form.dropdown(model,attribute,list,prompt,html_options)
 	local value, name, html_options = defaults(model,attribute,html_options)
 	list = list or {}
