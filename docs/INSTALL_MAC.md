@@ -6,22 +6,16 @@ Sailor is compatible with a variety of operating systems and webservers. On this
 
 Sailor is compatible with both Lua 5.1 and Lua 5.2. OS X 10.9 Mavericks already comes with Apache 2.2 by default, but you can't use Lua scripts on it.
 
-We need to install Lua, luarocks and Apache 2.4.
+You need to install Lua, luarocks and Apache 2.4.
 
     brew update
     brew install lua luarocks zlib homebrew/apache/httpd24
 
-After installing those packages, you'll need to add a couple of directives to Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/2.4/httpd.conf`. First, you'll need to add or uncomment the following directive:
+After installing those packages, you need to enable `mod_lua` in Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/2.4/httpd.conf`. Add or uncomment the following directive:
 
     LoadModule lua_module modules/mod_lua.so
 
-Secondly, you need to register the following handler for *.lua files:
-
-    <Files *.lua>
-        SetHandler lua-script
-    </Files>
-
-Finally, you need to look for the `DirectoryIndex` setting and change it to `index.lua`.
+It's also necessary to allow `.htaccess` files. Look for the `AllowOverride` directive in the configuration file and change from `None` (the default) to `All`.
 
 Now, you should restart Apache. You can use the following command for that:
 
