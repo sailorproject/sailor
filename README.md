@@ -29,7 +29,7 @@ For Windows, see [INSTALL_WIN.md](https://github.com/Etiene/sailor/blob/master/d
 A default Sailor app will have the following directory tree structure:
 * /conf - configuration files, open and edit them.
 * /controllers - controllers you will make!
-* /layouts - default layout files. 
+* /layouts - default layout files.
 * /models - models you will make!
 * /pub - publicly accessible files (js libraries, for example)
 * /runtime - temporary files generated during runtime.
@@ -66,7 +66,7 @@ Go to /views, create a dir named 'site' to match your controller name and create
   Hi, <?=name?>
 </p>
 ```
-For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates 
+For more information on what you can do with html and Lua Pages, visit http://keplerproject.github.io/cgilua/manual.html#templates
 
 For more examples, you can check the test controller (/controllers/test.lua), the test views (/views/test/*) and the User model (/models/user.lua)
 

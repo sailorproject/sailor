@@ -26,7 +26,7 @@ Download Apache 2.4 according to your Windows version:
 
 Windows 7, 8/8.1, Vista, Server 2008, Server 2012 - <http://www.apachelounge.com/download/>
 
-Windows XP - <http://www.apachelounge.com/download/win32/> 
+Windows XP - <http://www.apachelounge.com/download/win32/>
 
 Unzip the package (eg: httpd-2.4.9-win32.zip) to C:\Apache24\
 
@@ -37,22 +37,22 @@ Copy the files in the `src/sailor/demo-app` directory of this repository to C:/A
 Edit `\conf\httpd.conf` and uncomment the following line to enable mod_lua:
 
     LoadModule lua_module modules/mod_lua.so
-    
+
 Change the DirectoryIndex directive to:
 
     DirectoryIndex index.lua index.html
-    
+
 Add the SetHandler directive:
 
     <FilesMatch "\.lua$">
       SetHandler lua-script
     </FilesMatch>
-    
+
 Optionally, tweak mod_lua for high performance:
 
     LuaScope thread
     LuaCodeCache stat
-    
+
 Add the LuaPackage* directives:
 
     <IfModule lua_module>
@@ -62,7 +62,7 @@ Add the LuaPackage* directives:
      LuaPackagePath "C:/Apache24/htdocs/sailor/?.lua"
      LuaPackagePath "C:/Apache24/htdocs/sailor/?/init.lua"
     </IfModule>
-    
+
 ####Alternative Installation with mod_plua
 
 Download mod_plua from <http://sourceforge.net/projects/modplua/files/>
@@ -74,7 +74,7 @@ Install and configure it as explained at <http://sourceforge.net/p/modplua/wiki/
 TODO
 
 ####Done!
-    
+
 Run bin\httpd.exe in the Apache24 directory.
 
 Now go to <http://localhost/sailor/?r=main> in your browser. You should see the default Sailor page.
@@ -113,7 +113,7 @@ You must also add to the server block:
         index  index.lua index.lp;
     }
     location ~* ^.+\.(?:css|eot|js|json|png|svg|ttf|woff)$ { }
-    
+
 ####Done!
-    
+
 Now run nginx.exe and go to <http://localhost/sailor/index.lua?r=main> in your browser.
