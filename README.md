@@ -25,6 +25,8 @@ For Linux, see [INSTALL_LINUX.md](https://github.com/Etiene/sailor/blob/master/d
 
 For Windows, see [INSTALL_WIN.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_WIN.md)
 
+For Mac, see [INSTALL_MAC.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_MAC.md)
+
 ### Using Sailor
 A default Sailor app will have the following directory tree structure:
 * /conf - configuration files, open and edit them.
