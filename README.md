@@ -1,7 +1,7 @@
-Sailor
-======
-
+#Sailor
 A Lua MVC Framework. www.sailorproject.org
+
+[![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Development progress
 So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have controllers, a mailer module,  routes, basic models, db connection, a validation module, integration with lua51.js so we can use Lua at client-side, basic form generation, sessions, basic authentication and some other stuff. We are now working on researching, refactoring, making Sailor compatible with more environments and making documentation for releasing a version 0.2 and a luarocks build. After that is done the roadmap is rewriting the DB module for benefiting from mod_lua's API, reviewing the session management, improving form generation, making models relate to each other and keep improving Sailor's compatibility.
