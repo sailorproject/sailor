@@ -17,9 +17,11 @@ function model:new(obj)
 	obj.__newindex = function (table, key, value)
 		if key ~= '__newindex' then
 			local found = false
-			for _,attr in pairs(obj.attributes) do
-				if attr == key or attr[key] then
-					found = true
+			for _,n in pairs(obj.attributes) do 
+				for attr,_ in pairs(n) do
+					if attr == key or attr[key] then
+						found = true
+					end
 				end
 			end
 			if not found and not obj[key] then
@@ -51,20 +53,24 @@ function model:insert()
 
 	local attrs = {}
 	local values = {}
-	for attr,_ in pairs(attributes) do
-		table.insert(attrs,attr)
-		if not self[attr] then
-			table.insert(values,"null")
-		elseif type(self[attr]) == 'number' then
-			table.insert(values,self[attr])
-		else
-			table.insert(values,"'"..db.escape(self[attr]).."'")
+	for _,n in pairs(self.attributes) do 
+		for attr,_ in pairs(n) do
+			table.insert(attrs,attr)
+			if not self[attr] then
+				table.insert(values,"null")
+			elseif type(self[attr]) == 'number' then
+				table.insert(values,self[attr])
+			else
+				table.insert(values,"'"..db.escape(self[attr]).."'")
+			end
 		end
 	end
 	local attr_string = table.concat (attrs, ',')
 	local value_string = table.concat (values, ',')
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
+
+	sailor.r:puts(query)
 	local id = db.query_insert(query)
 
 	self[self.db.key] = id
@@ -77,16 +83,18 @@ function model:update()
 	local attributes = self.attributes
 	local key = self.db.key
 	local updates = {}
-	for attr,_ in pairs(attributes) do
-		local string = attr.."="
-		if not self[attr] then
-			string = string.."null"
-		elseif type(self[attr]) == 'number' then
-			string = string..self[attr]
-		else
-			string = string.."'"..db.escape(self[attr]).."'"
+	for _,n in pairs(self.attributes) do 
+		for attr,_ in pairs(n) do
+			local string = attr.."="
+			if not self[attr] then
+				string = string.."null"
+			elseif type(self[attr]) == 'number' then
+				string = string..self[attr]
+			else
+				string = string.."'"..db.escape(self[attr]).."'"
+			end
+			table.insert(updates,string)
 		end
-		table.insert(updates,string)
 	end
 	local update_string = table.concat (updates, ', ')
 	local query = "update "..self.db.table.." set "..update_string.." where "..key.." = "..db.escape(self[key])..";"
@@ -159,8 +167,10 @@ function model:find_all(where_string)
 	local row = cur:fetch ({}, "a")
 	while row do
 		local obj = {}
-		for attr,_ in pairs(self.attributes) do 
-			obj[attr] = row[attr]
+		for _,n in pairs(self.attributes) do 
+			for attr,_ in pairs(n) do
+				obj[attr] = row[attr]
+			end
 		end
 		res[row[key]] = self:new(obj)
 		row = cur:fetch (row, "a")
@@ -190,25 +200,25 @@ function model:validate()
 		
 		for attr,rules in pairs(n) do
 		
-		if rules and rules ~= "safe" then 
+			if rules and rules ~= "safe" then 
 
-			local res, err = rules(self[attr])
+				local res, err = rules(self[attr])
 
-			check = check and res
-			if not res then
-				table.insert(errs,"'"..attr.."' "..tostring(err))
+				check = check and res
+				if not res then
+					table.insert(errs,"'"..attr.."' "..tostring(err))
+				end
+			--[[	local val = validation:new()
+
+				for val_func,args in pairs(rules) do
+					val = val[val_func](unpack(args))
+				end
+				local res, err = val(self[attr])
+				check = check and res
+				if not res then
+					table.insert(errs,"'"..attr.."' "..err)
+				end]]
 			end
-		--[[	local val = validation:new()
-
-			for val_func,args in pairs(rules) do
-				val = val[val_func](unpack(args))
-			end
-			local res, err = val(self[attr])
-			check = check and res
-			if not res then
-				table.insert(errs,"'"..attr.."' "..err)
-			end]]
-		end
 		end
 	end
 	return check,errs
@@ -216,21 +226,20 @@ end
 
 function model:get_post(POST)
 	local sub = string.gsub
-	local value
-	local res = false
+	local value = ""
 	local function apply(attr)
-		if not self.attributes[attr] then
-			return false, "No attribute '"..attr.."' in model '"..self["@name"]
-		end
 		self[attr] = value
-		res = res or true
 	end
 	if not next(POST) then return false end
 	for k,v in pairs(POST) do
-		value = v
+		if type(v) == "table" then
+			value = v[#v]
+		else
+			value = tostring(v)
+		end
    		sub(k,self["@name"]..":(.*)",apply)
    	end
-   	return res
+   	return true
 end
 
 function model.generate_model(table_name)

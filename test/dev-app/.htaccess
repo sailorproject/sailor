@@ -1,5 +1,4 @@
-
 <FilesMatch "\.lua$">
-	AddHandler lua-script .lua
+       AddHandler lua-script .lua
 </FilesMatch>
 DirectoryIndex index.lua
