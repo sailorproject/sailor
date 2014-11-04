@@ -6,7 +6,7 @@ Sailor is compatible with a variety of operating systems and webservers. On this
 If you don't have it already, install Lua. Sailor is compatible with both 5.1 and 5.2.
 
     sudo apt-get install lua5.2
-    
+
 ### Installing Apache 2.4
 
 On Ubuntu 13.10 and above, use the following command to install Apache 2.4.x:
@@ -24,7 +24,7 @@ If you are compiling apache by yourself it might be necessary to add the flag --
 Enable mod_lua
 
     a2enmod lua
-    
+
 On some versions where a2enmod command is not available, you may enable it alternatively by uncommenting this line on httpd.conf
 
     LoadModule lua_module modules/mod_lua.so
@@ -32,21 +32,21 @@ On some versions where a2enmod command is not available, you may enable it alter
 Restart Apache
 
     service apache2 restart
-    
+
 ### Installing Sailor
 You can either clone it directly from the repository, download the zip containing the master branch or download and install it through LuaRocks. We will go through LuaRocks since it will also download and install almost all the required dependencies except for luasql-mysql if you want to persist your models.
 
     sudo apt-get install luarocks
     luarocks install sailor
-    
+
 We are almost done! You can now use `sailor_create` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on http://localhost/hey_arnold
 
     sailor_create 'Hey Arnold' /var/www
 
-Alternatively, you can manually copy the files in the /src/sailor/demo-app directory of this repository to /var/www/hey_arnold and access it at <http://localhost/hey_arnold> and if you didn't install sailor through LuaRocks, you must open .htaccess and replace {{path}} with the full path on your system to Sailor's src directory. 
+Alternatively, you can manually copy the files in the /src/sailor/demo-app directory of this repository to /var/www/hey_arnold and access it at <http://localhost/hey_arnold> and if you didn't install sailor through LuaRocks, you must open .htaccess and replace {{path}} with the full path on your system to Sailor's src directory.
 
 #### Dependencies
-If you want to persist your models you need luasql. Sailor could work with other drivers but so far we've only tested with mysql and don't offer support for others. 
+If you want to persist your models you need luasql. Sailor could work with other drivers but so far we've only tested with mysql and don't offer support for others.
 
     luarocks install luasql-mysql
 
@@ -83,9 +83,9 @@ Open the nginx.conf file and add to the http block:
 
     lua_package_path 'path/to/lua/?.lua;path/to/html/hey_arnold/?.lua;';
     lua_package_cpath 'path/to/clibs/?.so;';
-    
+
 Don't forget to replace path/to with the actual path to your Lua installation and the Nginx document root.
-    
+
 You must also add to the server block:
 
     location ~ ^/hey_arnold/(.+) {
@@ -95,6 +95,6 @@ You must also add to the server block:
         index  index.lua index.lp;
     }
     location ~* ^.+\.(?:css|eot|js|json|png|svg|ttf|woff)$ { }
-    
+
 Now run nginx and go to http://localhost/hey_arnold/index.lua?r=main in your browser.
 
