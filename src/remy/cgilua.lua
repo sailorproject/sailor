@@ -15,8 +15,10 @@ local request = {
 	parseargs = function(_) return cgilua.QUERY, {} end,
 	parsebody = function(_) return cgilua.POST, {} end,
 	-- REQUEST RESPONSE FUNCTIONS
-	puts = function(_,...) cgilua.put(...) end,
-	write = function(_,...) cgilua.print(...) end
+	--puts = function(_,...) cgilua.put(...) end,
+	--write = function(_,...) cgilua.print(...) end
+	puts = function(_,...) remy.print(...) end,
+	write = function(_,...) remy.print(...) end
 }
 
 local M = {
@@ -63,10 +65,16 @@ function M.init()
 end
 
 function M.getpathinfo()
-	local p = cgilua.urlpath
-  	if p == nil then
-  		p = cgilua.servervariable("SCRIPT_NAME")
-  	end
+  -- Xavante compatibility fix (Etiene)
+  if cgilua.servervariable("SERVER_NAME") == "" then
+    -- By default, Xavante will have an empty server name
+    -- A more accurate detection method is needed here
+    local p = cgilua.urlpath
+  end
+	local p = cgilua.servervariable("PATH_INFO")
+  if p == nil then
+    p = cgilua.servervariable("SCRIPT_NAME")
+  end
   return p
 end
 
@@ -80,18 +88,42 @@ function M.getunparseduri()
 end
 
 function M.contentheader(content_type)
-	if content_type == "text/html" then
+	local r = request
+	r.content_type = content_type
+end
+
+-- TODO: better handle the return code
+function M.finish(code)
+	local r = request
+	
+	-- Handle page redirect
+	local location = r.headers_out['Location']
+  if location ~= nil and r.status == 302 then
+     if location:match('^https?://') then
+				cgilua.redirect(location)
+     else
+        -- CGILua needs a full URL
+        if r.is_https then
+					location = 'https://'..cgilua.servervariable("HTTP_HOST")..location
+        else
+					location = 'http://'..cgilua.servervariable("HTTP_HOST")..location
+        end
+				cgilua.redirect(location)
+     end
+  end
+	
+	-- Prints the response text (if any)
+	if r.content_type == "text/html" then
 		cgilua.htmlheader()
 	else
 		local header_sep = "/"
-		local header_type = remy.splitstring(content_type,header_sep)[1]
-		local header_subtype = remy.splitstring(content_type,header_sep)[2]
+		local header_type = remy.splitstring(r.content_type,header_sep)[1]
+		local header_subtype = remy.splitstring(r.content_type,header_sep)[2]
 		cgilua.contentheader(header_type,header_subtype)
 	end
-end
-
--- TODO: handle the return code in CGILua
-function M.finish(code)
+	if remy.responsetext ~= nil then
+	   cgilua.print(remy.responsetext)
+	end
 end
 
 return M

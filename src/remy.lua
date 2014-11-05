@@ -1,4 +1,4 @@
--- Remy 0.2.5
+-- Remy 0.2.6
 -- Copyright (c) 2014 Felipe Daragon
 -- License: MIT (http://opensource.org/licenses/mit-license.php)
 --
@@ -19,6 +19,8 @@ remy.config = {
 	hostname = "localhost",
 	uri = "/index.lua"
 }
+
+remy.responsetext = nil
 
 -- HTTPd Package constants
 remy.httpd = {
@@ -91,6 +93,7 @@ local request_rec_fields = {
 }
 
 function remy.init(mode)
+  remy.responsetext = nil
 	if mode == nil then
 		mode = remy.detect()
 	end
@@ -135,6 +138,12 @@ end
 function remy.loadrequestrec(r)
 	for k,v in pairs(request_rec_fields) do r[k] = v end
 	return r
+end
+
+-- Temporarily stores the printed content (needed by CGILua mode)
+function remy.print(str)
+  remy.responsetext = remy.responsetext or ""
+  remy.responsetext = remy.responsetext..str
 end
 
 -- Runs the mod_lua handle function

@@ -140,13 +140,19 @@ function Page:render(filename,parms)
         if self.controller then
             dir = '/'..self.controller
         end
-        filepath = sailor.path.."/views"..dir.."/"..filename
-        src = read_src(filepath)
+        -- filename is nil if the controller script is missing in /controllers/
+        -- ToDo: print error informing about missing controller?
+        if filename ~= nil then
+					filepath = sailor.path.."/views"..dir.."/"..filename
+					src = read_src(filepath)
+				end
     end
-
-    src = lp.translate(src)
-    parms.page = self
-    render_page(filepath..".lp",src,parms)
+    
+    if filename ~= nil then
+			src = lp.translate(src)
+			parms.page = self
+			render_page(filepath..".lp",src,parms)
+	  end
 end
 
 -- Redirects to another action or another address
@@ -163,7 +169,8 @@ function Page:redirect(route,args)
     end
       
     self.r.headers_out['Location'] = route
-    return 302
+    self.r.status = 302
+    return self.r.status
 end
 
 -- Reads route GET var to decide which controller/action or default page to run.
