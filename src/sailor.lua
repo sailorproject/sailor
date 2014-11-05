@@ -143,16 +143,16 @@ function Page:render(filename,parms)
         -- filename is nil if the controller script is missing in /controllers/
         -- ToDo: print error informing about missing controller?
         if filename ~= nil then
-					filepath = sailor.path.."/views"..dir.."/"..filename
-					src = read_src(filepath)
-				end
+            filepath = sailor.path.."/views"..dir.."/"..filename
+            src = read_src(filepath)
+        end
     end
     
     if filename ~= nil then
-			src = lp.translate(src)
-			parms.page = self
-			render_page(filepath..".lp",src,parms)
-	  end
+        src = lp.translate(src)
+        parms.page = self
+        render_page(filepath..".lp",src,parms)
+    end
 end
 
 -- Redirects to another action or another address
