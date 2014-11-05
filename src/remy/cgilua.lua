@@ -65,13 +65,13 @@ function M.init()
 end
 
 function M.getpathinfo()
+	local p = cgilua.servervariable("PATH_INFO")
   -- Xavante compatibility fix (Etiene)
   if cgilua.servervariable("SERVER_NAME") == "" then
     -- By default, Xavante will have an empty server name
     -- A more accurate detection method is needed here
-    local p = cgilua.urlpath
+    p = cgilua.urlpath
   end
-	local p = cgilua.servervariable("PATH_INFO")
   if p == nil then
     p = cgilua.servervariable("SCRIPT_NAME")
   end
