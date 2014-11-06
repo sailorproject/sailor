@@ -18,7 +18,7 @@ More about this project's motivation can be found here: http://etiene.net/sailor
 
 ### Supported Environments
 
-Sailor has been tested under Linux, Mac OS X and Windows and is currently compatible with Apache with [mod_lua](http://www.modlua.org/) or [mod_pLua](https://github.com/Humbedooh/mod_pLua), Nginx with [ngx_lua](https://github.com/chaoslawful/lua-nginx-module), or any CGI-enabled web server, like [Civetweb](https://github.com/sunsetbrew/civetweb) or [Mongoose](https://github.com/cesanta/mongoose), if [CGILua](https://github.com/keplerproject/cgilua) is present.
+Sailor has been tested under Linux, Mac OS X and Windows and is currently compatible with Apache with [mod_lua](http://www.modlua.org/) or [mod_pLua](https://github.com/Humbedooh/mod_pLua), Nginx with [ngx_lua](https://github.com/chaoslawful/lua-nginx-module), or any CGI-enabled web server, like [Civetweb](https://github.com/bel2125/civetweb) or [Mongoose](https://github.com/cesanta/mongoose), if [CGILua](https://github.com/keplerproject/cgilua) is present.
 
 ### Installation
 
