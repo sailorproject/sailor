@@ -66,16 +66,14 @@ end
 
 function M.getpathinfo()
 	local p = cgilua.servervariable("PATH_INFO")
-  -- Xavante compatibility fix (Etiene)
-  if cgilua.servervariable("SERVER_NAME") == "" then
-    -- By default, Xavante will have an empty server name
-    -- A more accurate detection method is needed here
-    p = cgilua.urlpath
-  end
-  if p == nil then
-    p = cgilua.servervariable("SCRIPT_NAME")
-  end
-  return p
+	--Xavante compatibility fix (Etiene)
+	if cgilua.servervariable("SERVER_SOFTWARE"):match('^Xavante')then
+		p = cgilua.urlpath
+	end
+	if p == nil then
+		p = cgilua.servervariable("SCRIPT_NAME")
+	end
+	return p
 end
 
 function M.getunparseduri()
