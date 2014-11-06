@@ -195,8 +195,11 @@ function sailor.route(page)
 
         if not route then
             -- file not found
-            local _,res = xpcall(function () page:render(conf.sailor.default_error404) end, error_handler)
-            return res or 404
+            if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
+                local _,res = xpcall(function () page:render(conf.sailor.default_error404) end, error_handler)
+            end
+            page.r.status = 404
+            return res or page.r.status 
        else
             local ctr = require("controllers."..controller)
             page.controller = controller
@@ -206,8 +209,11 @@ function sailor.route(page)
             end
             if(ctr[action] == nil) then 
                 -- controller does not have an action with this name
-                local _, res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
-                return res or 404
+                if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
+                    local _, res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
+                end
+                page.r.status = 404
+                return res or page.r.status 
             else
                 -- run action
                 local _, res = xpcall(function() return ctr[action](page) end, error_handler)
