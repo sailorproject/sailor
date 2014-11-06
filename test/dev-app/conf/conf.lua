@@ -6,7 +6,8 @@ local conf = {
 		default_controller = 'main', 
 		default_action = 'index',
 		layout = 'default',
-		route_parameter = 'r'
+		route_parameter = 'r',
+		default_error404 = 'error/404'
 	},
 	db = {
 		driver = 'mysql',
