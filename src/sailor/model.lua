@@ -5,24 +5,43 @@
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
-
-local model = {}
+local ins = require "inspect"
+local model = {loaded_relations = {}}
 local db = require("sailor.db")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
 	obj = obj or {}
 	setmetatable(obj,self)
-	self.__index = self
-	obj.__newindex = function (table, key, value)
-		if key ~= '__newindex' then
+	self.__index = function (table, key)
+		local ret
+		if key ~= "attributes" and key ~= "relations" and not model[key] then
 			local found = false
-			for _,n in pairs(obj.attributes) do 
-				for attr,_ in pairs(n) do
-					if attr == key or attr[key] then
-						found = true
-					end
+			for _,attrs in pairs(obj.attributes) do 
+				if attrs[key] then
+					found = true
 				end
+			end
+			if obj.relations and obj.relations[key] then
+				found = true
+				ret = obj:get_relation(key)
+			end
+			if not found then
+				error(tostring(key).." is not a valid attribute for this model.")
+			end
+		end
+		return ret or self[key]
+	end
+	obj.__newindex = function (table, key, value)
+		if key ~= '__newindex'  and  key ~= '__index'  then
+			local found = false
+			for _,attrs in pairs(obj.attributes) do 
+				if attrs[key] then
+					found = true
+				end
+			end
+			if obj.relations and obj.relations[key] then
+				found = true
 			end
 			if not found and not obj[key] then
 				error(tostring(key).." is not a valid attribute for this model.")
@@ -45,6 +64,22 @@ function model:save()
 		return self:update()
 	end
 end
+
+function model:get_relation(key)
+	if not self.loaded_relations[key] then
+		local Model, obj
+		local rel = self.relations
+		if self.relations[key].relation == "HAS_ONE" then
+			Model = sailor.model(self.relations[key].model)
+			obj = Model:find_by_id(self[self.relations[key].attribute])
+			self.loaded_relations[key] = obj 
+			obj.loaded_relations = {}
+			return obj
+		end
+	else
+		return self.loaded_relations[key]
+	end
+end	
 
 function model:insert()
 	db.connect()
@@ -197,27 +232,14 @@ function model:validate()
 	local errs = {}
 
 	for _,n in pairs(self.attributes) do 
-		
 		for attr,rules in pairs(n) do
-		
 			if rules and rules ~= "safe" then 
-
 				local res, err = rules(self[attr])
-
+				
 				check = check and res
 				if not res then
 					table.insert(errs,"'"..attr.."' "..tostring(err))
 				end
-			--[[	local val = validation:new()
-
-				for val_func,args in pairs(rules) do
-					val = val[val_func](unpack(args))
-				end
-				local res, err = val(self[attr])
-				check = check and res
-				if not res then
-					table.insert(errs,"'"..attr.."' "..err)
-				end]]
 			end
 		end
 	end
