@@ -5,7 +5,7 @@
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
-local ins = require "inspect"
+local inspect = require "inspect"
 local model = {loaded_relations = {}}
 local db = require("sailor.db")
 
@@ -15,11 +15,13 @@ function model:new(obj)
 	setmetatable(obj,self)
 	self.__index = function (table, key)
 		local ret
-		if key ~= "attributes" and key ~= "relations" and not model[key] then
+		if key ~= "attributes" and key ~= "relations" and key ~= "db" and not model[key] then
 			local found = false
 			for _,attrs in pairs(obj.attributes) do 
-				if attrs[key] then
-					found = true
+				for attr,_ in pairs(attrs) do 
+					if attr == key or attr[key] then
+						found = true
+					end
 				end
 			end
 			if obj.relations and obj.relations[key] then
@@ -66,16 +68,37 @@ function model:save()
 end
 
 function model:get_relation(key)
+	local relation = self.relations[key]
 	if not self.loaded_relations[key] then
-		local Model, obj
-		local rel = self.relations
-		if self.relations[key].relation == "HAS_ONE" then
-			Model = sailor.model(self.relations[key].model)
-			obj = Model:find_by_id(self[self.relations[key].attribute])
-			self.loaded_relations[key] = obj 
-			obj.loaded_relations = {}
-			return obj
+		local Model = sailor.model(relation.model)
+		local obj = {}
+
+		if relation.relation == "BELONGS_TO" then
+			obj = Model:find_by_id(self[relation.attribute])
+
+		elseif relation.relation == "HAS_ONE" then
+			local attributes = {}
+			attributes[relation.attribute] = self[self.db.key]
+			obj = Model:find_by_attributes( attributes )
+
+		elseif relation.relation == "HAS_MANY" then
+			obj = Model:find_all(relation.attribute..' = '..self[self.db.key])
+
+		elseif relation.relation == "MANY_MANY" then
+			db.connect()
+			local cur = db.query("select "..relation.attributes[2].." from "..relation.table.." where "..relation.attributes[1].."='"..self[self.db.key].."';")
+			local res = {}
+			local row = cur:fetch ({}, "a")
+			while row do
+				table.insert(obj,Model:find_by_id(row[relation.attributes[2]]))
+				row = cur:fetch (row, "a")
+			end
+			cur:close()
+			db.close()
 		end
+
+		self.loaded_relations[key] = obj 
+		return obj
 	else
 		return self.loaded_relations[key]
 	end
@@ -235,7 +258,7 @@ function model:validate()
 		for attr,rules in pairs(n) do
 			if rules and rules ~= "safe" then 
 				local res, err = rules(self[attr])
-				
+
 				check = check and res
 				if not res then
 					table.insert(errs,"'"..attr.."' "..tostring(err))
