@@ -5,7 +5,6 @@
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
-local inspect = require "inspect"
 local model = {loaded_relations = {}}
 local db = require("sailor.db")
 
