@@ -217,6 +217,9 @@ function sailor.route(page)
             else
                 -- run action
                 local _, res = xpcall(function() return ctr[action](page) end, error_handler)
+                if res == 404 then
+                    _,res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
+                end
                 return res or httpd.OK
             end
         end
