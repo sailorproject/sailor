@@ -175,6 +175,7 @@ function model:fetch_object(cur)
 end
 
 function model:find_by_id(id)
+	if not id then return nil end
 	db.connect()
 	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';")
 	local f = self:fetch_object(cur)
@@ -231,7 +232,7 @@ function model:find_all(where_string)
 				obj[attr] = row[attr]
 			end
 		end
-		res[row[key]] = self:new(obj)
+		table.insert(res,self:new(obj))
 		row = cur:fetch (row, "a")
 	end
 	cur:close()
