@@ -13,6 +13,11 @@ user.db = {
 	table = 'user'
 }
 
+user.relations = {
+	posts = {relation = "HAS_MANY", model = "post", attribute = "author_id"},
+	comments = {relation = "HAS_MANY", model = "comment", attribute = "author_id"}
+}
+
 -- Public Methods
 function user.test() return "test" end
 
