@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.3: basic model creator, uses db module
+-- model.lua, v0.4: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
-local model = {loaded_relations = {}}
+local model = {}
 local db = require("sailor.db")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
@@ -14,7 +14,7 @@ function model:new(obj)
 	setmetatable(obj,self)
 	self.__index = function (table, key)
 		local ret
-		if key ~= "attributes" and key ~= "relations" and key ~= "db" and not model[key] then
+		if key ~= "attributes" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] then
 			local found = false
 			for _,attrs in pairs(obj.attributes) do 
 				for attr,_ in pairs(attrs) do 
@@ -25,16 +25,16 @@ function model:new(obj)
 			end
 			if obj.relations and obj.relations[key] then
 				found = true
-				ret = obj:get_relation(key)
+				self[key] = table:get_relation(key)
 			end
 			if not found then
 				error(tostring(key).." is not a valid attribute for this model.")
 			end
 		end
-		return ret or self[key]
+		return self[key]
 	end
 	obj.__newindex = function (table, key, value)
-		if key ~= '__newindex'  and  key ~= '__index'  then
+		if key ~= '__newindex'  and  key ~= '__index' and key ~= 'loaded_relations' then
 			local found = false
 			for _,attrs in pairs(obj.attributes) do 
 				if attrs[key] then
@@ -68,13 +68,14 @@ end
 
 function model:get_relation(key)
 	local relation = self.relations[key]
+	self.loaded_relations = self.loaded_relations or {}
 	if not self.loaded_relations[key] then
 		local Model = sailor.model(relation.model)
 		local obj = {}
 
 		if relation.relation == "BELONGS_TO" then
 			obj = Model:find_by_id(self[relation.attribute])
-
+			local attr = relation.attribute
 		elseif relation.relation == "HAS_ONE" then
 			local attributes = {}
 			attributes[relation.attribute] = self[self.db.key]
@@ -95,6 +96,7 @@ function model:get_relation(key)
 			cur:close()
 			db.close()
 		end
+
 
 		self.loaded_relations[key] = obj 
 		return obj
@@ -165,7 +167,7 @@ function model:fetch_object(cur)
 	local row = cur:fetch ({}, "a")
 	cur:close()
 	if row then
-		local obj = self:new(row)
+		local obj = sailor.model(self["@name"]):new(row)
 		return obj
 	else
 		return false
