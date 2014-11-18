@@ -2,6 +2,7 @@ local blog = {}
 
 function blog.index (page)
 	local posts = sailor.model("post"):find_all()
+	page:inspect(posts,"Content of posts")
 	page:render('index',{posts=posts})
 end
 

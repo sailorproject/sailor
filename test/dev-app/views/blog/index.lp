@@ -6,7 +6,7 @@
 	Categories: 
 	<?lua for _,c in pairs(p.categories) do ?>
 		<%= c.name %>; 
-	<?lua end ?> 
+	<?lua page:inspect(c.name,p.body) end ?> 
 	<br/>
 	<a href="?r=blog/comments&pid=<%= p.id %>">
 	Comments (<%= #p.comments %>)

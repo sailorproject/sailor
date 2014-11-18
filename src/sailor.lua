@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.2: core functionalities of the framework
+-- sailor.lua, v0.3: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -62,6 +62,7 @@ function sailor.init(r)
         render = Page.render,
         redirect = Page.redirect,
         include = Page.include,
+        inspect = Page.inspect,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
         GET = GET,
@@ -69,6 +70,7 @@ function sailor.init(r)
         POSTMULTI = POSTMULTI,
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
+        trace = {}
     }
     sailor.r = r
     lp.setoutfunc("page:print")
@@ -124,6 +126,7 @@ function Page:render(filename,parms)
     
     local src
     local filepath
+
     -- If there's a default theme, parse the layout first
     if self.layout ~= nil and self.layout ~= '' then
         self.layout_path = "layouts/"..self.layout
@@ -146,6 +149,12 @@ function Page:render(filename,parms)
             filepath = sailor.path.."/views"..dir.."/"..filename
             src = read_src(filepath)
         end
+
+    end
+   
+    if conf.debug.inspect and ( (conf.sailor.layout and self.layout) or not conf.sailor.layout )then
+        local debug_src = read_src(sailor.path.."/views/error/inspect")
+        src = src..debug_src
     end
     
     if filename ~= nil then
@@ -171,6 +180,22 @@ function Page:redirect(route,args)
     self.r.headers_out['Location'] = route
     self.r.status = 302
     return self.r.status
+end
+
+-- Shows an a trace message on the bottom of the page
+-- value: a variable to be inspected
+-- [message]: an optional debug message
+function Page:inspect(value,message)
+    if conf.debug.inspect then
+        local inspect
+        if not message then
+            inspect = value    
+        else
+            inspect = {}
+            inspect[message] = value
+        end
+        table.insert(self.trace,inspect)
+    end
 end
 
 -- Reads route GET var to decide which controller/action or default page to run.

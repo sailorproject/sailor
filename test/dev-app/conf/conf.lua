@@ -21,6 +21,9 @@ local conf = {
 		user = '',
 		pass = '',
 		from = ''
+	},
+	debug = {
+		inspect = true
 	}
 }
 
