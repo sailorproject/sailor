@@ -57,21 +57,21 @@ local function create()
 	
 	local raw_app = sailor_path.."/sailor/demo-app"
 	local new_app = destiny.."/"..name
-	os.execute("cp -a "..raw_app.." "..new_app)
+	assert(os.execute("cp -a "..raw_app.." "..new_app))
 
-	local htaccess = io.open (new_app.."/.htaccess" , "r")
+	local htaccess = assert(io.open (new_app.."/.htaccess" , "r"))
 	local src = htaccess:read("*a")
 	htaccess:close()
 
-	htaccess = io.open (new_app.."/.htaccess" , "w")
+	htaccess = assert(io.open (new_app.."/.htaccess" , "w"))
 	src = string.gsub(src,"{{path}}",sailor_path)
 	htaccess:write(src)
 	htaccess:close()
 
-	local conf = io.open (new_app.."/conf/conf.lua" , "r")
+	local conf = assert(io.open (new_app.."/conf/conf.lua" , "r"))
 	src = conf:read("*a")
 	conf:close()
-	conf = io.open (new_app.."/conf/conf.lua" , "w")
+	conf = assert(io.open (new_app.."/conf/conf.lua" , "w"))
 	src = string.gsub(src,"Sailor! A Lua MVC Framework",arg[1])
 	conf:write(src)
 	conf:close()
