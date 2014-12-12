@@ -10,11 +10,11 @@ local db = require("sailor.db")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
-	obj = obj or {}
+	obj = obj or {errors={}}
 	setmetatable(obj,self)
 	self.__index = function (table, key)
 		local ret
-		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] then
+		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] and key ~= "errors" then
 			local found = false
 			for _,attrs in pairs(obj.attributes) do 
 				for attr,_ in pairs(attrs) do 
@@ -264,11 +264,12 @@ function model:validate()
 
 				check = check and res
 				if not res then
-					table.insert(errs,"'"..attr.."' "..tostring(err))
+					errs[attr] = attr.." "..tostring(err)
 				end
 			end
 		end
 	end
+	self.errors = errs
 	return check,errs
 end
 
@@ -282,6 +283,8 @@ function model:get_post(POST)
 	for k,v in pairs(POST) do
 		if type(v) == "table" then
 			value = v[#v]
+		elseif tonumber(v) ~= nil then
+			value = tonumber(v)
 		elseif v ~= "" then
 			value = tostring(v)
 		else
