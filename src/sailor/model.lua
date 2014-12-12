@@ -14,7 +14,7 @@ function model:new(obj)
 	setmetatable(obj,self)
 	self.__index = function (table, key)
 		local ret
-		if key ~= "attributes" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] then
+		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] then
 			local found = false
 			for _,attrs in pairs(obj.attributes) do 
 				for attr,_ in pairs(attrs) do 
@@ -59,7 +59,7 @@ function model:save()
 		return res,err
 	end
 	local id = self[self.db.key]
-	if not id or not self:find(id) then
+	if not id or not self:find_by_id(id) then
 		return self:insert()
 	else
 		return self:update()
@@ -129,7 +129,7 @@ function model:insert()
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
 
-	sailor.r:puts(query)
+
 	local id = db.query_insert(query)
 
 	self[self.db.key] = id
@@ -177,6 +177,7 @@ end
 function model:find_by_id(id)
 	if not id then return nil end
 	db.connect()
+
 	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';")
 	local f = self:fetch_object(cur)
 	db.close()
@@ -243,13 +244,13 @@ end
 function model:delete()
 	db.connect()
 	local id = self[self.db.key]
-	if id and self:find(id) then
+	--if id and self:find_by_id(id) then
 		local d = (db.query("delete from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';") ~= 0)
 		db.close()
 		return d
-	end
-	db.close()
-	return false
+	--end
+	--db.close()
+	--return false
 end
 
 function model:validate()
@@ -273,16 +274,18 @@ end
 
 function model:get_post(POST)
 	local sub = string.gsub
-	local value = ""
+	local value = nil
 	local function apply(attr)
 		self[attr] = value
 	end
-	if not next(POST) then return false end
+	if not POST or not next(POST) then return false end
 	for k,v in pairs(POST) do
 		if type(v) == "table" then
 			value = v[#v]
-		else
+		elseif v ~= "" then
 			value = tostring(v)
+		else
+			value = nil
 		end
    		sub(k,self["@name"]..":(.*)",apply)
    	end
@@ -296,10 +299,10 @@ WHERE table_name = ']]..table_name..[[';]]
 
 	local code = [[-- Uncomment this to use validation rules
 -- local val = require "valua"
-local ]]..table_name..[[ = {}
+local M = {}
 
 -- Attributes and their validation rules
-]]..table_name..[[.attributes = {
+M.attributes = {
 	-- {<attribute> = <validation function, valua required>}
 	-- Ex. {id = val:new().integer()}
 ]]
@@ -314,19 +317,21 @@ local ]]..table_name..[[ = {}
 			key = row.COLUMN_NAME
 		end
 		code = code..[[
-	]]..row.COLUMN_NAME..[[ = "safe",
+	{ ]]..row.COLUMN_NAME..[[ = "safe" },
 ]]
 		row = cur:fetch (row, "a")
 	end
 	code = code..[[
 }
 
-]]..table_name..[[.db = {
+M.db = {
 	key = ']]..key..[[',
 	table = ']]..table_name..[['
 }
 
-return ]]..table_name..[[
+M.relations = {}
+
+return M
 
 ]]
 	cur:close()
@@ -334,6 +339,8 @@ return ]]..table_name..[[
 	local file = io.open("models/"..table_name..".lua", "w")
 	file:write(code)
 	file:close()
+
+	return true
 end
 
 --[[function model:generate_mysql()
