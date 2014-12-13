@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.4: basic model creator, uses db module
+-- model.lua, v0.5: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -10,6 +10,7 @@ local db = require("sailor.db")
 local autogen = require ("sailor.autogen")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
+--Attention, OO stuff! Will produce our little pretty objects
 function model:new(obj)
 	obj = obj or {errors={}}
 	setmetatable(obj,self)
@@ -54,7 +55,10 @@ function model:new(obj)
 	return obj
 end
 
-function model:save()
+-- saves our object
+-- if the object is a new object, it will insert values in our table,
+-- otherwise it updates them.
+function model:save() 
 	local res,err = self:validate()
 	if not res then
 		return res,err
@@ -67,6 +71,9 @@ function model:save()
 	end
 end
 
+-- Based on the relations set for our model,
+-- this function will search the related objects
+-- (might be better to make this not automatic in the future?)
 function model:get_relation(key)
 	local relation = self.relations[key]
 	self.loaded_relations = self.loaded_relations or {}
@@ -106,6 +113,7 @@ function model:get_relation(key)
 	end
 end	
 
+-- (escaped) Inserts our model values in the db table!
 function model:insert()
 	db.connect()
 	local key = self.db.key
@@ -138,6 +146,7 @@ function model:insert()
 	return true
 end
 
+-- (escaped) Updates our model values in the db table!
 function model:update()
 	db.connect()
 	local attributes = self.attributes
@@ -164,6 +173,7 @@ function model:update()
 	return u
 end
 
+-- Reads the cursor information after reading from db and turns it into an object
 function model:fetch_object(cur)
 	local row = cur:fetch ({}, "a")
 	cur:close()
@@ -175,6 +185,7 @@ function model:fetch_object(cur)
 	end
 end
 
+-- (escaped) Finds objects with the given id
 function model:find_by_id(id)
 	if not id then return nil end
 	db.connect()
@@ -185,6 +196,9 @@ function model:find_by_id(id)
 	return f
 end
 
+-- (escaped) Finds objects with the given attributes
+-- attributes: table, Example {name='joao',age = 26}
+-- Might need a refactor to include other comparisons such as LIKE, > etc.
 function model:find_by_attributes(attributes)
 	db.connect()
 
@@ -206,8 +220,10 @@ function model:find_by_attributes(attributes)
 	
 end
 
+-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
+-- Finds an object based on the given part of the SQL query after the WHERE
+-- Returns the object found or nil
 function model:find(where_string)
-	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
 	db.connect()
 	local cur = db.query("select * from "..self.db.table.." where "..where_string..";")
 	local f = self:fetch_object(cur)
@@ -215,8 +231,10 @@ function model:find(where_string)
 	return f
 end
 
+-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
+-- Finds all objects based on the given part of the SQL query after the WHERE
+-- Returns a table containing all objects found or empty table
 function model:find_all(where_string)
-	-- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
 	db.connect()
 	local key = self.db.key
 	if where_string then
@@ -242,6 +260,7 @@ function model:find_all(where_string)
 	return res
 end
 
+-- (escaped) Deletes our object on db
 function model:delete()
 	db.connect()
 	local id = self[self.db.key]
@@ -254,6 +273,7 @@ function model:delete()
 	--return false
 end
 
+-- Verifies if object attributes comply to specified rules on model
 function model:validate()
 	local check = true
 	local errs = {}
@@ -274,6 +294,7 @@ function model:validate()
 	return check,errs
 end
 
+-- Will read POST and search for information sent via sailor's form model and applies to object
 function model:get_post(POST)
 	local sub = string.gsub
 	local value = nil
@@ -296,6 +317,8 @@ function model:get_post(POST)
    	return true
 end
 
+-- Generates a CRUD based on the given model, model must already exist
+-- model_name: string, the name of the model
 function model.generate_crud(model_name)
 	local f=io.open(sailor.path.."/models/"..model_name..".lua","r")
 	if f == nil then 
@@ -316,6 +339,8 @@ function model.generate_crud(model_name)
 	end
 end
 
+-- Generates a model based on a given table
+-- table_name, the name of the table
 function model.generate_model(table_name)
 	db.connect()
 	local check_query = [[SHOW TABLES LIKE ']]..table_name..[[';]]

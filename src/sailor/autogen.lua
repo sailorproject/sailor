@@ -1,7 +1,15 @@
+--------------------------------------------------------------------------------
+-- autogen.lua, v0.1: has codes in strings for autogenerating CRUDS based on sailor models
+-- This file is a part of Sailor project
+-- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
+-- License: MIT
+-- http://sailorproject.org
+--------------------------------------------------------------------------------
 local lfs = require "lfs"
 
 local M = {}
 
+--The code for the autogen page
 function M.gen()
 	local code = [[
 <?lua
@@ -45,6 +53,8 @@ end
 	return code
 end
 
+-- The code for the generated controller
+-- model: the model from which the generated CRUD will refer to 
 function M.generate_controller(model)
 	local code = [[
 local M = {}
@@ -114,6 +124,8 @@ return M
 	return false
 end
 
+-- The code for the generated index page of the CRUD
+-- model: the model from which the generated CRUD will refer to 
 function M.generate_index(model)
 	local code = [[
 <style&gt;
@@ -164,7 +176,8 @@ function M.generate_index(model)
 	return false
 end
 
-
+-- The code for the generated read page of the CRUD
+-- model: the model from which the generated CRUD will refer to 
 function M.generate_view(model)
 	local code = [[
 <h2&gt;
@@ -195,6 +208,8 @@ function M.generate_view(model)
 	return false
 end
 
+-- The code for the generated create page of the CRUD
+-- model: the model from which the generated CRUD will refer to 
 function M.generate_create(model)
 	code = [[
 <?lua local form = require "sailor.form" ?&gt;
@@ -230,6 +245,8 @@ function M.generate_create(model)
 	return false
 end
 
+-- The code for the generated update page of the CRUD
+-- model: the model from which the generated CRUD will refer to 
 function M.generate_update(model)
 	local code = [[
 <?lua local form = require "sailor.form" ?&gt;

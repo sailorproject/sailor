@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.3: core functionalities of the framework
+-- sailor.lua, v0.4: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -199,7 +199,8 @@ function Page:inspect(value,message)
     end
 end
 
-
+-- Auxiliary function to open the autogen page for models and CRUDs
+-- page: our page object
 local function autogen(page)
     local autogen = require "sailor.autogen"
 
