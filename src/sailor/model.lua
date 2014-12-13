@@ -7,6 +7,7 @@
 --------------------------------------------------------------------------------
 local model = {}
 local db = require("sailor.db")
+local autogen = require ("sailor.autogen")
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 function model:new(obj)
@@ -295,12 +296,42 @@ function model:get_post(POST)
    	return true
 end
 
+function model.generate_crud(model_name)
+	local f=io.open(sailor.path.."/models/"..model_name..".lua","r")
+	if f == nil then 
+   		error("The model '"..model_name.."'does not exist") 
+   		return false 
+   	else
+   		io.close(f)
+
+		local success = true
+		local model = sailor.model(model_name)
+		success = success and autogen.generate_controller(model)
+		success = success and autogen.generate_index(model)
+		success = success and autogen.generate_view(model)
+		success = success and autogen.generate_create(model)
+		success = success and autogen.generate_update(model)
+
+		return success
+	end
+end
+
 function model.generate_model(table_name)
-	local query = [[SELECT *
+	db.connect()
+	local check_query = [[SHOW TABLES LIKE ']]..table_name..[[';]]
+	local cur = db.query(check_query)
+	local row = cur:fetch ({}, "a")
+	if not row then
+		db:close()
+		cur:close()
+		error("The table '"..table_name.."' does not exist.")
+		return false
+   	else
+		local query = [[SELECT *
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE table_name = ']]..table_name..[[';]]
 
-	local code = [[-- Uncomment this to use validation rules
+		local code = [[-- Uncomment this to use validation rules
 -- local val = require "valua"
 local M = {}
 
@@ -310,21 +341,21 @@ M.attributes = {
 	-- Ex. {id = val:new().integer()}
 ]]
 
-	db.connect()
-	local key
-	local cur = db.query(query)
-	local res = {}
-	local row = cur:fetch ({}, "a")
-	while row do
-		if row.COLUMN_KEY == "PRI" then
-			key = row.COLUMN_NAME
-		end
-		code = code..[[
+		
+		local key
+		cur = db.query(query)
+		local res = {}
+		row = cur:fetch ({}, "a")
+		while row do
+			if row.COLUMN_KEY == "PRI" then
+				key = row.COLUMN_NAME
+			end
+			code = code..[[
 	{ ]]..row.COLUMN_NAME..[[ = "safe" },
 ]]
-		row = cur:fetch (row, "a")
-	end
-	code = code..[[
+			row = cur:fetch (row, "a")
+		end
+		code = code..[[
 }
 
 M.db = {
@@ -337,13 +368,15 @@ M.relations = {}
 return M
 
 ]]
-	cur:close()
-	db.close()
-	local file = io.open("models/"..table_name..".lua", "w")
-	file:write(code)
-	file:close()
-
-	return true
+		cur:close()
+		db.close()
+		local file = io.open("models/"..table_name..".lua", "w")
+		if file:write(code) then
+			file:close()
+			return true
+		end
+		return false
+	end
 end
 
 --[[function model:generate_mysql()

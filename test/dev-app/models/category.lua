@@ -1,9 +1,13 @@
+-- Uncomment this to use validation rules
+-- local val = require "valua"
 local M = {}
 
 -- Attributes and their validation rules
 M.attributes = {
-	{id = "safe"},
-	{name = "safe"},
+	-- {<attribute> = <validation function, valua required>}
+	-- Ex. {id = val:new().integer()}
+	{ id = "safe" },
+	{ name = "safe" },
 }
 
 M.db = {
@@ -11,8 +15,7 @@ M.db = {
 	table = 'category'
 }
 
-M.relations = {
-	posts = {relation = "MANY_MANY", model = "post", table = "post_category", attributes = {"cateogory_id","post_id"}}
-}
+M.relations = {}
 
 return M
+

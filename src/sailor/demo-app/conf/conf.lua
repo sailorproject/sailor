@@ -7,7 +7,8 @@ local conf = {
 		default_action = 'index',
 		layout = 'default',
 		route_parameter = 'r',
-		default_error404 = 'error/404'
+		default_error404 = 'error/404',
+		enable_autogen = false -- default is false, should be true only in development environment
 	},
 	db = {
 		driver = 'mysql',

@@ -123,7 +123,7 @@ end
 -- parms: table, vars being passed ahead.
 function Page:render(filename,parms)
     parms = parms or {} 
-    
+
     local src
     local filepath
 
@@ -164,6 +164,7 @@ function Page:render(filename,parms)
     end
 end
 
+
 -- Redirects to another action or another address
 -- route: string, '<controller name>/<action_name>'
 -- args: table, vars to be passed in url get style
@@ -198,6 +199,15 @@ function Page:inspect(value,message)
     end
 end
 
+
+local function autogen(page)
+    local autogen = require "sailor.autogen"
+
+    local src = autogen.gen()
+    src = lp.translate(src)
+    render_page('sailor/autogen',src,{page=page})
+end
+
 -- Reads route GET var to decide which controller/action or default page to run.
 -- page: Page object with utilitary functions and request
 function sailor.route(page)
@@ -216,6 +226,10 @@ function sailor.route(page)
     -- If there is a route path, find the correspondent controller/action
     elseif route_name ~= nil and route_name ~= '' then
         local controller, action = match(route_name, "([^/]+)/?([^/]*)")
+        if conf.sailor.enable_autogen and controller == "autogen" then
+            res = xpcall(function () autogen(page) end, error_handler)
+            return res or httpd.OK
+        end
         local route = lfs.attributes (sailor.path.."/controllers/"..controller..".lua")
 
         if not route then
@@ -259,12 +273,13 @@ function sailor.route(page)
     return 500
 end
 
+
 -- Creates a sailor model and returns an instantiated object
 -- There must be a .lua file with the model's name under /model
 -- model_name: string, model's name. 
 function sailor.new(model_name)
     local model = require "sailor.model"
-    local obj = {}
+    local obj = {erros = {}}
     obj["@name"] = model_name
     return sailor.model_name(model_name):new(obj)
 end
@@ -276,5 +291,6 @@ function sailor.model(model_name)
     local model = require "sailor.model"
     local obj = require("models."..model_name)
     obj["@name"] = model_name
+    obj.errors = {}
     return model:new(obj)
 end
