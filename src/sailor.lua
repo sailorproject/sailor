@@ -280,7 +280,7 @@ end
 -- model_name: string, model's name. 
 function sailor.new(model_name)
     local model = require "sailor.model"
-    local obj = {erros = {}}
+    local obj = {errors = {}}
     obj["@name"] = model_name
     return sailor.model_name(model_name):new(obj)
 end
