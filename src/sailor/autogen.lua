@@ -221,11 +221,11 @@ function M.generate_create(model)
 ]]
 	for _,attributes in pairs (model.attributes) do
 		for attr,rules in pairs(attributes) do
-			code = code ..[[<div class="form-group"&gt;
-	<label&gt;]]..attr..[[:</label&gt;
-	<?lua page:print( form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') ) ?&gt;
-	<span class="help-block"&gt; <?lua page:print( ]]..model["@name"]..".errors."..attr..[[ or '') ?&gt; </span&gt;
-</div&gt;
+			code = code ..[[	<div class="form-group"&gt;
+		<label&gt;]]..attr..[[:</label&gt;
+		<?lua page:print( form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') ) ?&gt;
+		<span class="help-block"&gt; <?lua page:print( ]]..model["@name"]..".errors."..attr..[[ or '') ?&gt; </span&gt;
+	</div&gt;
 ]]
 		end
 	end
@@ -258,7 +258,7 @@ function M.generate_update(model)
 ]]
 	for _,attributes in pairs (model.attributes) do
 		for attr,rules in pairs(attributes) do
-			code = code ..[[<div class="form-group"&gt;
+			code = code ..[[	<div class="form-group"&gt;
 		<label&gt;]]..attr..[[:</label&gt;
 		<?lua page:print( form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') ) ?&gt;
 	</div&gt;
