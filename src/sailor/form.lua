@@ -79,7 +79,7 @@ function form.checkbox(model,attribute,label,checked,html_options)
 	label = label or attribute
 
 	local check = ''
-	if (value ~= nil and value ~= 0 and value ~= '0') or checked == true then
+	if (value ~= nil and value ~= '' and value ~= 0 and value ~= '0') or checked == true then
 		check = ' checked '
 	end
 
