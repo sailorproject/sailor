@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- form.lua, v0.2: generates html for forms
+-- form.lua, v0.2.1: generates html for forms
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT

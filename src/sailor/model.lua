@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.5: basic model creator, uses db module
+-- model.lua, v0.5.1: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -128,6 +128,8 @@ function model:insert()
 				table.insert(values,"null")
 			elseif type(self[attr]) == 'number' then
 				table.insert(values,self[attr])
+			elseif type(self[attr]) == 'boolean' then
+				table.insert(values,tostring(self[attr]))
 			else
 				table.insert(values,"'"..db.escape(self[attr]).."'")
 			end
