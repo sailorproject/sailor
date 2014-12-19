@@ -149,6 +149,8 @@ function model:update()
 				string = string.."null"
 			elseif type(self[attr]) == 'number' then
 				string = string..self[attr]
+			elseif type(self[attr]) == 'boolean' then
+				string = string..tostring(self[attr])
 			else
 				string = string.."'"..db.escape(self[attr]).."'"
 			end
