@@ -13,24 +13,12 @@ local autogen = require ("sailor.autogen")
 --Attention, OO stuff! Will produce our little pretty objects
 function model:new(obj)
 	obj = obj or {errors={}}
+
 	setmetatable(obj,self)
 	self.__index = function (table, key)
-		local ret
 		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] and key ~= "errors" then
-			local found = false
-			for _,attrs in pairs(obj.attributes) do 
-				for attr,_ in pairs(attrs) do 
-					if attr == key or attr[key] then
-						found = true
-					end
-				end
-			end
 			if obj.relations and obj.relations[key] then
-				found = true
 				self[key] = table:get_relation(key)
-			end
-			if not found then
-				error(tostring(key).." is not a valid attribute for this model.")
 			end
 		end
 		return self[key]
