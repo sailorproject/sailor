@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.2.2: controls access of sailor apps
+-- access.lua, v0.2.3: controls access of sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -15,12 +15,13 @@ session.open(sailor.r)
 -- Comment to login through db (user model)
 --access.default = "demo"
 --access.default_pass = "demo"
---access.salt = "sailorisawesome" -- uncomment to use unhashed passwords
+--access.salt = "sailorisawesome" -- set to nil to use unhashed passwords
 
 local INVALID = "Invalid username or password."
 
 -- Simple hashing algorithm for encrypting passworsd
-function access.hash(username, password)
+function access.hash(username, password, salt)
+	salt = salt or access.salt
 	local hash = username .. password
 	-- Check if bcrypt is embedded
 	if sailor.r.htpassword then
@@ -28,9 +29,9 @@ function access.hash(username, password)
 		
 	-- If not, fall back to sha1 hashing
 	else
-		if access.salt and sailor.r.sha1 then
+		if salt and sailor.r.sha1 then
 			for i = 1, 500 do
-				hash = sailor.r:sha1(access.salt .. hash)
+				hash = sailor.r:sha1(salt .. hash)
 			end
 		end
 	end
@@ -49,13 +50,13 @@ function access.grant(data,time)
 	return session.save(data)
 end
 
-function access.login(username,password)
+function access.login(username,password,salt)
 	local id
 	if not access.default then
 		local User = sailor.model("user")
 		local u = User:find_by_attributes{
 			username=username,
-			password=access.hash(username, password)
+			password=access.hash(username, password, salt)
 			}
 		if not u then
 			return false, INVALID
