@@ -11,6 +11,7 @@ local request = {
 	base64_encode = function(_,...) return base64.encode(...) end,
 	escape = function(_,...) return cgilua.urlcode.escape(...) end,
 	unescape = function(_,...) return cgilua.urlcode.unescape(...) end,
+	sha1  = function(_,...) return remy.sha1(...) end,
 	-- REQUEST PARSING FUNCTIONS
 	parseargs = function(_) return cgilua.QUERY, {} end,
 	parsebody = function(_) return cgilua.POST, {} end,

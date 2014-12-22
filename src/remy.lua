@@ -1,4 +1,4 @@
--- Remy 0.2.6
+-- Remy 0.2.7
 -- Copyright (c) 2014 Felipe Daragon
 -- License: MIT (http://opensource.org/licenses/mit-license.php)
 --
@@ -118,8 +118,8 @@ function remy.detect()
 	local mode = nil
 	if cgilua ~= nil then
 		mode = remy.MODE_CGILUA
-  elseif ngx ~= nil then
-    mode = remy.MODE_NGINX
+	elseif ngx ~= nil then
+    	mode = remy.MODE_NGINX
 	elseif getEnv ~= nil then
 		local env = getEnv()
 		if env["pLua-Version"] ~= nil then
@@ -158,4 +158,9 @@ function remy.splitstring(s, delimiter)
 		table.insert(result, match)
 	end
 	return result
+end
+
+function remy.sha1(str)
+	local sha1 = require "sha1"
+	return sha1(str)
 end
