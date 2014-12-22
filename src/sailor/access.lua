@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.2: controls access of sailor apps
+-- access.lua, v0.2.2: controls access of sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,9 +13,9 @@ session.open(sailor.r)
 
 -- Uncomment to login with "demo" / "demo"
 -- Comment to login through db (user model)
-local default = "demo"
-local default_pass = "demo"
-local salt = "sailorisawesome" -- uncomment to use unhashed passwords
+--access.default = "demo"
+--access.default_pass = "demo"
+--access.salt = "sailorisawesome" -- uncomment to use unhashed passwords
 
 local INVALID = "Invalid username or password."
 
@@ -28,9 +28,9 @@ function access.hash(username, password)
 		
 	-- If not, fall back to sha1 hashing
 	else
-		if salt and sailor.r.sha1 then
+		if access.salt and sailor.r.sha1 then
 			for i = 1, 500 do
-				hash = sailor.r:sha1(salt .. hash)
+				hash = sailor.r:sha1(access.salt .. hash)
 			end
 		end
 	end
@@ -45,12 +45,13 @@ end
 function access.grant(data,time)
 	session.setsessiontimeout (time or 604800) -- 1 week
 	if not data.username then return false end
+	access.data = data
 	return session.save(data)
 end
 
 function access.login(username,password)
 	local id
-	if not default then
+	if not access.default then
 		local User = sailor.model("user")
 		local u = User:find_by_attributes{
 			username=username,
@@ -61,13 +62,13 @@ function access.login(username,password)
 		end
 		id = u.id
 	else
-		if username ~= default or password ~= default_pass then
+		if username ~= access.default or password ~= access.default_pass then
 			return false, INVALID
 		end
 		id = 1
 	end
-	access.grant({username=username,id=id})	
-	return true
+	
+	return access.grant({username=username,id=id})	
 end
 
 function access.logout()
