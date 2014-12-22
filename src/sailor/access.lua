@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.2.3: controls access of sailor apps
+-- access.lua, v0.2.4: controls access of sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -50,17 +50,21 @@ function access.grant(data,time)
 	return session.save(data)
 end
 
-function access.login(username,password,salt)
+function access.login(username,password)
 	local id
 	if not access.default then
 		local User = sailor.model("user")
 		local u = User:find_by_attributes{
-			username=username,
-			password=access.hash(username, password, salt)
+			username=username
 			}
 		if not u then
 			return false, INVALID
 		end
+
+		if u.password ~= access.hash(username, password, u.salt) then
+			return false, INVALID
+		end
+
 		id = u.id
 	else
 		if username ~= access.default or password ~= access.default_pass then
