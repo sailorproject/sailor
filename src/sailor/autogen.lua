@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- autogen.lua, v0.1: has codes in strings for autogenerating CRUDS based on sailor models
+-- autogen.lua, v0.2: has codes in strings for autogenerating CRUDS based on sailor models
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
