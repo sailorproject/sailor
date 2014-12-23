@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- db.lua, v0.2: DB module for connecting and querying through LuaSQL
+-- db.lua, v0.2.1: DB module for connecting and querying through LuaSQL
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -70,8 +70,16 @@ end]]
 -- @param query string: the query to be executed
 -- return number or string: the id of the last inserted row.
 function db.query_insert(query)
-	assert(db.con:execute(query))
-	local id = db.con:getlastautoid()
+	local id
+	if conf.driver == "postgresql" then
+		query = query .. "RETURNING uid; "
+		id = assert(db.con:execute(query))
+	else
+		query  = query .. "; "
+		assert(db.con:execute(query))
+		id = db.con:getlastautoid()
+	end
+
 	return id
 end
 
