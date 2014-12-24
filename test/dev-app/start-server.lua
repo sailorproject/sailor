@@ -36,7 +36,7 @@ if conf.friendly_urls then
                         get = vars[2]..get
                     end
 
-                    req.cmd_url = "/index.lua?r="..vars[1].."/"..get
+                    req.cmd_url = "/index.lua?"..conf.route_parameter.."="..vars[1].."/"..get
                 else
                     req.cmd_url = "/index.lua"
                 end
