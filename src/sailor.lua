@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4: core functionalities of the framework
+-- sailor.lua, v0.4.1: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -274,6 +274,25 @@ function sailor.route(page)
     return 500
 end
 
+-- creates a url string based on friendly url configuration
+-- route: string, controller/action or controller
+-- params: table, get vars and values. example: {id = 3, color = "blue"}
+function sailor.make_url(route,params)
+    params = params or {}
+    url = route
+
+    if conf.sailor.friendly_urls then
+        for k,v in pairs(params) do
+            url = url.."/"..k.."/"..v
+        end
+    else
+        url = "?"..conf.sailor.route_parameter.."="..url
+        for k,v in pairs(params) do
+            url = url.."&"..k.."="..v
+        end
+    end
+    return url
+end
 
 -- Creates a sailor model and returns an instantiated object
 -- There must be a .lua file with the model's name under /model
