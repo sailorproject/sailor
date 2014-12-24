@@ -8,7 +8,8 @@ local conf = {
 		layout = 'default',
 		route_parameter = 'r',
 		default_error404 = 'error/404',
-		enable_autogen = false -- default is false, should be true only in development environment
+		enable_autogen = false, -- default is false, should be true only in development environment
+		friendly_urls = false,
 	},
 	db = {
 		driver = 'mysql',
