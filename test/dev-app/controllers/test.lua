@@ -181,5 +181,9 @@ function test.client_module_js(page)
     page:render('client_module_js')
 end
 
+function test.realtime(page)
+    page:render('realtime')
+end
+
 
 return test
