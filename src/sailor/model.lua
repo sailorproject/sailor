@@ -126,8 +126,7 @@ function model:insert()
 	local attr_string = table.concat (attrs, ',')
 	local value_string = table.concat (values, ',')
 
-	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string.."); "
-
+	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..")"
 
 	local id = db.query_insert(query)
 
