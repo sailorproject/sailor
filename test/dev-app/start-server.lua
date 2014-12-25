@@ -22,7 +22,7 @@ if conf.friendly_urls then
                     table.insert(vars,var)
                 end
 
-                if #vars > 0 and #vars % 2 == 0 then
+                if #vars > 0 then
                     local mod = (#vars % 2) - 1
                     local get = ""
 
