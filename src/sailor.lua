@@ -171,11 +171,8 @@ end
 function Page:redirect(route,args)
     args = args or {}
     if not route:match('^https?://') then
-        local get = ''
-        for k,v in pairs(args) do
-            get = get.."&"..k.."="..v
-        end  
-        route = self.r.uri.."?r="..route..get
+        --route = self.r.uri..sailor.make_url(route,args)
+        route = sailor.make_url(route,args)
     end
       
     self.r.headers_out['Location'] = route
@@ -282,11 +279,12 @@ function sailor.make_url(route,params)
     url = route
 
     if conf.sailor.friendly_urls then
+        url = "/"..url
         for k,v in pairs(params) do
             url = url.."/"..k.."/"..v
         end
     else
-        url = "?"..conf.sailor.route_parameter.."="..url
+        url = "/?"..conf.sailor.route_parameter.."="..url
         for k,v in pairs(params) do
             url = url.."&"..k.."="..v
         end
