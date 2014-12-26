@@ -148,12 +148,12 @@ function M.generate_index(model)
 	code = code .. [[
 	</tr&gt;
 	<?lua for k,v in pairs(]]..model["@name"]..[[s) do ?&gt;
-		<tr onclick="location.href='?r=]]..model["@name"]..[[/view&id=<?lua page:print( v.id ) ?&gt;'" &gt; 
+		<tr onclick="location.href='<%= sailor.make_url(']]..model["@name"]..[[/view',{id = v.id}) %&gt;'" &gt; 
 ]]
 
 	for _,attributes in pairs (model.attributes) do
 		for attr,rules in pairs(attributes) do
-			code = code .. [[			<td&gt; <?lua page:print( v.]]..attr..[[ ) ?&gt; </td&gt; 
+			code = code .. [[			<td&gt; <%= v.]]..attr..[[ %&gt; </td&gt; 
 ]]
 		end
 	end
@@ -163,7 +163,7 @@ function M.generate_index(model)
 	<?lua end ?&gt; 
 </table&gt; 
 <br/&gt;
-<a href="?r=]]..model["@name"]..[[/create" class="btn btn-primary"&gt;Create new ]]..model["@name"]..[[</a&gt;
+<a href="<%= sailor.make_url(']]..model["@name"]..[[/create') %&gt;" class="btn btn-primary"&gt;Create new ]]..model["@name"]..[[</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
@@ -181,22 +181,22 @@ end
 function M.generate_view(model)
 	local code = [[
 <h2&gt;
-	View ]]..model["@name"]..[[ #<?lua page:print( ]]..model["@name"]..[[.id ) ?&gt; 
-	<small>(<a href="?r=]]..model["@name"]..[[/update&id=<?lua page:print( ]]..model["@name"]..[[.id ) ?&gt;" >update</a&gt;)</small&gt; 
-	<small>(<a href="?r=]]..model["@name"]..[[/delete&id=<?lua page:print( ]]..model["@name"]..[[.id ) ?&gt;" >delete</a&gt;)</small&gt;
+	View ]]..model["@name"]..[[ #<%= ]]..model["@name"]..[[.id %&gt; 
+	<small>(<a href="<%= sailor.make_url(']]..model["@name"]..[[/update', {id = ]]..model["@name"]..[[.id} ) %&gt;" >update</a&gt;)</small&gt; 
+	<small>(<a href="<%= sailor.make_url(']]..model["@name"]..[[/delete', {id = ]]..model["@name"]..[[.id} ) %&gt;" >delete</a&gt;)</small&gt;
 </h2&gt;
 <table class="table"&gt; 
 ]]
 	for _,attributes in pairs (model.attributes) do
 		for attr,rules in pairs(attributes) do
-			code = code .. [[	<tr&gt;<td&gt;]]..attr..[[</td&gt;<td&gt;<?lua page:print( ]]..model["@name"].."."..attr..[[ ) ?&gt; </td&gt;</tr&gt; 
+			code = code .. [[	<tr&gt;<td&gt;]]..attr..[[</td&gt;<td&gt;<%= ]]..model["@name"].."."..attr..[[ %&gt; </td&gt;</tr&gt; 
 ]]
 		end
 	end
 	code = code ..[[
 </table&gt; 
 <br/&gt;
-<a href="?r=]]..model["@name"]..[[/index"&gt;<- Back to View All</a&gt;
+<a href="<%= sailor.make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
@@ -223,8 +223,8 @@ function M.generate_create(model)
 		for attr,rules in pairs(attributes) do
 			code = code ..[[	<div class="form-group"&gt;
 		<label&gt;]]..attr..[[:</label&gt;
-		<?lua page:print( form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') ) ?&gt;
-		<span class="help-block"&gt; <?lua page:print( ]]..model["@name"]..".errors."..attr..[[ or '') ?&gt; </span&gt;
+		<%= form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') %&gt;
+		<span class="help-block"&gt; <%= ]]..model["@name"]..".errors."..attr..[[ or '' %&gt; </span&gt;
 	</div&gt;
 ]]
 		end
@@ -233,7 +233,7 @@ function M.generate_create(model)
 	<input type="submit" class="btn btn-primary"/&gt;
 </form&gt; 
 <br/&gt;
-<a href="?r=]]..model["@name"]..[[/index"&gt;<- Back to View All</a&gt;
+<a href="<%= sailor.make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
@@ -260,7 +260,7 @@ function M.generate_update(model)
 		for attr,rules in pairs(attributes) do
 			code = code ..[[	<div class="form-group"&gt;
 		<label&gt;]]..attr..[[:</label&gt;
-		<?lua page:print( form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') ) ?&gt;
+		<%= form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') %&gt;
 	</div&gt;
 ]]
 		end
@@ -269,7 +269,7 @@ function M.generate_update(model)
 	<input type="submit" class="btn btn-primary"/&gt;
 </form&gt;
 <br/&gt;
-<a href="?r=]]..model["@name"]..[[/index"&gt;<- Back to View All</a&gt; 
+<a href="<%= sailor.make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt; 
 ]]
 
 	code = string.gsub(code,"&gt;",">")
