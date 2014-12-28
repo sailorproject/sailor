@@ -33,7 +33,7 @@ function sailor.launch(native_request)
         -- Or Apache with mod_pLua
         require "remy"
         httpd = remy.httpd
-        remy.init(remy.MODE_AUTODETECT, native_request)
+        sailor.remy_mode = remy.init(sailor.remy_mode, native_request)
         remy.contentheader('text/html')
         remy.run(sailor.handle_request)
     end

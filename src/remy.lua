@@ -110,6 +110,7 @@ function remy.init(mode, native_request)
 	end
 	apache2 = remy.httpd
 	emu.init(native_request)
+	return mode
 end
 
 -- Sets the value of the Content Type header field
