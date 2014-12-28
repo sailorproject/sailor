@@ -39,7 +39,7 @@ local M = {
     request = request
 }
 
-function M.init()
+function M.init(native_request)
     -- FIXME: Most of these constants are hardcoded to possibly wrong values.
     local filename = "./index.lua"
     local uri = "/index.lua"
@@ -47,6 +47,8 @@ function M.init()
 
     local r = request
     r = remy.loadrequestrec(r)
+
+    r.native_request = native_request
 
     r.headers_out = {}
     r.headers_in = {}

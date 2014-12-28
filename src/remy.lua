@@ -94,7 +94,7 @@ local request_rec_fields = {
 	useragent_ip = "127.0.0.1"
 }
 
-function remy.init(mode)
+function remy.init(mode, native_request)
 	remy.responsetext = nil
 	if mode == remy.MODE_AUTODETECT then
 		mode = remy.detect()
@@ -109,7 +109,7 @@ function remy.init(mode)
 		emu = require "remy.lwan"
 	end
 	apache2 = remy.httpd
-	emu.init()
+	emu.init(native_request)
 end
 
 -- Sets the value of the Content Type header field

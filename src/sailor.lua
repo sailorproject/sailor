@@ -22,7 +22,7 @@ local httpd = {}
 
 -- Cross-environment compatible launcher. Makes Sailor adapt to
 -- different web server environments
-function sailor.launch()
+function sailor.launch(native_request)
     if apr_table ~= nil then 
         -- This is Apache with mod_lua
         -- Sets a handle function to be called by mod_lua
@@ -33,7 +33,7 @@ function sailor.launch()
         -- Or Apache with mod_pLua
         require "remy"
         httpd = remy.httpd
-        remy.init(remy.MODE_AUTODETECT)
+        remy.init(remy.MODE_AUTODETECT, native_request)
         remy.contentheader('text/html')
         remy.run(sailor.handle_request)
     end
