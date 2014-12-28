@@ -10,6 +10,7 @@ remy = {
 	MODE_CGILUA = 0,
 	MODE_MOD_PLUA = 1,
 	MODE_NGINX = 2,
+	MODE_LWAN = 3
 }
 
 local emu = {}
@@ -104,6 +105,8 @@ function remy.init(mode)
 		emu = require "remy.nginx"
 	elseif mode == remy.MODE_MOD_PLUA then
 		emu = require "remy.mod_plua"
+	elseif mode == remy.MODE_LWAN then
+		emu = require "remy.lwan"
 	end
 	apache2 = remy.httpd
 	emu.init()
@@ -120,12 +123,16 @@ function remy.detect()
 	if cgilua ~= nil then
 		mode = remy.MODE_CGILUA
 	elseif ngx ~= nil then
-    	mode = remy.MODE_NGINX
+		mode = remy.MODE_NGINX
 	elseif getEnv ~= nil then
 		local env = getEnv()
 		if env["pLua-Version"] ~= nil then
 			mode = remy.MODE_MOD_PLUA
 		end
+	else
+		-- FIXME: Presuming it's Lwan here is not a good idea,
+		-- as this should return `nil` on detection failure.
+		mode = remy.MODE_LWAN
 	end
 	return mode
 end
