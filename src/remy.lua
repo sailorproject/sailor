@@ -6,9 +6,10 @@
 -- environments that allow to run Lua code.
 
 remy = {
+	MODE_AUTODETECT = nil,
 	MODE_CGILUA = 0,
 	MODE_MOD_PLUA = 1,
-	MODE_NGINX = 2
+	MODE_NGINX = 2,
 }
 
 local emu = {}
@@ -93,8 +94,8 @@ local request_rec_fields = {
 }
 
 function remy.init(mode)
-  remy.responsetext = nil
-	if mode == nil then
+	remy.responsetext = nil
+	if mode == remy.MODE_AUTODETECT then
 		mode = remy.detect()
 	end
 	if mode == remy.MODE_CGILUA then
