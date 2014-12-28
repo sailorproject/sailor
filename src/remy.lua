@@ -97,7 +97,7 @@ local request_rec_fields = {
 function remy.init(mode, native_request)
 	remy.responsetext = nil
 	if mode == remy.MODE_AUTODETECT then
-		mode = remy.detect()
+		mode = remy.detect(native_request)
 	end
 	if mode == remy.MODE_CGILUA then
 		emu = require "remy.cgilua"
@@ -118,7 +118,7 @@ function remy.contentheader(content_type)
 end
 
 -- Detects the Lua environment
-function remy.detect()
+function remy.detect(native_request)
 	local mode = nil
 	if cgilua ~= nil then
 		mode = remy.MODE_CGILUA
@@ -129,9 +129,7 @@ function remy.detect()
 		if env["pLua-Version"] ~= nil then
 			mode = remy.MODE_MOD_PLUA
 		end
-	else
-		-- FIXME: Presuming it's Lwan here is not a good idea,
-		-- as this should return `nil` on detection failure.
+	elseif native_request ~= nil and type(native_request.query_param) == "function" then
 		mode = remy.MODE_LWAN
 	end
 	return mode
