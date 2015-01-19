@@ -68,6 +68,7 @@ function sailor.init(r)
         GET = GET,
         POST = POST,
         POSTMULTI = POSTMULTI,
+        theme = conf.sailor.theme,
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
         trace = {}
@@ -127,15 +128,15 @@ function Page:render(filename,parms)
     local src
     local filepath
 
-    -- If there's a default theme, parse the layout first
-    if self.layout ~= nil and self.layout ~= '' then
-        self.layout_path = "layouts/"..self.layout
-        filepath = sailor.path.."/"..self.layout_path.."/index"
-        local layout_src = read_src(filepath)
+    -- If there's a default theme, parse the theme first
+    if self.theme ~= nil and self.theme ~= '' then
+        self.theme_path = "themes/"..self.theme
+        filepath = sailor.path.."/"..self.theme_path.."/"..self.layout
+        local theme_src = read_src(filepath)
         local filename_var = "sailor_filename_"..tostring(random(1000))
         local parms_var = "sailor_parms_"..tostring(random(1000))
-        -- Then remove layout and continue parsing
-        src = gsub(layout_src,"{{content}}",' <? page.layout = nil; page:render('..filename_var..','..parms_var..') ?> ')
+        -- Then remove theme and continue parsing
+        src = gsub(theme_src,"{{content}}",' <? page.theme = nil; page:render('..filename_var..','..parms_var..') ?> ')
         parms[filename_var] = filename
         parms[parms_var] = parms
     else
@@ -152,7 +153,7 @@ function Page:render(filename,parms)
 
     end
    
-    if conf.debug.inspect and ( (conf.sailor.layout and self.layout) or not conf.sailor.layout )then
+    if conf.debug.inspect and ( (conf.sailor.theme and self.theme) or not conf.sailor.theme )then
         local debug_src = read_src(sailor.path.."/views/error/inspect")
         src = src..debug_src
     end

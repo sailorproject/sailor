@@ -11,10 +11,10 @@
     <title><%=page.title%></title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<%=page.layout_path%>/css/bootstrap.css" rel="stylesheet">
+    <link href="<%=page.theme_path%>/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<%=page.layout_path%>/css/sticky-footer-navbar.css" rel="stylesheet">
+    <link href="<%=page.theme_path%>/css/sticky-footer-navbar.css" rel="stylesheet">
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,7 +78,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="<%=page.layout_path%>/js/jquery-1.10.2.min.js"></script>
-    <script src="<%=page.layout_path%>/js/bootstrap.min.js"></script>
+    <script src="<%=page.theme_path%>/js/jquery-1.10.2.min.js"></script>
+    <script src="<%=page.theme_path%>/js/bootstrap.min.js"></script>
   </body>
 </html>
