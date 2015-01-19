@@ -6,9 +6,11 @@
 -- environments that allow to run Lua code.
 
 remy = {
+	MODE_AUTODETECT = nil,
 	MODE_CGILUA = 0,
 	MODE_MOD_PLUA = 1,
-	MODE_NGINX = 2
+	MODE_NGINX = 2,
+	MODE_LWAN = 3
 }
 
 local emu = {}
@@ -92,10 +94,10 @@ local request_rec_fields = {
 	useragent_ip = "127.0.0.1"
 }
 
-function remy.init(mode)
-  remy.responsetext = nil
-	if mode == nil then
-		mode = remy.detect()
+function remy.init(mode, native_request)
+	remy.responsetext = nil
+	if mode == remy.MODE_AUTODETECT then
+		mode = remy.detect(native_request)
 	end
 	if mode == remy.MODE_CGILUA then
 		emu = require "remy.cgilua"
@@ -103,9 +105,12 @@ function remy.init(mode)
 		emu = require "remy.nginx"
 	elseif mode == remy.MODE_MOD_PLUA then
 		emu = require "remy.mod_plua"
+	elseif mode == remy.MODE_LWAN then
+		emu = require "remy.lwan"
 	end
 	apache2 = remy.httpd
-	emu.init()
+	emu.init(native_request)
+	return mode
 end
 
 -- Sets the value of the Content Type header field
@@ -114,17 +119,19 @@ function remy.contentheader(content_type)
 end
 
 -- Detects the Lua environment
-function remy.detect()
+function remy.detect(native_request)
 	local mode = nil
 	if cgilua ~= nil then
 		mode = remy.MODE_CGILUA
 	elseif ngx ~= nil then
-    	mode = remy.MODE_NGINX
+		mode = remy.MODE_NGINX
 	elseif getEnv ~= nil then
 		local env = getEnv()
 		if env["pLua-Version"] ~= nil then
 			mode = remy.MODE_MOD_PLUA
 		end
+	elseif native_request ~= nil and type(native_request.query_param) == "function" then
+		mode = remy.MODE_LWAN
 	end
 	return mode
 end
