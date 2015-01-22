@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.1: core functionalities of the framework
+-- sailor.lua, v0.4.2: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -207,11 +207,29 @@ local function autogen(page)
     render_page('sailor/autogen',src,{page=page})
 end
 
+-- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
+-- TODO - improve
+local function apache_friendly_url(page)
+    if conf.sailor.friendly_urls and page.GET.q and page.GET.q ~= '' then
+        query = {}
+        for w in string.gmatch(page.GET.q, "[^/]+") do
+            table.insert(query,w)
+        end
+        for i=1,#query,2 do
+            if query[i+1] then
+                page.GET[query[i]] = query[i+1]
+            end
+        end
+    end
+end
+
 -- Reads route GET var to decide which controller/action or default page to run.
 -- page: Page object with utilitary functions and request
 function sailor.route(page)
-    local GET = page.r:parseargs()
-    local route_name = GET[conf.sailor.route_parameter]
+    
+    apache_friendly_url(page)
+
+    local route_name = page.GET[conf.sailor.route_parameter]
     -- Encapsulated error function for showing detailed traceback
     -- Needs improvement
     local function error_handler(msg)
