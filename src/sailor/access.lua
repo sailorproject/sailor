@@ -40,7 +40,9 @@ end
 
 
 function access.is_guest()
-	access.data = session.data
+	if not access.data then
+		access.data = session.data
+	end
 	return not access.data.username
 end
 
@@ -78,6 +80,7 @@ function access.login(username,password)
 end
 
 function access.logout()
+	session.data = {}
 	session.destroy(sailor.r)
 end
 
