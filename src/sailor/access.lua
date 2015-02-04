@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.2.5: controls access of sailor apps
+-- access.lua, v0.2.6: controls access of sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
