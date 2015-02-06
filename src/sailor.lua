@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.1: core functionalities of the framework
+-- sailor.lua, v0.4.2: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -55,7 +55,7 @@ function sailor.init(r)
     local GET, GETMULTI = r:parseargs()
     local POST, POSTMULTI = {}, {}
     if r.parsebody ~= nil then -- only present in Apache 2.4.3 or higher
-        POST, POSTMULTI = r:parsebody()
+        POST, POSTMULTI = r:parsebody(conf.sailor.max_upload or nil)
     end
     local page = {
         r = r,

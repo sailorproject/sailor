@@ -11,6 +11,7 @@ local conf = {
 		default_error404 = 'error/404',
 		enable_autogen = false, -- default is false, should be true only in development environment
 		friendly_urls = false,
+		max_upload = 1024 * 1024, 
 	},
 	db = {
 		driver = 'mysql',
