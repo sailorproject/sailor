@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.2.4: controls access of sailor apps
+-- access.lua, v0.2.6: controls access of sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -24,9 +24,9 @@ function access.hash(username, password, salt)
 	salt = salt or access.salt
 	local hash = username .. password
 	-- Check if bcrypt is embedded
-	if sailor.r.htpassword then
-		return sailor.r:htpassword(hash, 2, 100) -- Use bcrypt on pwd
-		
+	if sailor.conf.bcrypt and salt and sailor.r.htpassword then
+		hash = sailor.r:htpassword(salt .. hash, 2, 100) -- Use bcrypt on pwd
+		return hash
 	-- If not, fall back to sha1 hashing
 	else
 		if salt and sailor.r.sha1 then
@@ -40,7 +40,10 @@ end
 
 
 function access.is_guest()
-	return not session.data.username
+	if not access.data then
+		access.data = session.data
+	end
+	return not access.data.username
 end
 
 function access.grant(data,time)
@@ -77,6 +80,7 @@ function access.login(username,password)
 end
 
 function access.logout()
+	session.data = {}
 	session.destroy(sailor.r)
 end
 
