@@ -81,13 +81,13 @@ Now go to <http://localhost/sailor/?r=main> in your browser. You should see the 
 
 ###Installation for Nginx
 
-Download Nginx 1.5.12.1 from:
+Download the latest Nginx version from:
 
 <http://nginx-win.ecsds.eu/>
 
 If you've not done it yet, you may need to install the Visual C++ Redistributable Setup:
 
-<http://nginx-win.ecsds.eu/vcredist_x86.exe>
+<http://nginx-win.ecsds.eu/download/vcredist_x86.exe>
 
 Unzip the nginx ZIP to a directory of your choice.
 
