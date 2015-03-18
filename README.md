@@ -4,6 +4,38 @@ A Lua MVC Framework. www.sailorproject.org
 [![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/Etiene/sailor)
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
+### Features
+* Up until last release 
+  * Luarocks setup
+  * Runs over Apache2, NginX or Mongoose webservers
+  * Using Windows, Mac or Linux systems
+  * Compatible with MySQL, PostgreSQL, SQLite and others
+  * MVC structure
+  * Parsing of Lua pages
+  * Routing
+  * Email sending
+  * Basic Object-relational mapping
+  * Validation
+  * Layouts support 
+  * App comes already shipped with Bootstrap
+  * Include, redirect
+  * Sessions, cookies
+  * Login module
+  * Easy deployment (unix only) -> sailor_create "app name" /dir/to/app
+  * Form generation
+  * Lua at client (possible through a Lua=>JS virtual machine deployed with the app)
+
+* Features not yet released through Luarocks, but present in master branch
+  * Friendly urls
+  * Inspect function for better debugging => similar to a var dump
+  * Custom 404 pages
+  * Runs over Xavante and Lwan web servers
+  * Relations
+  * Model generation (reading from DB)
+  * CRUD generation (reading from model)
+  * Theme and layout (now you can have multiple layouts inside a theme. e.g. 1-column and 2-column)
+
+
 ### Development progress
 So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have controllers, a mailer module,  routes, basic models, db connection, a validation module, integration with lua51.js so we can use Lua at client-side, basic form generation, sessions, basic authentication, auto generation for models and CRUDs and some other stuff. We are now working on researching, refactoring, and making documentation for releasing a version 0.3. After that is done the roadmap is rewriting the DB module for benefiting from mod_lua's API, improving the autogen and the form features.
 
