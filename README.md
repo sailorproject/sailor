@@ -29,7 +29,7 @@ A Lua MVC Framework. www.sailorproject.org
   * Friendly urls
   * Inspect function for better debugging => similar to a var dump
   * Custom 404 pages
-  * Runs over Xavante and Lwan web servers
+  * Runs over Lighttpd, Xavante and Lwan web servers
   * Relations
   * Model generation (reading from DB)
   * CRUD generation (reading from model)
@@ -50,7 +50,7 @@ More about this project's motivation can be found here: http://etiene.net/sailor
 
 ### Supported Environments
 
-Sailor has been tested under Linux, Mac OS X and Windows and is currently compatible with Apache with [mod_lua](http://www.modlua.org/) or [mod_pLua](https://github.com/Humbedooh/mod_pLua), Nginx with [ngx_lua](https://github.com/chaoslawful/lua-nginx-module), or any CGI-enabled web server, like [Civetweb](https://github.com/bel2125/civetweb), [Mongoose](https://github.com/cesanta/mongoose) and [Xavante](http://keplerproject.github.io/xavante/), if [CGILua](https://github.com/keplerproject/cgilua) is present.
+Sailor has been tested under Linux, Mac OS X and Windows and is currently compatible with Apache with [mod_lua](http://www.modlua.org/) or [mod_pLua](https://github.com/Humbedooh/mod_pLua), Nginx with [ngx_lua](https://github.com/chaoslawful/lua-nginx-module), Lighttpd with [mod_magnet](http://redmine.lighttpd.net/projects/1/wiki/Docs_ModMagnet), or any CGI-enabled web server, like [Civetweb](https://github.com/bel2125/civetweb), [Mongoose](https://github.com/cesanta/mongoose) and [Xavante](http://keplerproject.github.io/xavante/), if [CGILua](https://github.com/keplerproject/cgilua) is present.
 
 ### Installation
 

@@ -98,3 +98,28 @@ You must also add to the server block:
 
 Now run nginx and go to http://localhost/hey_arnold/index.lua?r=main in your browser.
 
+###Alternative Installation with Lighttpd
+
+Install Lighttpd as explained at <http://redmine.lighttpd.net/projects/lighttpd/wiki/GetLighttpd>
+
+Copy the files in the `src/sailor/demo-app` directory of this repository to the htdocs/sailor directory of the Lighttpd dir.
+
+####Configuring Lighttpd
+
+Open the `conf\lighttpd.conf` file, uncomment mod_magnet in server.modules, and add the following lines right after index-file.names:
+
+    $HTTP["url"] =~ "^/sailor/index.lua" {                    
+        magnet.attract-physical-path-to = ( server_root + "/htdocs/sailor/index-magnet.lua")
+    }
+    $HTTP["url"] =~ "^/sailor/(conf|controllers|models|runtime|views)/" {                
+        url.access-deny = ("")
+        dir-listing.activate = "disable" 
+    }
+    $HTTP["url"] =~ "^/sailor/themes/" {                
+        url.access-deny = (".lp")
+        dir-listing.activate = "disable" 
+    }
+    
+####Done!
+
+Now run Lighttpd and go to <http://localhost/sailor/index.lua?r=main> in your browser.
