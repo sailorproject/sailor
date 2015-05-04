@@ -49,9 +49,15 @@ end
 -- Useful for posterior compatibility with other servers
 -- r: webserver's request object
 function sailor.init(r)
-    local filename = r.uri:match( "([^/]+)$")
+    local dir = lfs.currentdir()
+    if dir == '/' or not dir then
+        local filename = r.uri:match( "([^/]+)$")
+        sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+    else
+        sailor.path = dir
+    end
     r.content_type = "text/html"
-    sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+    
     local GET, GETMULTI = r:parseargs()
     local POST, POSTMULTI = {}, {}
     if r.parsebody ~= nil then -- only present in Apache 2.4.3 or higher
@@ -71,7 +77,8 @@ function sailor.init(r)
         theme = conf.sailor.theme,
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
-        trace = {}
+        trace = {},
+        base_path = ((r.uri):match('^@?(.-)/index.lua$') or '')
     }
     sailor.r = r
     lp.setoutfunc("page:print")
@@ -112,7 +119,7 @@ end
 -- parms: table, vars being passed ahead
 function Page:include(path,parms)
     parms = parms or {}
-    local incl_src = read_src(sailor.path.."/"..path)
+    local incl_src = read_src(((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..path)
 
     incl_src = lp.translate(incl_src)
     parms.page = self
@@ -130,8 +137,9 @@ function Page:render(filename,parms)
 
     -- If there's a default theme, parse the theme first
     if self.theme ~= nil and self.theme ~= '' then
-        self.theme_path = "themes/"..self.theme
-        filepath = sailor.path.."/"..self.theme_path.."/"..self.layout
+        self.theme_path = self.base_path.."/themes/"..self.theme
+        filepath = ((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..self.theme_path.."/"..self.layout
+
         local theme_src = read_src(filepath)
         local filename_var = "sailor_filename_"..tostring(random(1000))
         local parms_var = "sailor_parms_"..tostring(random(1000))
@@ -139,6 +147,7 @@ function Page:render(filename,parms)
         src = gsub(theme_src,"{{content}}",' <? page.theme = nil; page:render('..filename_var..','..parms_var..') ?> ')
         parms[filename_var] = filename
         parms[parms_var] = parms
+
     else
         local dir = ''
         if self.controller then
@@ -153,7 +162,7 @@ function Page:render(filename,parms)
 
     end
    
-    if conf.debug.inspect and ( (conf.sailor.theme and self.theme) or not conf.sailor.theme )then
+    if conf.debug and conf.debug.inspect and ( (conf.sailor.theme and self.theme) or not conf.sailor.theme )then
         local debug_src = read_src(sailor.path.."/views/error/inspect")
         src = src..debug_src
     end
@@ -172,7 +181,6 @@ end
 function Page:redirect(route,args)
     args = args or {}
     if not route:match('^https?://') then
-        --route = self.r.uri..sailor.make_url(route,args)
         route = sailor.make_url(route,args)
     end
       
@@ -296,14 +304,14 @@ end
 function sailor.make_url(route,params)
     params = params or {}
     url = route
-
+    local base_path = ((sailor.r.uri):match('^@?(.-)/index.lua$') or '')
     if conf.sailor.friendly_urls then
-        url = "/"..url
+        url =  base_path.."/"..url
         for k,v in pairs(params) do
             url = url.."/"..k.."/"..v
         end
     else
-        url = "/?"..conf.sailor.route_parameter.."="..url
+        url = base_path.."/?"..conf.sailor.route_parameter.."="..url
         for k,v in pairs(params) do
             url = url.."&"..k.."="..v
         end

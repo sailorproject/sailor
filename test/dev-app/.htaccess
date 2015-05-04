@@ -2,3 +2,11 @@
        AddHandler lua-script .lua
 </FilesMatch>
 DirectoryIndex index.lua
+
+#Uncomment these lines to enable friendly urls on apache
+
+#RewriteEngine On
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^([^/]+)/([^/]+)/([^.]*)$ index.lua?r=$1/$2&q=$3 [L]
+#RewriteRule ^([^/]+)/([^/]+)$ index.lua?r=$1&q=$3 [L]
+#RewriteRule ^([^.]+)$ index.lua?r=$1 [L]
