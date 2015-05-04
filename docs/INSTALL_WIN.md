@@ -81,13 +81,13 @@ Now go to <http://localhost/sailor/?r=main> in your browser. You should see the 
 
 ###Installation for Nginx
 
-Download Nginx 1.5.12.1 from:
+Download the latest Nginx version from:
 
 <http://nginx-win.ecsds.eu/>
 
 If you've not done it yet, you may need to install the Visual C++ Redistributable Setup:
 
-<http://nginx-win.ecsds.eu/vcredist_x86.exe>
+<http://nginx-win.ecsds.eu/download/vcredist_x86.exe>
 
 Unzip the nginx ZIP to a directory of your choice.
 
@@ -117,3 +117,33 @@ You must also add to the server block:
 ####Done!
 
 Now run nginx.exe and go to <http://localhost/sailor/index.lua?r=main> in your browser.
+
+###Installation for Lighttpd
+
+Download the latest Lighttpd from:
+
+<http://code.google.com/p/wlmp-project/>
+
+Unzip the Lighttpd ZIP to a directory of your choice.
+
+Copy the files in the `src/sailor/demo-app` directory of this repository to the htdocs/sailor directory of the Lighttpd dir.
+
+####Configuring Lighttpd
+
+Open the `conf\lighttpd.conf` file, uncomment mod_magnet in server.modules, and add the following lines right after index-file.names:
+
+    $HTTP["url"] =~ "^/sailor/index.lua" {                    
+        magnet.attract-physical-path-to = ( server_root + "/htdocs/sailor/index-magnet.lua")
+    }
+    $HTTP["url"] =~ "^/sailor/(conf|controllers|models|runtime|views)/" {                
+        url.access-deny = ("")
+        dir-listing.activate = "disable" 
+    }
+    $HTTP["url"] =~ "^/sailor/themes/" {                
+        url.access-deny = (".lp")
+        dir-listing.activate = "disable" 
+    }
+    
+####Done!
+
+Now run LightTPD.exe and go to <http://localhost/sailor/index.lua?r=main> in your browser.

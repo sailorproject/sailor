@@ -13,9 +13,9 @@ On Ubuntu 13.10 and above, use the following command to install Apache 2.4.x:
 
     sudo apt-get install apache2
 
-Ubuntu 13.04 and below have Apache 2.2 as default, but you can't use Lua scripts on it. It is recommended that you use the most recent version of Apache you can. You can follow the instructions at http://httpd.apache.org. If that sounds a bit too complicated, you can get Apache 2.4.2 adding the following repository and then installing it via apt-get:
+Ubuntu 13.04 and below have Apache 2.2 as default, but you can't use Lua scripts on it. It is recommended that you use the most recent version of Apache you can. You can follow the instructions at http://httpd.apache.org. If that sounds a bit too complicated, you can get Apache 2.4.12 adding the following repository and then installing it via apt-get:
 
-    sudo apt-add-repository ppa:ptn107/apache
+    sudo apt-add-repository ppa:ondrej/apache2
     sudo apt-get update
     sudo apt-get install apache2
 
@@ -98,3 +98,28 @@ You must also add to the server block:
 
 Now run nginx and go to http://localhost/hey_arnold/index.lua?r=main in your browser.
 
+###Alternative Installation with Lighttpd
+
+Install Lighttpd as explained at <http://redmine.lighttpd.net/projects/lighttpd/wiki/GetLighttpd>
+
+Copy the files in the `src/sailor/demo-app` directory of this repository to the htdocs/sailor directory of the Lighttpd dir.
+
+####Configuring Lighttpd
+
+Open the `conf\lighttpd.conf` file, uncomment mod_magnet in server.modules, and add the following lines right after index-file.names:
+
+    $HTTP["url"] =~ "^/sailor/index.lua" {                    
+        magnet.attract-physical-path-to = ( server_root + "/htdocs/sailor/index-magnet.lua")
+    }
+    $HTTP["url"] =~ "^/sailor/(conf|controllers|models|runtime|views)/" {                
+        url.access-deny = ("")
+        dir-listing.activate = "disable" 
+    }
+    $HTTP["url"] =~ "^/sailor/themes/" {                
+        url.access-deny = (".lp")
+        dir-listing.activate = "disable" 
+    }
+    
+####Done!
+
+Now run Lighttpd and go to <http://localhost/sailor/index.lua?r=main> in your browser.

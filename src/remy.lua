@@ -1,5 +1,5 @@
--- Remy 0.2.7
--- Copyright (c) 2014 Felipe Daragon
+-- Remy 0.2.8
+-- Copyright (c) 2014-2015 Felipe Daragon
 -- License: MIT (http://opensource.org/licenses/mit-license.php)
 --
 -- Remy runs Lua-based web applications in alternative web server
@@ -10,7 +10,8 @@ remy = {
 	MODE_CGILUA = 0,
 	MODE_MOD_PLUA = 1,
 	MODE_NGINX = 2,
-	MODE_LWAN = 3
+	MODE_LWAN = 3,
+	MODE_LIGHTTPD = 4
 }
 
 local emu = {}
@@ -105,6 +106,8 @@ function remy.init(mode, native_request)
 		emu = require "remy.nginx"
 	elseif mode == remy.MODE_MOD_PLUA then
 		emu = require "remy.mod_plua"
+	elseif mode == remy.MODE_LIGHTTPD then
+		emu = require "remy.mod_magnet"
 	elseif mode == remy.MODE_LWAN then
 		emu = require "remy.lwan"
 	end
@@ -130,6 +133,8 @@ function remy.detect(native_request)
 		if env["pLua-Version"] ~= nil then
 			mode = remy.MODE_MOD_PLUA
 		end
+	elseif lighty ~= nil then
+		mode = remy.MODE_LIGHTTPD
 	elseif native_request ~= nil and type(native_request.query_param) == "function" then
 		mode = remy.MODE_LWAN
 	end
