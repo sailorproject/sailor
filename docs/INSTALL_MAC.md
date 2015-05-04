@@ -1,15 +1,23 @@
 ## Installation for Mac
 
-Sailor is compatible with a variety of operating systems and webservers. On this example, we will use OS X 10.9 Mavericks and Apache 2.4.
+Sailor is compatible with a variety of operating systems and webservers. On this example, we will use OS X 10.10 Yosemite and Apache 2.4
 
 ### Installing dependencies
 
-Sailor is compatible with both Lua 5.1 and Lua 5.2. OS X 10.9 Mavericks already comes with Apache 2.2 by default, but you can't use Lua scripts on it.
+Sailor is compatible with both Lua 5.1 and Lua 5.2. 
 
 You need to install Lua, luarocks and Apache 2.4.
 
     brew update
-    brew install lua luarocks zlib homebrew/apache/httpd24
+    brew install lua luarocks zlib 
+    
+The default apache build however, does not come with Lua module by default.
+
+    brew edit httpd24
+
+Find the list of enabled flags, after `args = %W[`, add `--enable-lua` and save the file.
+
+    brew install httpd24
 
 After installing those packages, you need to enable `mod_lua` in Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/2.4/httpd.conf`. Add or uncomment the following directive:
 
@@ -19,9 +27,9 @@ It's also necessary to allow `.htaccess` files. Look for the `AllowOverride` dir
 
 Now, you should restart Apache. You can use the following command for that:
 
-    sudo /usr/local/Cellar/httpd24/2.4.10/bin/apachectl restart
+    sudo /usr/local/Cellar/httpd24/2.4.12/bin/apachectl restart
 
-Keep in mind that the specific version of Apache (in this case 2.4.10) might change.
+Keep in mind that the specific version of Apache (in this case 2.4.12) might change.
 
 ### Installing Sailor
 
