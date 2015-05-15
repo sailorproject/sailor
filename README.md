@@ -5,18 +5,15 @@ A Lua MVC Framework. www.sailorproject.org
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Features
-* Up until last release 
   * Luarocks setup
-  * Runs over Apache2, NginX or Mongoose webservers
+  * Runs over Apache2, NginX, Mongoose, Lighttpd, Xavante and Lwan web servers
   * Using Windows, Mac or Linux systems
-  * Compatible with MySQL, PostgreSQL, SQLite and others
+  * Compatible with MySQL, PostgreSQL, SQLite and other databases supported by the luasql library
   * MVC structure
   * Parsing of Lua pages
   * Routing
-  * Email sending
   * Basic Object-relational mapping
   * Validation
-  * Layouts support 
   * App comes already shipped with Bootstrap
   * Include, redirect
   * Sessions, cookies
@@ -24,20 +21,20 @@ A Lua MVC Framework. www.sailorproject.org
   * Easy deployment (unix only) -> sailor_create "app name" /dir/to/app
   * Form generation
   * Lua at client (possible through a Lua=>JS virtual machine deployed with the app)
-
-* Features not yet released through Luarocks, but present in master branch
   * Friendly urls
   * Inspect function for better debugging => similar to a var dump
   * Custom 404 pages
-  * Runs over Lighttpd, Xavante and Lwan web servers
   * Relations
   * Model generation (reading from DB)
   * CRUD generation (reading from model)
   * Theme and layout (now you can have multiple layouts inside a theme. e.g. 1-column and 2-column)
 
 
-### Development progress
-So far I have integrated with @mascarenhas's Lua Pages as a nice templater for views, we also have controllers, a mailer module,  routes, basic models, db connection, a validation module, integration with lua51.js so we can use Lua at client-side, basic form generation, sessions, basic authentication, auto generation for models and CRUDs and some other stuff. We are now working on researching, refactoring, and making documentation for releasing a version 0.3. After that is done the roadmap is rewriting the DB module for benefiting from mod_lua's API, improving the autogen and the form features.
+### Roadmap
+* Integration with a test suite
+* Improvements of Lua on the client side
+* Integration with mod_lua's DB API and DB module refactor
+* Improvements with the ORM
 
 More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
 
@@ -50,7 +47,7 @@ More about this project's motivation can be found here: http://etiene.net/sailor
 
 ### Supported Environments
 
-Sailor has been tested under Linux, Mac OS X and Windows and is currently compatible with Apache with [mod_lua](http://www.modlua.org/) or [mod_pLua](https://github.com/Humbedooh/mod_pLua), Nginx with [ngx_lua](https://github.com/chaoslawful/lua-nginx-module), Lighttpd with [mod_magnet](http://redmine.lighttpd.net/projects/1/wiki/Docs_ModMagnet), or any CGI-enabled web server, like [Civetweb](https://github.com/bel2125/civetweb), [Mongoose](https://github.com/cesanta/mongoose) and [Xavante](http://keplerproject.github.io/xavante/), if [CGILua](https://github.com/keplerproject/cgilua) is present.
+Sailor has been tested under Linux, Mac OS X and Windows and is currently compatible with Apache with [mod_lua](http://www.modlua.org/) or [mod_pLua](https://github.com/Humbedooh/mod_pLua), Nginx with [ngx_lua](https://github.com/chaoslawful/lua-nginx-module), [Lwan](http://lwan.ws/), Lighttpd with [mod_magnet](http://redmine.lighttpd.net/projects/1/wiki/Docs_ModMagnet), or any CGI-enabled web server, like [Civetweb](https://github.com/bel2125/civetweb), [Mongoose](https://github.com/cesanta/mongoose) and [Xavante](http://keplerproject.github.io/xavante/), if [CGILua](https://github.com/keplerproject/cgilua) is present.
 
 ### Installation
 
@@ -105,10 +102,20 @@ For more information on what you can do with html and Lua Pages, visit http://ke
 
 For more examples, you can check the test controller (/controllers/test.lua), the test views (/views/test/*) and the User model (/models/user.lua)
 
-### Suggestions or questions
+### Documentation & Reference Manual
+http://sailorproject.org/?r=docs
+
+
+### Contributing
+Contributions are welcome! Just make a pull request :)
+
+
+### Suggestions, questions & hugs
+Hugs! Not bugs. For bugs, fill an issue! :)
+
 dalcol@etiene.net
 
 http://twitter.com/etiene_d
 
 
-##### If you are having trouble to get it working or if you got it working using different specs, please contact me so we can exchange info and I can improve this manual. Thanks!
+##### If you are having trouble to get it working or if you got it working using different specs, please contact me so we can exchange info and I can improve the manual. Thanks!
