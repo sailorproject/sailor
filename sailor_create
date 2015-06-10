@@ -55,7 +55,7 @@ local function create()
 	
 	local sailor_path = get_sailor_path(current_dir)
 	
-	local raw_app = sailor_path.."/sailor/demo-app"
+	local raw_app = sailor_path.."/sailor/blank-app"
 	local new_app = destiny.."/"..name
 	assert(os.execute("cp -a "..raw_app.." "..new_app))
 
