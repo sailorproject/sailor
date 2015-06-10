@@ -12,20 +12,26 @@ local conf = {
 		enable_autogen = true, -- default is false, should be true only in development environment
 		friendly_urls = false,
 		max_upload = 1024 * 1024, 
+		environment = "test", -- this will use db configuration named test
 	},
+
 	db = {
-		driver = 'mysql',
-		host = '',
-		user = '',
-		pass = '',
-		dbname = ''
+		test = { -- current environment
+			driver = 'mysql',
+			host = 'localhost',
+			user = '',
+			pass = '',
+			dbname = ''
+		}
 	},
+
 	smtp = {
 		server = '',
 		user = '',
 		pass = '',
 		from = ''
 	},
+
 	debug = {
 		inspect = true
 	}
