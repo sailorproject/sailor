@@ -172,13 +172,19 @@ end
 -- Reads the cursor information after reading from db and turns it into an object
 function model:fetch_object(cur)
 	local row = cur:fetch ({}, "a")
+	local types = cur:getcoltypes()
+	local names = cur:getcolnames()
 	cur:close()
-	if row then
-		local obj = sailor.model(self["@name"]):new(row)
-		return obj
-	else
-		return false
+
+	if not row then return false end
+	
+	for k,t in pairs(types) do
+		if t:find('number') then
+			row[names[k]] = tonumber(row[names[k]])
+		end
 	end
+	local obj = sailor.model(self["@name"]):new(row)
+	return obj
 end
 
 -- (escaped) Finds objects with the given id
