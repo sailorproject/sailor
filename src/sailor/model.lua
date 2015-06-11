@@ -46,10 +46,13 @@ end
 -- saves our object
 -- if the object is a new object, it will insert values in our table,
 -- otherwise it updates them.
-function model:save() 
-	local res,err = self:validate()
-	if not res then
-		return res,err
+function model:save(validate)
+	validate = validate == nil or validate -- defaults validation to true
+	if validate then
+		local res,err = self:validate()
+		if not res then
+			return res,err
+		end
 	end
 	local id = self[self.db.key]
 	if not id or not self:find_by_id(id) then
