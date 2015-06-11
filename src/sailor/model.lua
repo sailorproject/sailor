@@ -8,11 +8,13 @@
 local model = {}
 local db = require("sailor.db")
 local autogen = require ("sailor.autogen")
+local util = require "web_utils.utils"
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 --Attention, OO stuff! Will produce our little pretty objects
 function model:new(obj)
 	obj = obj or {errors={}}
+	obj = util.deepcopy(obj)
 
 	setmetatable(obj,self)
 	self.__index = function (table, key)
