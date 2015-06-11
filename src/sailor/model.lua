@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.5.1: basic model creator, uses db module
+-- model.lua, v0.6: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -48,6 +48,7 @@ end
 -- saves our object
 -- if the object is a new object, it will insert values in our table,
 -- otherwise it updates them.
+-- validate: boolean, default is true, set to false to deactivate validation before saving
 function model:save(validate)
 	validate = validate == nil or validate -- defaults validation to true
 	if validate then
@@ -172,12 +173,16 @@ end
 -- Reads the cursor information after reading from db and turns it into an object
 function model:fetch_object(cur)
 	local row = cur:fetch ({}, "a")
+
+	if not row then 
+		cur:close() 
+		return false 
+	end
+
 	local types = cur:getcoltypes()
 	local names = cur:getcolnames()
 	cur:close()
 
-	if not row then return false end
-	
 	for k,t in pairs(types) do
 		if t:find('number') then
 			row[names[k]] = tonumber(row[names[k]])
@@ -284,7 +289,6 @@ function model:validate()
 		for attr,rules in pairs(n) do
 			if rules and rules ~= "safe" then 
 				local res, err = rules(self[attr])
-
 				check = check and res
 				if not res then
 					errs[attr] = attr.." "..tostring(err)
@@ -449,6 +453,7 @@ end
 	db.close()
 end]]
 
+-- Gets the amount of stored objects
 function model:count()
 	db.connect()
 	local cur = db.query("select count(*) from "..self.db.table..";")
