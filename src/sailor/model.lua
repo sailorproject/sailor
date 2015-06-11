@@ -443,4 +443,13 @@ end
 	db.close()
 end]]
 
+function model:count()
+	db.connect()
+	local cur = db.query("select count(*) from "..self.db.table..";")
+	local count = cur:fetch()
+	cur:close()
+	db.close()
+	return tonumber(count)
+end
+
 return model
