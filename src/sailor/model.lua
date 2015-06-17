@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.6: basic model creator, uses db module
+-- model.lua, v0.7: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -171,7 +171,8 @@ function model:update()
 end
 
 -- Reads the cursor information after reading from db and turns it into an object
-function model:fetch_object(cur)
+-- If searching for multiple results, a table as the second parameter is needed
+function model:fetch_object(cur,res_table)
 	local row = cur:fetch ({}, "a")
 
 	if not row then 
@@ -181,7 +182,6 @@ function model:fetch_object(cur)
 
 	local types = cur:getcoltypes()
 	local names = cur:getcolnames()
-	cur:close()
 
 	for k,t in pairs(types) do
 		if t:find('number') then
@@ -189,6 +189,12 @@ function model:fetch_object(cur)
 		end
 	end
 	local obj = sailor.model(self["@name"]):new(row)
+	if res_table ~= nil then 
+		table.insert(res_table,obj)
+	else
+		cur:close()
+	end
+	
 	return obj
 end
 
@@ -251,17 +257,7 @@ function model:find_all(where_string)
 	end
 	local cur = db.query("select * from "..self.db.table..where_string..";")
 	local res = {}
-	local row = cur:fetch ({}, "a")
-	while row do
-		local obj = {}
-		for _,n in pairs(self.attributes) do 
-			for attr,_ in pairs(n) do
-				obj[attr] = row[attr]
-			end
-		end
-		table.insert(res,self:new(obj))
-		row = cur:fetch (row, "a")
-	end
+	while(self:fetch_object(cur,res)) do end
 	cur:close()
 	db.close()
 	return res
