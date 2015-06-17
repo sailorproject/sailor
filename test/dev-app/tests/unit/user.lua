@@ -1,25 +1,18 @@
-require "sailor"
-local db = require "sailor.db"
+local helper = require "tests.unit.helper"
 
 describe("Testing #UserModel", function()
-
+  --helper.blah()
   local User = sailor.model('user')
   local fixtures = require "tests.fixtures.user" or {}
-  local users = {}
+  local users = User:find_all()
   local u, count_before
 
   setup(function()
-    db.connect()
-    db.query('truncate table ' .. User.db.table .. ';') -- Reseting current state
-    db.close()
-    for _,v in pairs(fixtures) do  -- loading fixtures
-      u = User:new(v)
-      u:save(false)
-      table.insert(users,u)
-    end
+ 
   end)
 
   it("should create object", function()
+    
     local s = spy.on(User,'validate')
     local s2 = spy.on(User,'insert')
     count_before = User:count()
