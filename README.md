@@ -117,5 +117,9 @@ dalcol@etiene.net
 
 http://twitter.com/etiene_d
 
+### Mail List & Support
+[Join our google group for mail list and support](https://groups.google.com/forum/#!forum/sailor-l)
 
-##### If you are having trouble to get it working or if you got it working using different specs, please contact me so we can exchange info and I can improve the manual. Thanks!
+
+
+##### If you are having trouble to get it working or if you got it working using different specs, please make contact so we can exchange info and I can improve the manual. Thanks!
