@@ -61,7 +61,7 @@ function M.contentheader(content_type)
 end
 
 function M.finish(code)
-	if request.content_type ~= nil then
+	if request.content_type ~= nil and ngx.header.content_type == nil then
 		ngx.header.content_type = request.content_type
 	end
 	-- TODO: translate request_rec's exit code and call ngx.exit(code)
