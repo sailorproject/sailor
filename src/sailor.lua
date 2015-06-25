@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.2: core functionalities of the framework
+-- sailor.lua, v0.4.3: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -66,11 +66,15 @@ function sailor.init(r)
     end
     r.content_type = "text/html"
     
-    local GET, GETMULTI = r:parseargs()
+    local GET, GETMULTI = {}, {}
     local POST, POSTMULTI = {}, {}
     if r.parsebody ~= nil then -- only present in Apache 2.4.3 or higher
         POST, POSTMULTI = r:parsebody(conf.sailor.max_upload or nil)
     end
+    if r.parseargs ~= nil then
+        GET, GETMULTI = r:parseargs()
+    end
+
     local page = {
         r = r,
         render = Page.render,
@@ -250,6 +254,8 @@ function sailor.route(page)
     -- Needs improvement
     local function error_handler(msg)
         page:write("<pre>"..traceback(msg,2).."</pre>")
+        print(traceback(msg,2))
+        return 500
     end
 
     -- If a default static page is configured, run it and prevent routing
@@ -259,6 +265,7 @@ function sailor.route(page)
     -- If there is a route path, find the correspondent controller/action
     elseif route_name ~= nil and route_name ~= '' then
         local controller, action = match(route_name, "([^/]+)/?([^/]*)")
+
         if conf.sailor.enable_autogen and controller == "autogen" then
             res = xpcall(function () autogen(page) end, error_handler)
             return res or httpd.OK
@@ -288,7 +295,7 @@ function sailor.route(page)
                 return res or page.r.status 
             else
                 -- run action
-                local _, res = xpcall(function() return ctr[action](page) end, error_handler)
+                local _, res = xpcall(function() return ctr[action](page) or page.r.status or 200 end, error_handler)
                 if res == 404 then
                     _,res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
                 end
@@ -299,7 +306,7 @@ function sailor.route(page)
     elseif conf.sailor.default_controller and conf.sailor.default_action then
         page.controller = conf.sailor.default_controller
         local ctr = require("controllers."..page.controller)
-        local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) end, error_handler)
+        local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) or 200 end, error_handler)
         return res or httpd.OK
     end
     -- No route specified and no defaults

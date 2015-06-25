@@ -1,4 +1,4 @@
-local helper = require "tests.unit.helper"
+local helper = require "tests.helper"
 
 describe("Testing #UserModel", function()
   --helper.blah()

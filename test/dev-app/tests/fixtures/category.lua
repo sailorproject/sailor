@@ -1,7 +1,6 @@
 -- category fixtures
 
 return {
-	{
-		name = 'General'
-	}
+	{ name = 'General' },
+	{ name = 'Literature' }
 }
