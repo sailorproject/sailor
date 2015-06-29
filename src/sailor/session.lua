@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- session.lua, v0.2: session abstraction
+-- session.lua, v0.2.1: cgilua session abstraction
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -43,6 +43,7 @@ function session.destroy (r)
 		session.delete (id)
 	end
 	session.id = nil
+	return true
 end
 
 local new = session.new

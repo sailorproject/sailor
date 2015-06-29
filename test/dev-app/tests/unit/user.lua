@@ -1,4 +1,5 @@
 local helper = require "tests.helper"
+local access = require "sailor.access"
 
 describe("Testing #UserModel", function()
   --helper.blah()
@@ -65,6 +66,22 @@ describe("Testing #UserModel", function()
 
   it("should find all objects", function()
     assert.is_equal(User:count(),#(User:find_all()))
+  end)
+
+   it("should login", function()
+    assert.is_true(User.authenticate(fixtures[1].username,fixtures[1].password,false))
+  end)
+
+  it("should know the user is logged in", function()
+    assert.is_false(access.is_guest())
+  end)
+
+  it("should logout", function()
+    assert.is_true(User.logout())
+  end)
+
+  it("should know the user is logged out", function()
+    assert.is_true(access.is_guest())
   end)
 
 end)

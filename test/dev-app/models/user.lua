@@ -1,5 +1,6 @@
 local user = {}
 local val = require "valua"
+local access = require "sailor.access"
 -- Attributes and their validation rules
 user.attributes = {
 	--{<attribute> =  < "safe" or validation function, requires valua >}
@@ -20,6 +21,18 @@ user.relations = {
 
 -- Public Methods
 function user.test() return "test" end
+
+function user.authenticate(login,password,use_hashing)
+	if use_hashing == nil then use_hashing = true end
+	access.settings({model = 'user', hashing = use_hashing})
+	return access.login(login,password)
+end
+
+function user.logout()
+	return access.logout()
+end
+
+
 
 
 return user

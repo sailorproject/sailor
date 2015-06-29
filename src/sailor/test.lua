@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- test.lua, v0.2: Helper functions for testing functionality
+-- test.lua, v0.3: Helper functions for testing functionality
 -- This file is a part of Sailor project
 -- Copyright (c) 2014-2015 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -7,6 +7,14 @@
 --------------------------------------------------------------------------------
 local M = {}
 
+local page
+local r
+
+function M:prepare(write_func)	
+	r = { uri = '', write = write_func, puts = write_func, headers_in = {}, headers_out = {} }
+	page = sailor.init(r)
+	return self
+end
 
 function M.load_fixtures(model_name)
 	local db = require "sailor.db"
@@ -20,7 +28,9 @@ function M.load_fixtures(model_name)
 	for _,v in pairs(fixtures) do  -- loading fixtures
 	  o = Model:new(v)
 	  o:save(false)
+	  table.insert(objects, o)
 	end
+	return objects
 end
 
 local function redirected(response, path)
@@ -28,17 +38,14 @@ local function redirected(response, path)
 	return (response.headers['Location']):match(path) and true or false
 end
 
-
 function M.request(path, data, additional_headers)
 	local conf = require "conf.conf"
 	data = data or {}
-	conf.sailor.friendly_urls = false
-
 	local body = ''
 	local function write(_,data) body = body .. data end
-	local r = { uri = '/'..path, write = write, puts = write, headers_in = {}, headers_out = {} }
-	
-	local page = sailor.init(r)
+	conf.sailor.friendly_urls = false
+
+	M:prepare(write)
 	page.POST = data.post or {}
 	page.GET = data.get or {}
 	page.GET[conf.sailor.route_parameter] = path
@@ -47,4 +54,4 @@ function M.request(path, data, additional_headers)
 	return {status = status, body = body, headers = r.headers_out, redirected = redirected}
 end
 
-return M
+return M:prepare()
