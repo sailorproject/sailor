@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- form.lua, v0.2.1: generates html for forms
+-- form.lua, v0.3: generates html for forms
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -8,6 +8,14 @@
 
 local form = {}
 local tinsert, tconcat = table.insert, table.concat
+local model_name
+
+local meta = {}
+meta.__call = function(_,mname)
+	model_name = mname
+	return form
+end
+setmetatable(form,meta)
 
 local function defaults(model,attribute,html_options)
 	return model[attribute] or '', model['@name']..':'..attribute, html_options or ''
@@ -84,6 +92,14 @@ function form.checkbox(model,attribute,label,checked,html_options)
 	end
 
 	return '<input type="checkbox" name="'..name..'"'..check..html_options..'/> '..label
+end
+
+function form.ify(data)
+	local new_data = {}
+	for k,v in pairs(data) do
+		new_data[model_name .. ':' .. k] = v
+	end
+	return new_data
 end
 
 return form

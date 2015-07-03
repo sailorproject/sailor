@@ -7,7 +7,8 @@
 --------------------------------------------------------------------------------
 
 local db = {env,con}
-local conf = require("conf.conf").db
+local main_conf = require "conf.conf"
+local conf = main_conf.db[main_conf.sailor.environment]
 local luasql = require("luasql."..conf.driver)
 
 -- Creates the connection of the instance

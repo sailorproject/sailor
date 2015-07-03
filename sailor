@@ -1,7 +1,7 @@
-#!/usr/bin/lua5.1
+#!/usr/bin/env lua
 
 --------------------------------------------------------------------------------
--- sailor_create, v0.2: deploys sailor apps
+-- sailor v0.3: Command line utility for sailor
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -11,17 +11,24 @@
 local lfs = require "lfs"
 
 local function help()
-	print("\n\t\27[31mUsage:\27[0m\n")
-	print("\t\tsailor_create <app name> {<dir>} - Generates web files in a directory.")
-	print("\t\t   <app name>: The name of your application.")
-	print("\t\t   <dir>: Optional. The directory you wish your files to be created or current dir.\n")
-	print("\n\t\27[31mExample:\27[0m\n")
-	print("\t\tsailor_create 'Hey Arnold' /var/www")
-	print("\t\t   This will create your web app under /var/www/hey_arnold.\n")
+	print("\27[31mUsage: sailor command\27[0m \n")
+	print("Commands:")
+	print("  \27[31mcreate	Usage: sailor create NAME [PATH]\27[0m")
+	print("    		Generates web application in a directory.")
+	print("     NAME	The name of your application.")
+	print("     PATH	Optional. The path to where you wish your app to be created. \n\t\tIf not specified, the app will be created at the current dir.\n")
+	print("		\27[31mExample:\27[0m sailor create 'Hey Arnold' /var/www")
+	print("		This will create your web app under /var/www/hey_arnold.\n")
+	print("  \27[31mtest\t\tUsage: sailor test [FLAGS]\27[0m")
+	print("    		Will run the tests specified for an application.")
+	print("     FLAGS	Optional. Flags for the Busted library.")
+	print("\nOptions:")
+	print("  --help	Shows help message.")
+	print("")
 end
 
 local function get_sailor_path(current_dir)
-	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor_create$"))
+	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor$"))
 
 	local f = sailor_path and io.open(sailor_path.."/src/sailor.lua", "r")
 	if not f then 
@@ -55,7 +62,7 @@ local function create()
 	
 	local sailor_path = get_sailor_path(current_dir)
 	
-	local raw_app = sailor_path.."/sailor/demo-app"
+	local raw_app = sailor_path.."/sailor/blank-app"
 	local new_app = destiny.."/"..name
 	assert(os.execute("cp -a "..raw_app.." "..new_app))
 
@@ -79,11 +86,22 @@ local function create()
 	print("done!")
 end
 
+local function test()
+	local flags = ''
+	for i=2,#arg do
+		flags = flags..arg[i]..' '
+	end
+	os.execute('busted --helper=tests/bootstrap.lua '..flags..'tests/unit/* tests/functional/*')
+end
+
 local function run()
-	if not arg[1] or arg[1] == '--help' or arg[1] == '-h' then
-		help()
-	else
+
+	if (arg[1] == 'create' or arg[1] == 'c') and arg[2] then
 		create()
+	elseif arg[1] == 'test' or arg[1] == 't' then
+		test()
+	else
+		help()
 	end
 end
 

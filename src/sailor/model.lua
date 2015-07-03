@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.5.1: basic model creator, uses db module
+-- model.lua, v0.7: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -8,11 +8,13 @@
 local model = {}
 local db = require("sailor.db")
 local autogen = require ("sailor.autogen")
+local util = require "web_utils.utils"
 
 --Warning: this is a tech preview and this model class might or might not avoid SQL injections.
 --Attention, OO stuff! Will produce our little pretty objects
 function model:new(obj)
 	obj = obj or {errors={}}
+	obj = util.deepcopy(obj)
 
 	setmetatable(obj,self)
 	self.__index = function (table, key)
@@ -46,10 +48,14 @@ end
 -- saves our object
 -- if the object is a new object, it will insert values in our table,
 -- otherwise it updates them.
-function model:save() 
-	local res,err = self:validate()
-	if not res then
-		return res,err
+-- validate: boolean, default is true, set to false to deactivate validation before saving
+function model:save(validate)
+	validate = validate == nil or validate -- defaults validation to true
+	if validate then
+		local res,err = self:validate()
+		if not res then
+			return res,err
+		end
 	end
 	local id = self[self.db.key]
 	if not id or not self:find_by_id(id) then
@@ -165,15 +171,31 @@ function model:update()
 end
 
 -- Reads the cursor information after reading from db and turns it into an object
-function model:fetch_object(cur)
+-- If searching for multiple results, a table as the second parameter is needed
+function model:fetch_object(cur,res_table)
 	local row = cur:fetch ({}, "a")
-	cur:close()
-	if row then
-		local obj = sailor.model(self["@name"]):new(row)
-		return obj
-	else
-		return false
+
+	if not row then 
+		cur:close() 
+		return false 
 	end
+
+	local types = cur:getcoltypes()
+	local names = cur:getcolnames()
+
+	for k,t in pairs(types) do
+		if t:find('number') then
+			row[names[k]] = tonumber(row[names[k]])
+		end
+	end
+	local obj = sailor.model(self["@name"]):new(row)
+	if res_table ~= nil then 
+		table.insert(res_table,obj)
+	else
+		cur:close()
+	end
+	
+	return obj
 end
 
 -- (escaped) Finds objects with the given id
@@ -235,17 +257,7 @@ function model:find_all(where_string)
 	end
 	local cur = db.query("select * from "..self.db.table..where_string..";")
 	local res = {}
-	local row = cur:fetch ({}, "a")
-	while row do
-		local obj = {}
-		for _,n in pairs(self.attributes) do 
-			for attr,_ in pairs(n) do
-				obj[attr] = row[attr]
-			end
-		end
-		table.insert(res,self:new(obj))
-		row = cur:fetch (row, "a")
-	end
+	while(self:fetch_object(cur,res)) do end
 	cur:close()
 	db.close()
 	return res
@@ -273,7 +285,6 @@ function model:validate()
 		for attr,rules in pairs(n) do
 			if rules and rules ~= "safe" then 
 				local res, err = rules(self[attr])
-
 				check = check and res
 				if not res then
 					errs[attr] = attr.." "..tostring(err)
@@ -437,5 +448,15 @@ end
 	db.query(query)
 	db.close()
 end]]
+
+-- Gets the amount of stored objects
+function model:count()
+	db.connect()
+	local cur = db.query("select count(*) from "..self.db.table..";")
+	local count = cur:fetch()
+	cur:close()
+	db.close()
+	return tonumber(count)
+end
 
 return model

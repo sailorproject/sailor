@@ -12,20 +12,26 @@ local conf = {
 		enable_autogen = false, -- default is false, should be true only in development environment
 		friendly_urls = false,
 		max_upload = 1024 * 1024, 
+		environment = "development"  -- this will use db configuration named development
 	},
+
 	db = {
-		driver = 'mysql',
-		host = '',
-		user = '',
-		pass = '',
-		dbname = ''
+		development = { -- current environment
+			driver = 'mysql',
+			host = '',
+			user = '',
+			pass = '',
+			dbname = ''
+		}
 	},
+
 	smtp = {
 		server = '',
 		user = '',
 		pass = '',
 		from = ''
 	},
+
 	debug = {
 		inspect = false
 	}
