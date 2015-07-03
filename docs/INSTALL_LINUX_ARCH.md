@@ -48,11 +48,11 @@ You can either clone it directly from the repository, download the zip containin
     sudo pacman -S luarocks
     sudo luarocks install sailor
 
-We are almost done! You can now use `sailor_create` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on http://localhost/hey_arnold
+We are almost done! You can now use `sailor` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on http://localhost/hey_arnold
 
-    sailor_create 'Hey Arnold' /srv/http
+    sailor create 'Hey Arnold' /srv/http
 
-Alternatively, you can manually copy the files in the /src/sailor/demo-app directory of this repository to /srv/http/hey_arnold and access it at <http://localhost/hey_arnold> and if you didn't install sailor through LuaRocks, you must open .htaccess and replace {{path}} with the full path on your system to Sailor's src directory.
+Alternatively, you can manually copy the files in the /src/sailor/blank-app directory of this repository to /srv/http/hey_arnold and access it at <http://localhost/hey_arnold> and if you didn't install sailor through LuaRocks, you must open .htaccess and replace {{path}} with the full path on your system to Sailor's src directory.
 
 #### Dependencies
 If you want to persist your models you need luasql. Sailor could work with other drivers but so far we've only tested with mysql and don't offer support for others.

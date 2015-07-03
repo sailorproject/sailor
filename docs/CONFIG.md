@@ -22,13 +22,17 @@ You will find Sailor's config file under `conf/conf.lua`. This file contains a t
 
 `sailor.max_upload` sets, in bytes, the max size of files to be uploaded using file inputs on forms.
 
-`db.driver` is your database driver, example: 'mysql'.
+`environment` is a string with the name of your current environment. Example: 'test'
 
-`db.host` is your database host, example: 'localhost'.
+`db` contains a table with your different database setups. They must contain the following fields:
 
-`db.user` and `db.pass` are the login information for your database.
+    `driver` is your database driver, example: 'mysql'.
+    
+    `host` is your database host, example: 'localhost'.
 
-`db.dbname` is the database name. You can leave db configs blank if you are not persisting models.
+    `user` and `db.pass` are the login information for your database.
+
+    `dbname` is the database name. You can leave db configs blank if you are not persisting models.
 
 `smtp.server` is the server for sending emails. You can leave smtp configs blank if you are not using your application for sending emails.
 

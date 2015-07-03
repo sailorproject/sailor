@@ -37,9 +37,9 @@ You can either clone it directly from the repository, download the zip containin
 
     luarocks install sailor
 
-We are almost done! You can now use `sailor_create` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /usr/local/var/www/htdocs). After you're done, you can open your browser and access it on http://localhost/hey_arnold .
+We are almost done! You can now use `sailor` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /usr/local/var/www/htdocs). After you're done, you can open your browser and access it on http://localhost/hey_arnold .
 
-    sailor_create 'Hey Arnold' /usr/local/var/www/htdocs
+    sailor create 'Hey Arnold' /usr/local/var/www/htdocs
 
 
 #### Dependencies

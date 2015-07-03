@@ -126,7 +126,7 @@ Download the latest Lighttpd from:
 
 Unzip the Lighttpd ZIP to a directory of your choice.
 
-Copy the files in the `src/sailor/demo-app` directory of this repository to the htdocs/sailor directory of the Lighttpd dir.
+Copy the files in the `src/sailor/blank-app` directory of this repository to the htdocs/sailor directory of the Lighttpd dir.
 
 ####Configuring Lighttpd
 
