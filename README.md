@@ -28,10 +28,10 @@ A Lua MVC Framework. www.sailorproject.org
   * Model generation (reading from DB)
   * CRUD generation (reading from model)
   * Theme and layout (now you can have multiple layouts inside a theme. e.g. 1-column and 2-column)
+  * Integration with Busted for unit and functional tests for your app
 
 
 ### Roadmap
-* Integration with a test suite
 * Improvements of Lua on the client side
 * Integration with mod_lua's DB API and DB module refactor
 * Improvements with the ORM
@@ -42,7 +42,7 @@ More about this project's motivation can be found here: http://etiene.net/sailor
 * /docs - this one is supposed to have documentation
 * /src - Lua modules with nice stuff from sailor and other places.
  * /sailor - Sailor modules
- * /sailor/demo-app - blank Sailor web app, can be copy pasted as base for your own apps
+ * /sailor/blank-app - blank Sailor web app, can be copy-pasted as base for your own apps
 * /test - apps for testing and demonstration purposes
 
 ### Supported Environments
@@ -65,6 +65,7 @@ A default Sailor app will have the following directory tree structure:
 * /models - models you will make!
 * /pub - publicly accessible files (js libraries, for example)
 * /runtime - temporary files generated during runtime.
+* /tests - unit and functional tests
 * /views - this is where your lua pages in .lp will go
 
 #### Creating Pages #
