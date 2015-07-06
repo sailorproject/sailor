@@ -36,6 +36,7 @@ build = {
       ['remy.nginx'] = "src/remy/nginx.lua",
       sailor = "src/sailor.lua",
       ['sailor.access'] = "src/sailor/access.lua",
+      ['sailor.autogen'] = "src/sailor/autogen.lua",
       ['sailor.cookie'] = "src/sailor/cookie.lua",
       ['sailor.db'] = "src/sailor/db.lua",
       ['sailor.blank-app.conf.conf'] = "src/sailor/blank-app/conf/conf.lua",
