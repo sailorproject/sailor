@@ -6,7 +6,7 @@ A Lua MVC Framework. www.sailorproject.org
 
 ### Features
   * Luarocks setup
-  * Runs over Apache2, NginX, Mongoose, Lighttpd, Xavante and Lwan web servers
+  * Runs over Apache2 (with mod_lua), NginX (openresty), Mongoose, Lighttpd, Xavante and Lwan web servers
   * Using Windows, Mac or Linux systems
   * Compatible with MySQL, PostgreSQL, SQLite and other databases supported by the luasql library
   * MVC structure
@@ -18,7 +18,7 @@ A Lua MVC Framework. www.sailorproject.org
   * Include, redirect
   * Sessions, cookies
   * Login module
-  * Easy deployment (unix only) -> sailor_create "app name" /dir/to/app
+  * Easy deployment (unix only) -> sailor create "app name" /dir/to/app
   * Form generation
   * Lua at client (possible through a Lua=>JS virtual machine deployed with the app)
   * Friendly urls
