@@ -56,9 +56,9 @@ local function error()
 end
 
 local function create()
-	local name = string.gsub(arg[1]:lower(),' ','_')
+	local name = string.gsub(arg[2]:lower(),' ','_')
 	local current_dir = lfs.currentdir()
-	local destiny = arg[2] or current_dir 
+	local destiny = arg[3] or current_dir 
 	
 	local sailor_path = get_sailor_path(current_dir)
 	
@@ -79,7 +79,7 @@ local function create()
 	src = conf:read("*a")
 	conf:close()
 	conf = assert(io.open (new_app.."/conf/conf.lua" , "w"))
-	src = string.gsub(src,"Sailor! A Lua MVC Framework",arg[1])
+	src = string.gsub(src,"Sailor! A Lua MVC Framework",arg[2])
 	conf:write(src)
 	conf:close()
 
