@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.4: core functionalities of the framework
+-- sailor.lua, v0.4.5: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -57,7 +57,7 @@ function sailor.handle_request(r)
 end
 
 -- Stores the path of the application in sailor.path
-function sailor.set_application_path()
+function sailor.set_application_path(r)
     local dir = lfs.currentdir()
     if dir == '/' or not dir then
         local filename = r.uri:match( "([^/]+)$")
@@ -71,7 +71,7 @@ end
 -- Useful for posterior compatibility with other servers
 -- r: webserver's request object
 function sailor.init(r)
-    sailor.set_application_path()
+    sailor.set_application_path(r)
     r.content_type = "text/html"
     
     local GET, GETMULTI = {}, {}
@@ -262,18 +262,16 @@ function sailor.route(page)
     -- Needs improvement
     local function error_handler(msg)
         page:write("<pre>"..traceback(msg,2).."</pre>")
-        print(traceback(msg,2))
         return 500
     end
 
     -- If a default static page is configured, run it and prevent routing
     if conf.sailor.default_static then
         xpcall(function () page:render(conf.sailor.default_static) end, error_handler)
-        return httpd.OK
+        return httpd.OK or page.r.status or 200
     -- If there is a route path, find the correspondent controller/action
     elseif route_name ~= nil and route_name ~= '' then
         local controller, action = match(route_name, "([^/]+)/?([^/]*)")
-
         if conf.sailor.enable_autogen and controller == "autogen" then
             res = xpcall(function () autogen(page) end, error_handler)
             return res or httpd.OK
@@ -303,19 +301,21 @@ function sailor.route(page)
                 return res or page.r.status 
             else
                 -- run action
-                local _, res = xpcall(function() return ctr[action](page) or page.r.status or 200 end, error_handler)
+                local _, res = xpcall(function() return ctr[action](page) end, error_handler)
                 if res == 404 then
                     _,res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
                 end
-                return res or httpd.OK
+
+                return res or httpd.OK or page.r.status or 200
             end
         end
     -- If no route var is defined, run default controller action
     elseif conf.sailor.default_controller and conf.sailor.default_action then
         page.controller = conf.sailor.default_controller
         local ctr = require("controllers."..page.controller)
-        local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) or 200 end, error_handler)
-        return res or httpd.OK
+        local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) end, error_handler)
+
+        return res or httpd.OK or page.r.status or 200
     end
     -- No route specified and no defaults
     return 500
@@ -328,13 +328,16 @@ function sailor.make_url(route,params)
     params = params or {}
     url = route
     local base_path = ((sailor.r.uri):match('^@?(.-)/index.lua$') or '')
+    if base_path ~= '' then
+        base_path = base_path..'/'
+    end
     if conf.sailor.friendly_urls then
-        url =  base_path.."/"..url
+        url =  base_path..url
         for k,v in pairs(params) do
             url = url.."/"..k.."/"..v
         end
     else
-        url = base_path.."/?"..conf.sailor.route_parameter.."="..url
+        url = base_path.."?"..conf.sailor.route_parameter.."="..url
         for k,v in pairs(params) do
             url = url.."&"..k.."="..v
         end
