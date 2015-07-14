@@ -4,7 +4,8 @@
 -- @release $Id: session.lua,v 1.29 2007/11/21 16:33:20 carregal Exp $
 ----------------------------------------------------------------------------
 
-local cgilua = require"web_utils.utils"
+local utils = require "web_utils.utils"
+local cgilua = require "cgilua"
 local lfs = require"lfs"
 local serialize = require"web_utils.serialize".serialize
 
@@ -173,7 +174,7 @@ function M.setsessiondir (path)
 		assert (mkdir (path))
 	end
 	-- Make sure it can create a new file in the given directory
-	local test_file = path.."/"..cgilua.tmpname()
+	local test_file = path.."/"..utils.tmpname()
 	local fh, err = _open (test_file, "w")
 	if not fh then
 		error ("Could not open a file in session directory: "..

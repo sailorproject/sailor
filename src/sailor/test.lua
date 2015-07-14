@@ -5,13 +5,16 @@
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
+
+local sailor = require "sailor"
+
 local M = {}
 
 local page
 local r
 
 -- Prepares for making a request
-function M:prepare(write_func, headers_in)	
+function M:prepare(write_func, headers_in)
 	headers_in = headers_in or {}
 	r = { uri = '', write = write_func, puts = write_func, headers_in = headers_in, headers_out = {} }
 	page = sailor.init(r)
@@ -31,7 +34,7 @@ function M.load_fixtures(model_name)
 	db.query('truncate table ' .. Model.db.table .. ';') -- Reseting current state
 	db.close()
 	for _,v in pairs(fixtures) do  -- loading fixtures
-	  o = Model:new(v)
+	  local o = Model:new(v)
 	  o:save(false)
 	  table.insert(objects, o)
 	end
@@ -68,7 +71,7 @@ function M.request(path, data, additional_headers)
 	page.GET = data.get or {}
 	page.GET[conf.sailor.route_parameter] = path
 	local status = sailor.route(page)
-	
+
 	return {status = status, body = body, headers = r.headers_out, redirected = redirected}
 end
 

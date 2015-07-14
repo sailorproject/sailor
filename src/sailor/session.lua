@@ -6,6 +6,7 @@
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
 
+local sailor = require "sailor"
 local utils = require "web_utils.utils"
 local session = require "web_utils.session"
 local cookie = require "sailor.cookie"
@@ -31,7 +32,7 @@ function session.open (r)
             session.new(r)
         end
     end
-    
+
 	session.cleanup()
 	return id
 end
@@ -47,7 +48,7 @@ function session.destroy (r)
 end
 
 local new = session.new
-function session.new(r)	
+function session.new(r)
 	session.id = new()
 	session.data = {}
     cookie.set(r,ID_NAME,session.id)

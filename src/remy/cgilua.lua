@@ -2,7 +2,9 @@
 -- Copyright (c) 2014 Felipe Daragon
 -- License: MIT
 
-require "base64"
+local base64 = require "base64"
+local cgilua = require "cgilua"
+local remy = require "remy"
 
 -- TODO: implement all functions from mod_lua's request_rec
 local request = {
@@ -94,7 +96,7 @@ end
 -- TODO: better handle the return code
 function M.finish(code)
 	local r = request
-	
+
 	-- Handle page redirect
 	local location = r.headers_out['Location']
   if location ~= nil and r.status == 302 then
@@ -110,7 +112,7 @@ function M.finish(code)
 				cgilua.redirect(location)
      end
   end
-	
+
 	-- Prints the response text (if any)
 	if r.content_type == "text/html" then
 		cgilua.htmlheader()

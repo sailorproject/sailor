@@ -6,6 +6,7 @@
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
 
+local sailor = require "sailor"
 local session = require "sailor.session"
 local access = {}
 
@@ -18,10 +19,10 @@ local settings = {
 	default_password = 'demo',
 	grant_time = 604800, 			-- 1 week
 	model = nil,					-- Setting this field will deactivate default login details and activate below fields
-	login_attributes = {'username'},-- Allows multiple options, for example, username or email. The one used to hash the 			 
+	login_attributes = {'username'},-- Allows multiple options, for example, username or email. The one used to hash the
 	password_attribute = 'password',--     password should come first.
 	salt_attribute = 'salt',
-	hashing = true 	
+	hashing = true
 }
 
 -- Changes settings
@@ -36,7 +37,7 @@ function access.hash(username, password, salt)
 	if not settings.hashing then return password end
 	local hash = username .. password
 	salt = salt or ''
-	
+
 	-- Check if bcrypt is embedded
 	if sailor.conf.bcrypt and sailor.r.htpassword then
 		hash = sailor.r:htpassword(salt .. hash, 2, 100) -- Use bcrypt on pwd
@@ -49,7 +50,7 @@ function access.hash(username, password, salt)
 			end
 		end
 	end
-	return hash 
+	return hash
 end
 
 
@@ -82,7 +83,7 @@ end
 function access.login(login,password)
 	local id
 	if settings.model then
-		local model = access.find_model(login) 
+		local model = access.find_model(login)
 		if not model then
 			return false, INVALID
 		end
@@ -98,7 +99,7 @@ function access.login(login,password)
 		end
 		id = 1
 	end
-	return access.grant({login=login,id=id})	
+	return access.grant({login=login,id=id})
 end
 
 
