@@ -5,6 +5,8 @@
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
+
+local sailor = require "sailor"
 local model = {}
 local db = require("sailor.db")
 local autogen = require ("sailor.autogen")
@@ -28,7 +30,7 @@ function model:new(obj)
 	obj.__newindex = function (table, key, value)
 		if key ~= '__newindex'  and  key ~= '__index' and key ~= 'loaded_relations' then
 			local found = false
-			for _,attrs in pairs(obj.attributes) do 
+			for _,attrs in pairs(obj.attributes) do
 				if attrs[key] then
 					found = true
 				end
@@ -100,12 +102,12 @@ function model:get_relation(key)
 		end
 
 
-		self.loaded_relations[key] = obj 
+		self.loaded_relations[key] = obj
 		return obj
 	else
 		return self.loaded_relations[key]
 	end
-end	
+end
 
 -- (escaped) Inserts our model values in the db table!
 function model:insert()
@@ -115,7 +117,7 @@ function model:insert()
 
 	local attrs = {}
 	local values = {}
-	for _,n in pairs(self.attributes) do 
+	for _,n in pairs(self.attributes) do
 		for attr,_ in pairs(n) do
 			table.insert(attrs,attr)
 			if not self[attr] then
@@ -147,7 +149,7 @@ function model:update()
 	local attributes = self.attributes
 	local key = self.db.key
 	local updates = {}
-	for _,n in pairs(self.attributes) do 
+	for _,n in pairs(self.attributes) do
 		for attr,_ in pairs(n) do
 			local string = attr.."="
 			if not self[attr] then
@@ -175,9 +177,9 @@ end
 function model:fetch_object(cur,res_table)
 	local row = cur:fetch ({}, "a")
 
-	if not row then 
-		cur:close() 
-		return false 
+	if not row then
+		cur:close()
+		return false
 	end
 
 	local types = cur:getcoltypes()
@@ -189,12 +191,12 @@ function model:fetch_object(cur,res_table)
 		end
 	end
 	local obj = sailor.model(self["@name"]):new(row)
-	if res_table ~= nil then 
+	if res_table ~= nil then
 		table.insert(res_table,obj)
 	else
 		cur:close()
 	end
-	
+
 	return obj
 end
 
@@ -230,7 +232,7 @@ function model:find_by_attributes(attributes)
 	local f = self:fetch_object(cur)
 	db.close()
 	return f
-	
+
 end
 
 -- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
@@ -281,9 +283,9 @@ function model:validate()
 	local check = true
 	local errs = {}
 
-	for _,n in pairs(self.attributes) do 
+	for _,n in pairs(self.attributes) do
 		for attr,rules in pairs(n) do
-			if rules and rules ~= "safe" then 
+			if rules and rules ~= "safe" then
 				local res, err = rules(self[attr])
 				check = check and res
 				if not res then
@@ -323,9 +325,9 @@ end
 -- model_name: string, the name of the model
 function model.generate_crud(model_name)
 	local f=io.open(sailor.path.."/models/"..model_name..".lua","r")
-	if f == nil then 
-   		error("The model '"..model_name.."'does not exist") 
-   		return false 
+	if f == nil then
+   		error("The model '"..model_name.."'does not exist")
+   		return false
    	else
    		io.close(f)
 
@@ -368,7 +370,7 @@ M.attributes = {
 	-- Ex. {id = val:new().integer()}
 ]]
 
-		
+
 		local key
 		cur = db.query(query)
 		local res = {}
@@ -409,7 +411,7 @@ end
 --[[function model:generate_mysql()
 	local query = "create table "..self.db.table.."("
 
-	for attr,rules in pairs(self.attributes) do 
+	for attr,rules in pairs(self.attributes) do
 		query = query..attr.." "
 		local attr_type
 		local not_null = ""
@@ -438,7 +440,7 @@ end
 		if not attr_type then
 			attr_type = "text"
 		end
-		
+
 		query = query..attr_type..not_null..", "
 	end
 

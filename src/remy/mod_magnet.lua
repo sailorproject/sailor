@@ -2,7 +2,9 @@
 -- Copyright (c) 2015 Felipe Daragon
 -- License: MIT
 
-require "base64"
+local base64 = require "base64"
+local remy = require "remy"
+local lighty = require "lighty"
 
 local utils = {}
 

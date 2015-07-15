@@ -5,7 +5,7 @@
 -- Remy runs Lua-based web applications in alternative web server
 -- environments that allow to run Lua code.
 
-remy = {
+local remy = {
 	MODE_AUTODETECT = nil,
 	MODE_CGILUA = 0,
 	MODE_MOD_PLUA = 1,
@@ -124,16 +124,16 @@ end
 -- Detects the Lua environment
 function remy.detect(native_request)
 	local mode = nil
-	if cgilua ~= nil then
+	if package.loaded.cgilua ~= nil then
 		mode = remy.MODE_CGILUA
-	elseif ngx ~= nil then
+	elseif package.loaded.ngx ~= nil then
 		mode = remy.MODE_NGINX
 	elseif getEnv ~= nil then
 		local env = getEnv()
 		if env["pLua-Version"] ~= nil then
 			mode = remy.MODE_MOD_PLUA
 		end
-	elseif lighty ~= nil then
+	elseif package.loaded.lighty ~= nil then
 		mode = remy.MODE_LIGHTTPD
 	elseif native_request ~= nil and type(native_request.query_param) == "function" then
 		mode = remy.MODE_LWAN
@@ -176,3 +176,5 @@ function remy.sha1(str)
 	local sha1 = require "sha1"
 	return sha1(str)
 end
+
+return remy

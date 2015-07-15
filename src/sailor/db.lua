@@ -6,10 +6,10 @@
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
 
-local db = {env,con}
 local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local luasql = require("luasql."..conf.driver)
+local db = {}
 
 -- Creates the connection of the instance
 function db.connect()
@@ -25,7 +25,7 @@ end
 
 -- Runs a query
 -- @param query string: the query to be executed
--- @return table: a cursor 
+-- @return table: a cursor
 function db.query(query)
 	local cur = assert(db.con:execute(query))
 	return cur
@@ -34,16 +34,16 @@ end
 -- Escapes a string or a table (its values). Should be used before concatenating strings on a query.
 -- @param q string or table: the string or table to be escaped
 -- @return string or nil: if q is a string, returns the new escaped string. If q is a table
---							it simply returns, since it already escaped the table's values 
+--							it simply returns, since it already escaped the table's values
 function db.escape(q)
 	if type(q) == "string" then
 		q = db.con:escape(q)
 		return q
 	elseif type(q) == "table" then
-		for k,v in pairs(q) do 
+		for k,v in pairs(q) do
 			q[k] = db.con:escape(v)
 		end
-		return 
+		return
 	end
 	return q
 end
@@ -66,7 +66,7 @@ end
 	return res
 end]]
 
---- Runs a query and returns the id of the last inserted row. Used for saving 
+--- Runs a query and returns the id of the last inserted row. Used for saving
 -- a model and obtaining the model id.
 -- @param query string: the query to be executed
 -- return number or string: the id of the last inserted row.

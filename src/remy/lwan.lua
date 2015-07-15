@@ -2,7 +2,8 @@
 -- Copyright (c) 2014 Leandro Pereira <leandro@tia.mat.br>
 -- License: MIT
 
-require "base64"
+local base64 = require "base64"
+local remy = require "remy"
 
 local lwan = {}
 lwan.query_param_table = function(req)

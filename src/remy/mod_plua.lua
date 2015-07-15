@@ -2,6 +2,8 @@
 -- Copyright (c) 2014 Felipe Daragon
 -- License: MIT
 
+local remy = require "remy"
+
 -- TODO: implement all functions from mod_lua's request_rec
 local request = {
 	-- ENCODING/DECODING FUNCTIONS
