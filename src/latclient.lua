@@ -1,6 +1,6 @@
 --[[
-Lua@Client 0.1.7
-Lua Pages Template Preprocessor Extension and Script Provider
+Lua@Client 0.2
+Lua Pages Template Preprocessor Extension
 Copyright (c) 2014 Felipe Daragon
 
 License: MIT
@@ -10,8 +10,6 @@ local M = {
 	js_url = "js",
 	js_served = false
 }
-
---M.js_url = "http://127.0.0.1/sailor/pub/thirdparty/latclient/js"
 
 function M.translate(src)
 	local get_both = function(s) return '<? '..s..' ?>'..M.get_client_js(s) end
@@ -25,9 +23,10 @@ function M.get_header(s)
 	if M.js_served == false then
 		M.js_served = true
 		local header = [[
-		<script src="{url}/lib/lua5.1.5.min.js"></script>
-		<script src="{url}/latclient.js"></script>
-		<script src="{url}/js-lua.js"></script>
+		<script src="{url}/moonshine.min.js"></script>
+		<script src="{url}/distillery.moonshine.min.js"></script>
+		<script src="{url}/DOMAPI.moonshine.min.js"></script>
+		<script>var vm = new shine.VM(shine.DOMAPI);</script>
 		]]
 		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
@@ -36,52 +35,11 @@ function M.get_header(s)
 end
 
 function M.get_client_js(s)
-	local s = M.js_string_escape(s)
-	s = '<script>LuaCS.runString('..s..')</script>'
+	local modules = M.get_modules(s)
+	s = string.dump(assert(loadstring(s)))
+	s = M.js_string_escape(s)
+	s = '<script>'..modules..'vm.load('..s..');</script>'
 	return M.get_header(s)
-end
-
-function M.get_provide_script(fn,path,filename)
-	local js = [[
-	(function(Lua5_1) {
-		Lua5_1.provide_file(%s, %s, %s,true, false);
-		})(Lua5_1);
-		]]
-		local file = io.open (fn, "r")
-		local src = file:read("*all")
-		file:close()
-		src = M.js_string_escape(src)
-		path = M.js_string_escape(path)
-		filename = M.js_string_escape(filename)
-		return string.format(js, path, filename, src)
-end
-
--- File provider for mod_lua
-function M.handle(r,path,filename)
-		r.content_type = "text/javascript"
-		if filename == nil then
-			filename = r.uri:match( "([^/]+)$")
-		end
-		if path == nil then
-			path = r.uri:match("^@?(.-)/"..filename.."$").."/"
-		end
-		r:puts(M.get_provide_script(r.filename,path,filename))
-		return apache2.OK
-end
-
--- File provider for CGI-Lua
-function M.cgilua_exit(path,filename)
-		if cgilua ~= nil then
-			cgilua.contentheader("text","javascript")
-			if filename == nil then
-				filename = cgilua.script_path:match( "([^/]+)$")
-			end
-			if path == nil then
-				path = cgilua.servervariable("SCRIPT_NAME"):match("^@?(.-)/"..filename.."$").."/"
-			end
-			cgilua.put(M.get_provide_script(cgilua.script_path,path,filename))
-			os.exit()
-		end
 end
 
 function M.js_string_escape(s)
@@ -113,6 +71,34 @@ function M.js_string_escape(s)
 
 		return '"' .. s:gsub('[\\"/%z\1-\031\128-\255]', matches) .. '"'
 
+end
+
+
+local function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+
+local function search_module_path(name)
+	local path
+	name = string.gsub(name,'%.','/')
+	for s in string.gmatch(package.path, "[^;]+") do
+	  path = string.gsub(s,'?',name)
+	  if file_exists(path) then return path end
+	end
+	return nil
+end
+
+function M.get_modules(s)
+	local modules = ""
+	for name in string.gfind(s, "require%s*%(?[\"'](.-)[\"']%)?")  do
+		local module_file = search_module_path(name)
+		if module_file then
+			local module_bytecode = M.js_string_escape(string.dump(assert(loadfile(module_file))))
+			modules = modules .. 'vm.preload("'..name..'",'..module_bytecode..'); '
+		end
+	end
+	return modules
 end
 
 return M

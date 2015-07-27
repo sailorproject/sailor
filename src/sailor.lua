@@ -263,7 +263,6 @@ function sailor.route(page)
     -- Needs improvement
     local function error_handler(msg)
         page:write("<pre>"..traceback(msg,2).."</pre>")
-        return 500
     end
 
     -- If a default static page is configured, run it and prevent routing
