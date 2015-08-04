@@ -198,6 +198,8 @@ function test.upload(page)
     page:render('upload')
 end
 
-
+function test.starlight(page)
+    page:render('starlight')
+end
 
 return test

@@ -6,7 +6,7 @@ local M = {
 }
 
 function M.translate (s)
-	lat.js_url = "./pub/moonshine"
+	lat.js_url = "./pub"
 	s = lat.translate(s)
 	return lp.translate(s)
 end

@@ -32,6 +32,10 @@ local conf = {
 		from = ''
 	},
 
+	lua_at_client = {
+		parse_at_server = false,
+	},
+
 	debug = {
 		inspect = false
 	}

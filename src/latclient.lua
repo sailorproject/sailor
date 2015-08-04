@@ -11,6 +11,8 @@ local M = {
 	js_served = false
 }
 
+local conf = require "conf.conf"
+
 function M.translate(src)
 	local get_both = function(s) return '<? '..s..' ?>'..M.get_client_js(s) end
 	src = string.gsub(src,'<[?]lua@both%s*(.-)%s*[?]>',get_both) -- must come first
@@ -22,12 +24,22 @@ end
 function M.get_header(s)
 	if M.js_served == false then
 		M.js_served = true
-		local header = [[
-		<script src="{url}/moonshine.min.js"></script>
-		<script src="{url}/distillery.moonshine.min.js"></script>
-		<script src="{url}/DOMAPI.moonshine.min.js"></script>
+		local header 
+		if conf.lua_at_client and conf.lua_at_client.parse_at_server then
+			header = [[
+		<script src="{url}/moonshine/moonshine.min.js"></script>
+		<script src="{url}/moonshine/distillery.moonshine.min.js"></script>
+		<script src="{url}/moonshine/DOMAPI.moonshine.min.js"></script>
 		<script>var vm = new shine.VM(shine.DOMAPI);</script>
 		]]
+		else
+			header = [[
+		<script src="{url}/starlight/starlight.min.js"></script>
+		<script src="{url}/starlight/parser.min.js"></script>
+		<script src="{url}/starlight/babel.min.js"></script>
+		<script src="{url}/starlight/DOMAPI.min.js"></script>
+		]]
+		end
 		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
 	end
@@ -36,9 +48,14 @@ end
 
 function M.get_client_js(s)
 	local modules = M.get_modules(s)
-	s = string.dump(assert(loadstring(s)))
-	s = M.js_string_escape(s)
-	s = '<script>'..modules..'vm.load('..s..');</script>'
+	if conf.lua_at_client and conf.lua_at_client.parse_at_server then
+		s = string.dump(assert(loadstring(s)))
+		s = M.js_string_escape(s)
+		s = '<script>'..modules..'vm.load('..s..');</script>'
+	else
+		s = '<script>'..modules..'(starlight.parser.parse(`'..s..'`))();</script>'
+
+	end
 	return M.get_header(s)
 end
 
@@ -94,8 +111,18 @@ function M.get_modules(s)
 	for name in string.gfind(s, "require%s*%(?[\"'](.-)[\"']%)?")  do
 		local module_file = search_module_path(name)
 		if module_file then
-			local module_bytecode = M.js_string_escape(string.dump(assert(loadfile(module_file))))
-			modules = modules .. 'vm.preload("'..name..'",'..module_bytecode..'); '
+			if conf.lua_at_client and conf.lua_at_client.parse_at_server then
+				local module_bytecode = M.js_string_escape(string.dump(assert(loadfile(module_file))))
+				modules = modules .. 'vm.preload("'..name..'",'..module_bytecode..'); '
+			else
+				local file = io.open(module_file,'r')
+				local file_str = file:read("*a")
+				file:close()
+				local lua_code = "rawset(package.preload, '" .. name.. [[', function(...)\n ]]
+				 .. file_str .. 
+				 [[ \nend)]]
+				modules = modules .. '(starlight.parser.parse(`'..lua_code..'`))(); '
+			end
 		end
 	end
 	return modules
