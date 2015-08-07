@@ -13,6 +13,7 @@ end
 
 function M.setoutfunc (f)
 	lat.js_served = false
+	lat.modules_served = {}
 	lp.setoutfunc(f)
 end
 

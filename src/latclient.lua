@@ -8,7 +8,8 @@ License: MIT
 
 local M = {
 	js_url = "js",
-	js_served = false
+	js_served = false,
+	modules_served = {}
 }
 
 local conf = require "conf.conf"
@@ -109,19 +110,22 @@ end
 function M.get_modules(s)
 	local modules = ""
 	for name in string.gfind(s, "require%s*%(?[\"'](.-)[\"']%)?")  do
-		local module_file = search_module_path(name)
-		if module_file then
-			if conf.lua_at_client and conf.lua_at_client.parse_at_server then
-				local module_bytecode = M.js_string_escape(string.dump(assert(loadfile(module_file))))
-				modules = modules .. 'vm.preload("'..name..'",'..module_bytecode..'); '
-			else
-				local file = io.open(module_file,'r')
-				local file_str = file:read("*a")
-				file:close()
-				local lua_code = "rawset(package.preload, '" .. name.. [[', function(...)\n ]]
-				 .. file_str .. 
-				 [[ \nend)]]
-				modules = modules .. '(starlight.parser.parse(`'..lua_code..'`))(); '
+		if not M.modules_served[name] then
+			local module_file = search_module_path(name)
+			if module_file then
+				if conf.lua_at_client and conf.lua_at_client.parse_at_server then
+					local module_bytecode = M.js_string_escape(string.dump(assert(loadfile(module_file))))
+					modules = modules .. 'vm.preload("'..name..'",'..module_bytecode..'); '
+				else
+					local file = io.open(module_file,'r')
+					local file_str = file:read("*a")
+					file:close()
+					local lua_code = "rawset(package.preload, '" .. name.. [[', function(...)\n ]]
+					 .. file_str .. 
+					 [[ \nend)]]
+					modules = modules .. '(starlight.parser.parse(`'..lua_code..'`))(); '
+				end
+				M.modules_served[name] = true
 			end
 		end
 	end
