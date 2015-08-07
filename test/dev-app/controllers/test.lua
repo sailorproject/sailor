@@ -202,4 +202,9 @@ function test.starlight(page)
     page:render('starlight')
 end
 
+function test.frontend_performance(page)
+    page.theme = nil
+    page:render('frontend_performance')
+end
+
 return test

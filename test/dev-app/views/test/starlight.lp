@@ -39,5 +39,12 @@ window:my_js_func_receives_lua_func(this_is_lua)
 local v = require "valua"
 local val = v:new().len(3,5)
 print(val('oi'))
+?>
 
+
+<?lua@client
+--Require modules on server, should not embed the module again, should find it on preload
+local v = require "valua"
+local val = v:new().len(3,5)
+print(val('oi'))
 ?>
