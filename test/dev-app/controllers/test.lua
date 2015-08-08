@@ -202,6 +202,14 @@ function test.starlight(page)
     page:render('starlight')
 end
 
+function test.lua51js(page)
+    page:render('lua51js')
+end
+
+function test.luavmjs(page)
+    page:render('luavmjs')
+end
+
 function test.frontend_performance(page)
     page.theme = nil
     page:render('frontend_performance')

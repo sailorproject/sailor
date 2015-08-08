@@ -6,14 +6,15 @@ local M = {
 }
 
 function M.translate (s)
-	lat.js_url = "./pub"
 	s = lat.translate(s)
 	return lp.translate(s)
 end
 
 function M.setoutfunc (f)
-	lat.js_served = false
-	lat.modules_served = {}
+	local conf = require "conf.conf"
+	local vm = require("latclient."..conf.lua_at_client.vm)
+	vm.js_served = false
+	vm.modules_served = {}
 	lp.setoutfunc(f)
 end
 
