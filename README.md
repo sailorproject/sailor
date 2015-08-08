@@ -32,9 +32,9 @@ A Lua MVC Framework. www.sailorproject.org
 
 
 ### Roadmap
-* Improvements of Lua on the client side
 * Integration with mod_lua's DB API and DB module refactor
 * Improvements with the ORM
+* Improvements on the openresty compatibility
 
 More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
 
@@ -121,6 +121,17 @@ http://twitter.com/etiene_d
 ### Mail List & Support
 [Join our google group for mail list and support](https://groups.google.com/forum/#!forum/sailor-l)
 
+
+####Thanks
+
+This repository contains the following third-party MIT licensed code:
+LP Templates - http://keplerproject.github.io/cgilua/manual.html#templates
+Valua - https://github.com/Etiene/valua
+Lua at client - https://github.com/felipedaragon/lua_at_client
+Moonshine - http://moonshinejs.org/
+Lua5.1.js - https://github.com/logiceditor-com/lua5.1.js
+Lua.vm.js - https://kripken.github.io/lua.vm.js/lua.vm.js.html 
+Starlight - https://github.com/paulcuth/starlight
 
 
 ##### If you are having trouble to get it working or if you got it working using different specs, please make contact so we can exchange info and I can improve the manual. Thanks!
