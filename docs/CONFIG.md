@@ -40,5 +40,7 @@ You will find Sailor's config file under `conf/conf.lua`. This file contains a t
 
 `smtp.from` is the email address who is sending emails.
 
+`lua_at_client.vm` is the virtual machine that will translate Lua to Javascript in case you'd like to write Lua code for the browser as well. `starlight` is the default. Other options are `moonshine`, `lua51js` and `luavmjs`. You can find more details about them on the reference manual.
+
 `debug.inspect` toggles on/off the exhibition of debug messages on the bottom of the page made with `page.inspect`.
 
