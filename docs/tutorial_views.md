@@ -27,6 +27,7 @@ Let's create our `/views/main/index.lp`:
     <?lua page:include("views/docs/_menu") ?>
 
 
+###Lua at client
 You can also write Lua code that will run on the browser, if you want to. This is possible because Sailor will get this piece of code and give it to a Virtual Machine that will handle it and run Javascript behind the scenes. There are different Virtual Machines available, however, `starlight` is the default. Other options are `moonshine`, `lua51js` and `luavmjs`. They have slight differences on features, performance and how they handle DOM manipulation. Since starlight is the default, the following example will work on it, but also on moonshine. You can find more details about these differences on the reference manual.
 
 
@@ -34,21 +35,21 @@ To write Lua code on a view that will run on the browser, you need to annotate y
 
 Here are some examples of Lua code that will run on the browser using the `starlight` virtual machine:
 
- * Manipulation of the DOM
+#####Manipulation of the DOM
 
     <div id="app"></div>
     <?lua@client
-
+    
     local app = window.document:getElementById('app')
     print(app.textContent)
     app.textContent = 'lets go'
-
+    
     window:alert('This code was written in Lua')
-
+    
     ?>
 
 
-* Accessing Javascript functions and passing callbacks
+#####Accessing Javascript functions and passing callbacks
 
 
     <script>
@@ -72,7 +73,7 @@ Here are some examples of Lua code that will run on the browser using the `starl
     
     ?>
 
-* Exporting Lua modules to the browser
+#####Exporting Lua modules to the browser
 
 Remember that this code will run on the browser and some Lua modules won't make sense being used in this context! Attention: this feature is still under tests.
 
@@ -86,7 +87,7 @@ Remember that this code will run on the browser and some Lua modules won't make 
     -- true
     ?>
 
-* Accessing Javascript modules such as JQuery
+#####Accessing Javascript modules such as JQuery
 
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script>
