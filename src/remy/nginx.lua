@@ -27,6 +27,10 @@ local M = {
   request = request
 }
 
+function M.redirect(url)
+	ngx.redirect(url)
+end
+
 function M.init()
 	local r = request
 	local filename = ngx.var.request_filename
@@ -56,6 +60,7 @@ function M.init()
 	r.uri = uri
 	r.user = user
 	r.useragent_ip = ngx.var.remote_addr
+	r.redirect = M.redirect
 
 	_G.string = string
 	_G.xpcall = xpcall
