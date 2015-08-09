@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.5: core functionalities of the framework
+-- sailor.lua, v0.4.6: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -200,14 +200,20 @@ end
 -- route: string, '<controller name>/<action_name>'
 -- args: table, vars to be passed in url get style
 function Page:redirect(route,args)
+
     args = args or {}
     if not route:match('^https?://') then
         route = sailor.make_url(route,args)
     end
 
-    self.r.headers_out['Location'] = route
-    self.r.status = 302
-    return self.r.status
+    if self.r.redirect then
+        self.r.redirect(route)
+    else
+
+        self.r.headers_out['Location'] = route
+        self.r.status = 302
+        return self.r.status
+    end
 end
 
 -- Shows an a trace message on the bottom of the page
