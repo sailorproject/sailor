@@ -1,6 +1,7 @@
 local session = require "sailor.session"
 local validation = require "valua"
 local form = require "sailor.form"
+local sailor = require "sailor"
 
 local test = {}
 
@@ -90,12 +91,13 @@ function test.models(page)
 end
 
 function test.modelval(page)
+    page.theme = nil
 	local User = sailor.model("user")
     local u = User:new()
     u.username = ""
     u.password = "12345"
     local res,err = u:validate()
-    page:print(table.concat(err,'<br/>'), '<br/>')
+    page:write(table.concat(err,'<br/>'), '<br/>')
     u.username = "Lala"
     u.password = "12345"
     local res,err = u:validate()
