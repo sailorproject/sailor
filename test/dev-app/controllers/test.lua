@@ -126,6 +126,7 @@ function test.redirect(page)
 end
 
 function test.include(page)
+    page.theme = nil
     page:render('include')
 end
 
@@ -157,6 +158,7 @@ function test.destroysession(page)
 end
 
 function test.login(page)
+    --REDO
     local access = require "sailor.access"
     if access.is_guest() then
         page:print("Logging in...<br/>")
@@ -215,6 +217,20 @@ end
 function test.frontend_performance(page)
     page.theme = nil
     page:render('frontend_performance')
+end
+
+function test.post(page)
+    page.theme = nil
+    for k, v in pairs(page.POST) do
+        page:write(k..": "..v)
+    end
+end
+
+function test.get(page)
+    page.theme = nil
+    for k, v in pairs(page.GET) do
+        page:write(k..": "..v)
+    end
 end
 
 return test
