@@ -1,17 +1,39 @@
 ## Installation for Mac
 
-Sailor is compatible with a variety of operating systems and webservers. On this example, we will use OS X 10.10 Yosemite and Apache 2.4
+Sailor is compatible with a variety of operating systems and webservers. On this example, we will use OS X 10.10 Yosemite
 
-### Installing dependencies
+### Basic installation through LuaRocks (Xavante web server)
 
-Sailor is compatible with both Lua 5.1 and Lua 5.2. 
+For the purpose of this guide, it will be assumed that you already have Homebrew installed. Sailor is compatible with both Lua 5.1 and Lua 5.2 and either of them can be installed through brew. 
 
-You need to install Lua, luarocks and Apache 2.4.
+Let's begin by installing Lua (by default brew will install the version 5.1) and LuaRocks. LuaRocks is a package manager for Lua modules and if you don't have it already you will find it very useful. If you already have these, you may skip this step.
 
     brew update
-    brew install lua luarocks zlib 
+    brew install lua luarocks 
+
+
+Now we need to install Sailor:
+
+    luarocks install sailor
+
+When installing Sailor through LuaRocks most of the dependencies will be installed with it, including Xavante, a lightweight webserver also written in Lua. However, libraries for manipulating data on a database will not be installed automatically because which database to use when developing a web application will be up to the developer. Once you have installed and configured your database of choice, you must also install the apropriate LuaSQL driver to allow your Sailor apps to communicate with it. So, supposed you are using MySQL, you must install LuaSQL-MySQL
+
+    luarocks install luasql-mysql
+
+Now everything is ready to create and run your app!
+
+    sailor create "My app"
+    cd my_app
+    lua start-server.lua
+
+You can view your app by opening your browser and navigating to `http://localhost:8080`.
+
+If you wish to use different web servers, please, read on.
+
+
+### Alternative setup with Apache 2.4 and mod_lua
     
-The default apache build however, does not come with Lua module by default.
+This guide assumes that you have already completed Sailor's basic installation through LuaRocks. Now we need Apache, that can be installed view homebrew. The default apache build however, does not come with Lua module by default, so we must edit the brew install file.
 
     brew edit httpd24
 
@@ -19,54 +41,40 @@ Find the list of enabled flags, after `args = %W[`, add `--enable-lua` and save 
 
     brew install httpd24
 
-After installing those packages, you need to enable `mod_lua` in Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/2.4/httpd.conf`. Add or uncomment the following directive:
+Alternatively, if you are having issues downloading Apache via homebrew, you can download it directly from [apache.org](http://apache.org) and compile your own build. Remember to add the `--enable-lua` flag when running `./configure` along with other flags you may wish.
+
+Now, you need to enable `mod_lua` in Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/2.4/httpd.conf`. Add or uncomment the following directive:
 
     LoadModule lua_module modules/mod_lua.so
 
-It's also necessary to allow `.htaccess` files. Look for the `AllowOverride` directive in the configuration file and change from `None` (the default) to `All`.
+It's also necessary to allow `.htaccess` files. Look for the `AllowOverride` directive in the configuration file and change from `None` (the default) to `All`. Now you can either add a VirtualHost for Apache to read from the directory of your previously created app or simply create your apps inside the directory Apache is reading from (for example /usr/local/var/www/htdocs).
 
-Now, you should restart Apache. You can use the following command for that:
+    sailor create "My app" /usr/local/var/www/htdocs
 
-    sudo /usr/local/Cellar/httpd24/2.4.12/bin/apachectl restart
+Now, you should start Apache. You can use the following command for that:
 
-Keep in mind that the specific version of Apache (in this case 2.4.12) might change.
+    sudo apachectl start
 
-### Installing Sailor
+You can view your app by opening your browser and navigating to `http://localhost/my_app`.
 
-You can either clone it directly from the repository, download the zip containing the master branch or download and install it through LuaRocks. We will go through LuaRocks since it will also download and install almost all the required dependencies, except for luasql-mysql (which is needed if you want to persist your models).
-
-    luarocks install sailor
-
-We are almost done! You can now use `sailor` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /usr/local/var/www/htdocs). After you're done, you can open your browser and access it on http://localhost/hey_arnold .
-
-    sailor create 'Hey Arnold' /usr/local/var/www/htdocs
+Keep in mind that this guide was made with a specific version of Apache (2.4.12) and in future releases some details might change. Other details like the location of apache's configuration files might also change according to the installation method used. It is recommended to always install the latest version of Apache.
 
 
-#### Dependencies
+### Alternative setup using Nginx and [OpenResty](http://openresty.org/)
 
-If you want to persist your models you'll need luasql. Sailor could work with other drivers but so far we've only tested with MySQL and don't offer support for others.
+This guide assumes that you have already completed Sailor's basic installation through LuaRocks. Now we need OpenResty. Please follow the guide at [openresty.org](http://openresty.org/#Download) to download and install it. It is recommended to always install the latest version.
 
-    luarocks install luasql-mysql
+Additionally, it might be necessary to add nginx binary to the PATH:
 
-If you installed Sailor through LuaRocks, there is no need to worry, all next dependencies will be installed with it and you can ignore the rest of this section. If you just cloned the repository or downloaded the zip, you should install these dependencies:
+    PATH=/usr/local/openresty/nginx/sbin/:$PATH
 
-Lua File System and valua are required.
+Then you can create your app and run it!
 
-    luarocks install luafilesystem
-    luarocks install valua
+    sailor create "My app"
+    cd my_app
+    nginx -p `pwd`/ -c conf/nginx.conf 
 
-If you want to save your models in a database, you will need LuaSQL. I believe it should work with every database LuaSQL supports, but so far I have only tested with MySQL. LuaSQL-MySQL requires you to have mysql installed.
+And a small useful information, if you want to restart the server, run this same last comment but with an additional reload command:
 
-    luarocks install LuaSQL-MySQL
+    nginx -p `pwd`/ -c conf/nginx.conf  -s reload
 
-If you want to use our mailer module, get these rocks so we are able to send stuff via SMTP.
-
-    luarocks install LuaSocket
-    luarocks install LuaSec
-
-LuaSec requires OpenSSL as a dependency, if you don't have it already please install it and try getting LuaSec again. Remember to install "devel" packages, if your distro has them, to get the header files! If LuaSec can't find your OpenSSL dir, try using these flags, depending on your system's architecture (the examples below work on some Linux distros).
-
-    luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
-or
-
-    luarocks install LuaSec OPENSSL_LIBDIR=/usr/lib/i386-linux-gnu
