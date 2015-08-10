@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.6: core functionalities of the framework
+-- sailor.lua, v0.4.7: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -59,6 +59,7 @@ end
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
     local dir = lfs.currentdir()
+
     if dir == '/' or not dir then
         local filename = r.uri:match( "([^/]+)$")
         sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
@@ -140,8 +141,8 @@ end
 -- parms: table, vars being passed ahead
 function Page:include(path,parms)
     parms = parms or {}
-    local incl_src = read_src(((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..path)
 
+    local incl_src = read_src(sailor.path..'/'..path)
     incl_src = lp.translate(incl_src)
     parms.page = self
     render_page(path,incl_src,parms)
