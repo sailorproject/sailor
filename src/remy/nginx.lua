@@ -62,45 +62,6 @@ function M.init()
 	r.useragent_ip = ngx.var.remote_addr
 	r.redirect = M.redirect
 
-	_G.string = string
-	_G.xpcall = xpcall
-	_G.package = package
-	_G.tostring = tostring
-	_G.print = print
-	_G.os = os
-	_G.unpack = unpack
-	_G.handle = handle
-	_G.require = require
-	_G.getfenv = getfenv
-	_G.setmetatable = setmetatable
-	_G.next = next
-	_G.assert = assert
-	_G.tonumber = tonumber
-	_G.io = io
-	_G.rawequal = rawequal
-	_G.collectgarbage = collectgarbage
-	_G.getmetatable = getmetatable
-	_G.module = module
-	_G.rawset = rawset
-	_G.math = math
-	_G.debug = debug
-	_G.pcall = pcall
-	_G.table = table
-	_G.type = type
-	_G.coroutine = coroutine
-	_G.select = select
-	_G.gcinfo = gcinfo
-	_G.pairs = pairs
-	_G.rawget = rawget
-	_G.loadstring = loadstring
-	_G.ipairs = ipairs
-	_G._VERSION = _VERSION
-	_G.dofile = dofile
-	_G.setfenv = setfenv
-	_G.load = load
-	_G.error = error
-	_G.loadfile = loadfile
-	
 end
 
 function M.contentheader(content_type)
