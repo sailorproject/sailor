@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.9: core functionalities of the framework
+-- sailor.lua, v0.4.10: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -173,14 +173,11 @@ function Page:render(filename,parms)
         parms[parms_var] = parms
 
     else
-        local dir = ''
-        if self.controller then
-            dir = '/'..self.controller
-        end
+        local dir = self.controller_view_path or 'views'
         -- filename is nil if the controller script is missing in /controllers/
         -- ToDo: print error informing about missing controller?
         if filename ~= nil then
-            filepath = sailor.path.."/views"..dir.."/"..filename
+            filepath = sailor.path..'/'..dir..'/'..filename
             src = read_src(filepath)
         end
 
@@ -278,7 +275,7 @@ function sailor.route(page)
     local function error_404()
         local _, res
         if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
-            page.controller = nil
+            page.controller_view_path = nil
             _, res = xpcall(function () page:render(conf.sailor.default_error404) end, error_handler)
             return res or httpd.OK or page.r.status or 200
         end
@@ -309,7 +306,8 @@ function sailor.route(page)
         _, res = xpcall(function() ctr = require("controllers."..controller) end, error_404)
         
         if ctr then
-            page.controller = controller
+            local custom_path = ctr.path or (ctr.conf and ctr.conf.path)
+            page.controller_view_path = (custom_path and custom_path..'/views/'..controller) or 'views/'..controller
             -- if no action is specified, defaults to index
             if action == '' then
                 action = 'index'
