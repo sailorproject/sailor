@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.8: core functionalities of the framework
+-- sailor.lua, v0.4.9: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -268,10 +268,22 @@ function sailor.route(page)
     apache_friendly_url(page)
 
     local route_name = page.GET[conf.sailor.route_parameter]
+
     -- Encapsulated error function for showing detailed traceback
     -- Needs improvement
     local function error_handler(msg)
         page:write("<pre>"..traceback(msg,2).."</pre>")
+    end
+    -- Error for controller or action not found
+    local function error_404()
+        local _, res
+        if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
+            page.controller = nil
+            _, res = xpcall(function () page:render(conf.sailor.default_error404) end, error_handler)
+            return res or httpd.OK or page.r.status or 200
+        end
+        page.r.status = 404
+        return res or page.r.status
     end
 
     -- If a default static page is configured, run it and prevent routing
@@ -279,56 +291,40 @@ function sailor.route(page)
         xpcall(function () page:render(conf.sailor.default_static) end, error_handler)
         return httpd.OK or page.r.status or 200
     -- If there is a route path, find the correspondent controller/action
-    elseif route_name ~= nil and route_name ~= '' then
-        local controller, action = match(route_name, "([^/]+)/?([^/]*)")
+    else 
+        local controller, action 
+
+        if not route_name or route_name == '' then
+            controller, action = conf.sailor.default_controller, conf.sailor.default_action
+        else
+            controller, action = match(route_name, "([^/]+)/?([^/]*)")
+        end
+
         if conf.sailor.enable_autogen and controller == "autogen" then
             local res = xpcall(function () autogen(page) end, error_handler)
             return res or httpd.OK
         end
-        local route = lfs.attributes (sailor.path.."/controllers/"..controller..".lua")
 
-        if not route then
-            -- file not found
-            local _, res
-            if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
-                _, res = xpcall(function () page:render(conf.sailor.default_error404) end, error_handler)
-            end
-            page.r.status = 404
-            return res or page.r.status
-       else
-            local ctr = require("controllers."..controller)
+        local ctr
+        _, res = xpcall(function() ctr = require("controllers."..controller) end, error_404)
+        
+        if ctr then
             page.controller = controller
             -- if no action is specified, defaults to index
             if action == '' then
                 action = 'index'
             end
-            if(ctr[action] == nil) then
-                -- controller does not have an action with this name
-                local _, res
-                if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
-                    _, res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
-                end
-                page.r.status = 404
-                return res or page.r.status
-            else
-                -- run action
-                local _, res = xpcall(function() return ctr[action](page) end, error_handler)
-                if res == 404 then
-                    _,res = xpcall(function () page:render('../'..conf.sailor.default_error404) end, error_handler)
-                end
 
-                return res or httpd.OK or page.r.status or 200
-            end
+            if not ctr[action] then return error_404() end
+
+            -- run action
+            local _, res = xpcall(function() return ctr[action](page) end, error_handler)
+            if res == 404 then return error_404() end
         end
-    -- If no route var is defined, run default controller action
-    elseif conf.sailor.default_controller and conf.sailor.default_action then
-        page.controller = conf.sailor.default_controller
-        local ctr = require("controllers."..page.controller)
-        local _,res = xpcall(function() return ctr[conf.sailor.default_action](page) end, error_handler)
 
         return res or httpd.OK or page.r.status or 200
     end
-    -- No route specified and no defaults
+    -- No route specified and no defaults or something went wrong
     return 500
 end
 
