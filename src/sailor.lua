@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.10: core functionalities of the framework
+-- sailor.lua, v0.4.11: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -16,6 +16,7 @@ local sailor = {
 }
 
 local lp = require "web_utils.lp_ex"
+local remy = require "remy"
 local lfs = require "lfs"
 local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
 local match,tostring,gsub = string.match,tostring,string.gsub
@@ -34,7 +35,6 @@ function sailor.launch(native_request)
     else
         -- This is a non-Apache (such as Nginx, Lighttpd, etc) or
         -- Apache with CGILua or mod_pLua
-        local remy = require "remy"
         httpd = remy.httpd
         sailor.remy_mode = remy.init(sailor.remy_mode, native_request)
         if sailor.remy_mode == remy.MODE_LIGHTTPD then
@@ -58,13 +58,16 @@ end
 
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
-    local dir = lfs.currentdir()
-
-    if dir == '/' or not dir then
-        local filename = r.uri:match( "([^/]+)$")
-        sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+    if sailor.remy_mode == remy.MODE_LIGHTTPD then
+        sailor.path = r.filename
     else
-        sailor.path = dir
+        local dir = lfs.currentdir()
+        if dir == '/' or not dir then
+            local filename = r.uri:match( "([^/]+)$")
+            sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+        else
+            sailor.path = dir
+        end
     end
 end
 
@@ -99,7 +102,7 @@ function sailor.init(r)
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
         trace = {},
-        base_path = ((r.uri):match('^@?(.-)/index.lua$') or '')
+        base_path = ((r.uri):match('^@?(.-)/index.lua$') or r.uri)
     }
     sailor.r = r
     lp.setoutfunc("page:print")
@@ -158,12 +161,12 @@ function Page:render(filename,parms)
 
     local src
     local filepath
-
+    local rel = self.base_path
+    if rel == '/' then rel = '' end
     -- If there's a default theme, parse the theme first
     if self.theme ~= nil and self.theme ~= '' then
-        self.theme_path = self.base_path.."/themes/"..self.theme
-        filepath = ((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..self.theme_path.."/"..self.layout
-
+        self.theme_path = rel.."/themes/"..self.theme
+        filepath = ((sailor.path):match('(.*)'..rel:gsub('-','%%-') ) or '')..self.theme_path.."/"..self.layout
         local theme_src = read_src(filepath)
         local filename_var = "sailor_filename_"..tostring(random(1000))
         local parms_var = "sailor_parms_"..tostring(random(1000))
