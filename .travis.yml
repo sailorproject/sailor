@@ -1,0 +1,46 @@
+language: c
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - libmysqlclient-dev
+
+env:
+  global:
+    - LUAROCKS=2.2.2
+    - DB_DRIVER=mysql
+    - DB_USER=travis
+    #- DB_PASS=
+    - DB_NAME=sailor_test
+
+  matrix:
+    - LUA=lua5.1
+    - LUA=lua5.2
+    - LUA=lua5.3
+    - LUA=luajit     # latest stable version (2.0.4)
+    # - LUA=luajit2.0  # current head of 2.0 branch
+    # - LUA=luajit2.1  # current head of 2.1 branch
+
+
+before_install:
+  - source .travis/setenv_lua.sh
+  - luarocks install luasql-mysql MYSQL_INCDIR=/usr/include/mysql
+
+install:
+  - luarocks make rockspecs/sailor-0.5-1.rockspec
+
+before_script:
+  - mysql -e 'create database sailor_test;'
+  - mysql $DB_NAME < test/dev-app/sql/mysql.sql
+
+script:
+  - cd test/dev-app
+  - sailor test --verbose
+  #- busted --helper=tests/bootstrap.lua --verbose tests/unit/* tests/functional/*
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always

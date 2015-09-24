@@ -1,3 +1,13 @@
+
+local db_driver, db_user, db_pass, db_name
+
+if os.getenv("TRAVIS") == "true" then
+	db_driver = assert(os.getenv("DB_DRIVER"))
+	db_user = assert(os.getenv("DB_USER"))
+	db_pass = os.getenv("DB_PASS")
+	db_name = os.getenv("DB_NAME")
+end
+
 local conf = {
 	sailor = {
 		app_name = 'Sailor! A Lua MVC Framework',
@@ -17,11 +27,11 @@ local conf = {
 
 	db = {
 		test = { -- current environment
-			driver = 'mysql',
+			driver = db_driver or 'mysql',
 			host = 'localhost',
-			user = '',
-			pass = '',
-			dbname = ''
+			user = db_user or '',
+			pass = db_pass or '',
+			dbname = db_name or ''
 		}
 	},
 

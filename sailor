@@ -96,7 +96,9 @@ local function test()
 	for i=2,#arg do
 		flags = flags..arg[i]..' '
 	end
-	os.execute('busted --helper=tests/bootstrap.lua '..flags..'tests/unit/* tests/functional/*')
+	local ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..'tests/unit/* tests/functional/*')
+	if type(ok) == "number" then return ok end -- Lua 5.1 just returns the status code
+	return ok and 0 or 1 -- don't care about actual value
 end
 
 local function enable()
@@ -132,7 +134,7 @@ local function run()
 	if (arg[1] == 'create' or arg[1] == 'c') and arg[2] then
 		create()
 	elseif arg[1] == 'test' or arg[1] == 't' then
-		test()
+		return test()
 	elseif arg[1] == 'enable' and arg[2] then
 		enable()
 	else
@@ -140,4 +142,8 @@ local function run()
 	end
 end
 
-run()
+local exit_code = run()
+if exit_code and exit_code ~= 0 then
+	-- exit code sometimes is > 255 and fails to be propagated
+	os.exit(1, true)
+end
