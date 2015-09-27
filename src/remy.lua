@@ -1,4 +1,4 @@
--- Remy 0.2.8
+-- Remy 0.2.9
 -- Copyright (c) 2014-2015 Felipe Daragon
 -- License: MIT (http://opensource.org/licenses/mit-license.php)
 --
@@ -133,7 +133,8 @@ function remy.detect(native_request)
 		if env["pLua-Version"] ~= nil then
 			mode = remy.MODE_MOD_PLUA
 		end
-	elseif package.loaded.lighty ~= nil then
+	-- Note: lighty is not a package so package.loaded.lighty ~= nil will not work
+	elseif lighty ~= nil then
 		mode = remy.MODE_LIGHTTPD
 	elseif native_request ~= nil and type(native_request.query_param) == "function" then
 		mode = remy.MODE_LWAN

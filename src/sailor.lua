@@ -56,15 +56,23 @@ function sailor.handle_request(r)
     return sailor.route(page)
 end
 
+function sailor.get_filename_path(r)
+    local filename = r.uri:match( "([^/]+)$")
+    return r.filename:match("^@?(.-)/"..filename.."$")
+end
+
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
-    local dir = lfs.currentdir()
-
-    if dir == '/' or not dir then
-        local filename = r.uri:match( "([^/]+)$")
-        sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+    if sailor.remy_mode == remy.MODE_LIGHTTPD then
+    -- Ideally, this should not be needed (needs improvement/removal)
+        sailor.path = sailor.get_filename_path(r)
     else
-        sailor.path = dir
+        local dir = lfs.currentdir()
+        if dir == '/' or not dir then
+            sailor.path = sailor.get_filename_path(r)
+        else
+            sailor.path = dir
+        end
     end
 end
 
