@@ -1,3 +1,7 @@
+-- This file is part of the Lua@Client project
+-- Copyright (c) 2015 Etiene Dalcol
+-- License: MIT
+
 local M = {
 	js_served = false,
 	modules_served = {}

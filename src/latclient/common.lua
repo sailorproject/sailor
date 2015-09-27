@@ -1,3 +1,8 @@
+-- This file is part of the Lua@Client project
+-- Copyright (c) 2014 Felipe Daragon
+-- Portions copyright (c) 2015 Etiene Dalcol
+-- License: MIT
+
 local M = {}
 
 local function file_exists(name)
