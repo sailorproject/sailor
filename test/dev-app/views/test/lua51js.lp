@@ -19,10 +19,10 @@ function JQObj(s){
 
 local function timer(msg)
 	local start = os.time()
-	js.console.log("Begin "  .. msg)
+	js.console:log("Begin "  .. msg)
 	return function()
 		local endtimer = os.time()
-		js.console.log("End " .. msg .. " " .. endtimer-start)
+		js.console:log("End " .. msg .. " " .. endtimer-start)
 	end
 end
 
