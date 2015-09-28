@@ -21,11 +21,12 @@ Here is a small comparative table of the compatible VMs:
 
 You can find more information about them here:
 
+Starlight: <a href="https://github.com/felipedaragon/lua_at_client/blob/master/docs/LUA_AT_CLIENT.starlight.md" target="_blank">Lua@Client Examples</a>, <a href="https://github.com/paulcuth/starlight" target="_blank">Github Repo</a> 
+
 Moonshine: <a href="http://moonshinejs.org/" target="_blank">Official website</a>, <a href="https://github.com/gamesys/moonshine" target="_blank">Github Repo</a> 
 
-Lua5.1.js: <a href="https://github.com/logiceditor-com/lua5.1.js" target="_blank">Github Repo</a>, <a href="https://github.com/felipedaragon/lua_at_client" target="_blank">Latclient Github Repo</a> 
+Lua5.1.js: <a href="https://github.com/felipedaragon/lua_at_client/blob/master/docs/LUA_AT_CLIENT.lua51js.md" target="_blank">Lua@Client Examples</a>, <a href="https://github.com/logiceditor-com/lua5.1.js" target="_blank">Github Repo</a>
 
 Lua.vm.js: <a href="https://kripken.github.io/lua.vm.js/lua.vm.js.html" target="_blank">Official website</a>, <a href="https://github.com/kripken/lua.vm.js" target="_blank">Github Repo</a> 
 
-Starlight: <a href="https://github.com/paulcuth/starlight" target="_blank">Github Repo</a> 
 
