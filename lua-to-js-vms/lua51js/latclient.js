@@ -1,7 +1,7 @@
 /*
  Lua@Client - latclient.js
   A client-side executor for Lua
-  Copyright (c) 2014 Felipe Daragon 
+  Copyright (c) 2014-2015 Felipe Daragon 
   
  License: MIT
  
@@ -93,7 +93,7 @@ var LuaCS_Browser = {
  print : function(L)
  {
   var str = C.luaL_checkstring(L, 1);
-  document.write(str);
+  console.log(str);
   return 0;
  },
  runOnLoad : function(L)

@@ -15,7 +15,7 @@ Here is a small comparative table of the compatible VMs:
 | DOM manipulation                                                          |           ✓           |           ✓           |        incomplete        |             ✓            |
 | Can require Lua modules                                                   |           ✓           |           ✓           |      Only on Apache      |                          |
 | Can send call JS functions and send Lua callbacks                         |           x           |           x           |                          |             x            |
-| How to print "hello" to the console                                       |     print("hello")    |     print("hello")    |  js.console:log("hello") |      print("hello")      |
+| How to print "hello" to the console                                       |     print("hello")    |     print("hello")    |      print("hello")      |      print("hello")      |
 | How to pop an alert message with "hello"                                  | window:alert("hello") | window:alert("hello") | js.window:alert("hello") | js.global:alert("hello") |
 
 

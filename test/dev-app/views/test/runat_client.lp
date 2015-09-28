@@ -1,15 +1,15 @@
 <?lua@client
 
- print('Today is: '..os.date()..'<br>')
- print('Your User-Agent is: '..js.navigator.userAgent..'<br>')
+ js.document:write('Today is: '..os.date()..'<br>')
+ js.document:write('Your User-Agent is: '..js.navigator.userAgent..'<br>')
  if js.navigator.cookieEnabled == true then
-      print('Cookie support is enabled.<br>')
+      js.document:write('Cookie support is enabled.<br>')
  else
-      print('Cookie support is disabled.<br>')
+      js.document:write('Cookie support is disabled.<br>')
  end
  
  function say_bye()
-      print('Bye! :)')
+      js.document:write('Bye! :)')
  end
  
 ?>
