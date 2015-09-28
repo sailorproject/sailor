@@ -26,7 +26,8 @@ end
 
 function M.get_client_js(s)
 	local modules = M.get_modules(s)
-	s = '<script>'..modules..'(starlight.parser.parse(`'..s..'`))();</script>'
+	s = common.js_string_escape(s)
+	s = '<script>'..modules..'(starlight.parser.parse('..s..'))();</script>'
 	return M.get_header(s)
 end
 
@@ -40,10 +41,11 @@ function M.get_modules(s)
 				local file = io.open(module_file,'r')
 				local file_str = file:read("*a")
 				file:close()
-				local lua_code = "rawset(package.preload, '" .. name.. [[', function(...)\n ]]
+				local lua_code = "rawset(package.preload, '" .. name.. [[', function(...) ]]
 				 .. file_str .. 
-				 [[ \nend)]]
-				modules = modules .. '(starlight.parser.parse(`'..lua_code..'`))(); '
+				 [[ end)]]
+				lua_code = common.js_string_escape(lua_code)
+				modules = modules .. '(starlight.parser.parse('..lua_code..'))(); '
 				M.modules_served[name] = true
 			end
 		end
