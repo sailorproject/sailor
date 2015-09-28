@@ -11,7 +11,7 @@ function handle_lp(r)
 end
 
 function provide_file(r)
-	local conf = require "conf.conf"
+	local conf = require "latclient.conf"
 	local vm = require("latclient."..conf.lua_at_client.vm)
 	return vm.handle(r)
 end

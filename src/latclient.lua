@@ -8,7 +8,7 @@ License: MIT
 
 local M = {}
 
-local conf = require "conf.conf"
+local conf = require "latclient.conf"
 local vm = require("latclient."..conf.lua_at_client.vm)
 
 function M.translate(src)
