@@ -13,11 +13,12 @@ function M.get_header(s)
 	if M.js_served == false then
 		M.js_served = true
 		local header = [[
-		<script src="./pub/starlight/starlight.min.js"></script>
-		<script src="./pub/starlight/parser.min.js"></script>
-		<script src="./pub/starlight/babel.min.js"></script>
-		<script src="./pub/starlight/DOMAPI.min.js"></script>
+		<script src="{url}/starlight/starlight.min.js"></script>
+		<script src="{url}/starlight/parser.min.js"></script>
+		<script src="{url}/starlight/babel.min.js"></script>
+		<script src="{url}/starlight/DOMAPI.min.js"></script>
 		]]
+		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
 	end
 	return s

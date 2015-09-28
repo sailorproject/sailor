@@ -13,11 +13,12 @@ function M.get_header(s)
 	if M.js_served == false then
 		M.js_served = true
 		local header = [[
-		<script src="./pub/moonshine/moonshine.min.js"></script>
-		<script src="./pub/moonshine/distillery.moonshine.min.js"></script>
-		<script src="./pub/moonshine/DOMAPI.moonshine.min.js"></script>
+		<script src="{url}/moonshine/moonshine.min.js"></script>
+		<script src="{url}/moonshine/distillery.moonshine.min.js"></script>
+		<script src="{url}/moonshine/DOMAPI.moonshine.min.js"></script>
 		<script>var vm = new shine.VM(shine.DOMAPI);</script>
 		]]
+		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
 	end
 	return s

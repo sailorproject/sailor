@@ -10,6 +10,7 @@ local M = {}
 
 local conf = require "latclient.conf"
 local vm = require("latclient."..conf.lua_at_client.vm)
+vm.js_url = conf.lua_at_client.vm_url or "./pub"
 
 function M.translate(src)
 	local get_both = function(s) return '<? '..s..' ?>'..vm.get_client_js(s) end

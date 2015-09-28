@@ -13,8 +13,9 @@ function M.get_header(s)
 	if M.js_served == false then
 		M.js_served = true
 		local header = [[
-		<script src="./pub/luavmjs/lua.vm.js"></script>
+		<script src="{url}/luavmjs/lua.vm.js"></script>
 		]]
+		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
 	end
 	return s

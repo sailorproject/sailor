@@ -12,10 +12,11 @@ function M.get_header(s)
 	if M.js_served == false then
 		M.js_served = true
 		local header = [[
-		<script src="./pub/lua51js/lua5.1.5.min.js"></script>
-		<script src="./pub/lua51js/latclient.js"></script>
-		<script src="./pub/lua51js/js-lua.js"></script>
+		<script src="{url}/lua51js/lua5.1.5.min.js"></script>
+		<script src="{url}/lua51js/latclient.js"></script>
+		<script src="{url}/lua51js/js-lua.js"></script>
 		]]
+		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s
 	end
 	return s
