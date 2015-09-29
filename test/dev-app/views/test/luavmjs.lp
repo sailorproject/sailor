@@ -32,14 +32,14 @@ for i = 1, 10000000 do
 end
 t()
 
---[[ does not work yet
+--Now this example seems to work! :)
 t = timer("Function 2 JS")
 for i=1,10000 do
-	local app = js.document:getElementById('app') -- DOES NOT EXIST
+	local app = js.global.document:getElementById('app')
 	app.textContent = i
 end
 t()
-]]
+
 
 t = timer("Function 7 Figuring out")
 local function len(value,min,max)
