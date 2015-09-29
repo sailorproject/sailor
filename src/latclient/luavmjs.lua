@@ -22,7 +22,8 @@ function M.get_header(s)
 end
 
 function M.get_client_js(s)
-	s = '<script type="text/lua">'..s..'</script>'
+  s = common.js_string_escape(s)
+	s = '<script>L.execute('..s..');</script>'
 	return M.get_header(s)
 end
 
