@@ -6,6 +6,14 @@
  
 */
 
+var LuaCS =
+{
+ runString : function (script)
+ {
+  (starlight.parser.parse(script))();
+ }
+}
+
 window[ addEventListener ? 'addEventListener' : 'attachEvent' ](
   addEventListener ? 'load' : 'onload', 
   function(){
