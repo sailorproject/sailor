@@ -96,18 +96,12 @@ var LuaCS_Browser = {
   console.log(str);
   return 0;
  },
- runOnLoad : function(L)
- {
-  window.onload = LuaCS.runScripts;
-  return 0;
- },
  register : function(L)
  {
   LuaCS.addFunction('print',LuaCS_Browser.print);
   LuaCS.addFunction('js_getprop',LuaCS_Browser.jsGetProp);
   LuaCS.addFunction('js_setprop',LuaCS_Browser.jsSetProp);
   LuaCS.addFunction('js_method',LuaCS_Browser.jsMethod);
-  LuaCS.addFunction('runonload',LuaCS_Browser.runOnLoad);
  },
  jsSetProp : function(L)
  {
@@ -491,3 +485,12 @@ true, false);
 
  }
 }
+
+window[ addEventListener ? 'addEventListener' : 'attachEvent' ](
+  addEventListener ? 'load' : 'onload', 
+  function(){
+    Array.prototype.forEach.call(document.querySelectorAll('script[type=\"text\/lua\"]'), function(tag) {
+      LuaCS.runString(tag.innerHTML)
+    });
+  }
+)
