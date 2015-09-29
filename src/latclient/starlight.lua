@@ -17,6 +17,7 @@ function M.get_header(s)
 		<script src="{url}/starlight/parser.min.js"></script>
 		<script src="{url}/starlight/babel.min.js"></script>
 		<script src="{url}/starlight/DOMAPI.min.js"></script>
+		<script src="{url}/starlight/latclient.js"></script>
 		]]
 		header = string.gsub(header, "{url}", M.js_url)
 		s = header..s

@@ -15,6 +15,7 @@ Here is a small comparative table of the compatible VMs:
 | DOM manipulation                                                          |           ✓           |           ✓           |        incomplete        |             ✓            |
 | Can require Lua modules                                                   |           ✓           |           ✓           |      Only on Apache      |                          |
 | Supports Lua callbacks                                                    |           ✓           |           ✓           |             x            |             ✓            |
+| Supports Lua script tags                                                  |           ✓           |           x           |             ✓            |             ✓            |
 | Can call JS methods like eval() from Lua                                  |           ?           |           ?           |             x            |             ✓            |
 | Supports the Lua C API                                                    |           x           |           x           |             ✓            |        incomplete        |
 | How to print "hello" to the console                                       |     print("hello")    |     print("hello")    |      print("hello")      |      print("hello")      |
