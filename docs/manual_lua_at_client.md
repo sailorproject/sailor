@@ -14,7 +14,9 @@ Here is a small comparative table of the compatible VMs:
 | Works with Sailor on LuaJIT based servers, such as openresty              |           ✓           |                       |             ✓            |             ✓            |
 | DOM manipulation                                                          |           ✓           |           ✓           |        incomplete        |             ✓            |
 | Can require Lua modules                                                   |           ✓           |           ✓           |      Only on Apache      |                          |
-| Can send call JS functions and send Lua callbacks                         |           x           |           x           |                          |             x            |
+| Supports Lua callbacks                                                    |           ✓           |           ✓           |             x            |             ✓            |
+| Can call JS from Lua                                                      |           ?           |           ?           |                          |             ✓            |
+| Supports the Lua C API                                                    |           x           |           x           |             ✓            |        incomplete        |
 | How to print "hello" to the console                                       |     print("hello")    |     print("hello")    |      print("hello")      |      print("hello")      |
 | How to pop an alert message with "hello"                                  | window:alert("hello") | window:alert("hello") | js.window:alert("hello") | js.global:alert("hello") |
 
@@ -27,6 +29,6 @@ Moonshine: <a href="http://moonshinejs.org/" target="_blank">Official website</a
 
 Lua5.1.js: <a href="https://github.com/felipedaragon/lua_at_client/blob/master/docs/LUA_AT_CLIENT.lua51js.md" target="_blank">Lua@Client Examples</a>, <a href="https://github.com/logiceditor-com/lua5.1.js" target="_blank">Github Repo</a>
 
-Lua.vm.js: <a href="https://kripken.github.io/lua.vm.js/lua.vm.js.html" target="_blank">Official website</a>, <a href="https://github.com/kripken/lua.vm.js" target="_blank">Github Repo</a> 
+Lua.vm.js: <a href="https://github.com/felipedaragon/lua_at_client/blob/master/docs/LUA_AT_CLIENT.luavmjs.md" target="_blank">Lua@Client Examples</a>, <a href="https://kripken.github.io/lua.vm.js/lua.vm.js.html" target="_blank">Official website</a>, <a href="https://github.com/kripken/lua.vm.js" target="_blank">Github Repo</a> 
 
 
