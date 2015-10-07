@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.10: core functionalities of the framework
+-- sailor.lua, v0.4.11: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -98,6 +98,7 @@ function sailor.init(r)
         redirect = Page.redirect,
         include = Page.include,
         inspect = Page.inspect,
+        tostring = Page.tostring,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
         GET = GET,
@@ -238,6 +239,26 @@ function Page:inspect(value,message)
         end
         table.insert(self.trace,inspect)
     end
+end
+
+function Page:tostring (val, indent, sep, ln, inspect)
+    indent = indent or 0
+    inspect = inspect or ''
+    sep = sep or '&nbsp;'
+    ln = ln or "<br/>"
+
+    if type(val) ~= "table" then
+        inspect = inspect .. tostring(val)
+    else
+        for k, v in pairs(val) do
+            if(k ~= "__newindex") then
+                local formatting = ln..string.rep(sep, indent) .. k .. ": "
+                inspect = inspect.. formatting 
+                inspect = self:tostring(v, indent+8, sep, ln, inspect)    
+            end
+        end
+    end
+    return inspect
 end
 
 -- Auxiliary function to open the autogen page for models and CRUDs
