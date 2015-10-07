@@ -7,6 +7,7 @@
 --------------------------------------------------------------------------------
 
 local conf = require "conf.conf"
+local remy = require "remy"
 
 local sailor = {
     conf = conf.sailor,
@@ -34,7 +35,6 @@ function sailor.launch(native_request)
     else
         -- This is a non-Apache (such as Nginx, Lighttpd, etc) or
         -- Apache with CGILua or mod_pLua
-        local remy = require "remy"
         httpd = remy.httpd
         sailor.remy_mode = remy.init(sailor.remy_mode, native_request)
         if sailor.remy_mode == remy.MODE_LIGHTTPD then
