@@ -45,7 +45,7 @@ function M.init()
 	r.method = ngx.var.request_method
 	r.args = remy.splitstring(ngx.var.request_uri,'?')
 	r.banner = M.mode.."/"..ngx.var.nginx_version
-  r.basic_auth_pw = pass
+	r.basic_auth_pw = pass
 	r.canonical_filename = filename
 	r.context_document_root = ngx.var.document_root
 	r.document_root = r.context_document_root

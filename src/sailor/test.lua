@@ -8,16 +8,15 @@
 
 local sailor = require "sailor"
 
-local M = {}
+local M = {req = {}}
 
 local page
-local r
 
 -- Prepares for making a request
 function M:prepare(write_func, headers_in)
 	headers_in = headers_in or {}
-	r = { uri = '', write = write_func, puts = write_func, headers_in = headers_in, headers_out = {} }
-	page = sailor.init(r)
+	M.req = { uri = '', write = write_func, puts = write_func, headers_in = headers_in, headers_out = {} }
+	page = sailor.init(M.req)
 	return self
 end
 
@@ -72,7 +71,7 @@ function M.request(path, data, additional_headers)
 	page.GET[conf.sailor.route_parameter] = path
 	local status = sailor.route(page)
 
-	return {status = status, body = body, headers = r.headers_out, redirected = redirected}
+	return {status = status, body = body, headers = M.req.headers_out, redirected = redirected}
 end
 
 return M:prepare()

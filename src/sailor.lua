@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4",
+    _VERSION = "Sailor 0.4.11",
 }
 
 local lp = require "web_utils.lp_ex"

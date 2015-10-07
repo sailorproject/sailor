@@ -90,17 +90,12 @@ function model:get_relation(key)
 
 		elseif relation.relation == "MANY_MANY" then
 			db.connect()
-			local cur = db.query("select "..relation.attributes[2].." from "..relation.table.." where "..relation.attributes[1].."='"..self[self.db.key].."';")
-			local res = {}
-			local row = cur:fetch ({}, "a")
-			while row do
+			local res = db.query("select "..relation.attributes[2].." from "..relation.table.." where "..relation.attributes[1].."='"..self[self.db.key].."';")
+			for _,row in ipairs(res) do
 				table.insert(obj,Model:find_by_id(row[relation.attributes[2]]))
-				row = cur:fetch (row, "a")
 			end
-			cur:close()
 			db.close()
 		end
-
 
 		self.loaded_relations[key] = obj
 		return obj
@@ -204,11 +199,11 @@ end
 function model:find_by_id(id)
 	if not id then return nil end
 	db.connect()
-
-	local cur = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';")
-	local f = self:fetch_object(cur)
+	local res = db.query("select * from "..self.db.table.." where "..self.db.key.."='"..db.escape(id).."';")
 	db.close()
-	return f
+
+	if res and next(res) then return sailor.model(self["@name"]):new(res[1]) end
+	return false
 end
 
 -- (escaped) Finds objects with the given attributes
@@ -228,11 +223,11 @@ function model:find_by_attributes(attributes)
         n = n+1
     end
 
-    local cur = db.query("select * from "..self.db.table..where..";")
-	local f = self:fetch_object(cur)
+    local res = db.query("select * from "..self.db.table..where..";")
 	db.close()
-	return f
 
+	if res and next(res) then return sailor.model(self["@name"]):new(res[1]) end
+	return false
 end
 
 -- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
@@ -240,10 +235,11 @@ end
 -- Returns the object found or nil
 function model:find(where_string)
 	db.connect()
-	local cur = db.query("select * from "..self.db.table.." where "..where_string..";")
-	local f = self:fetch_object(cur)
+	local res = db.query("select * from "..self.db.table.." where "..where_string..";")
 	db.close()
-	return f
+
+	if res and next(res) then return sailor.model(self["@name"]):new(res[1]) end
+	return false
 end
 
 -- NOT ESCAPED, DONT USE IT UNLESS YOU WROTE THE WHERE STRING YOURSELF
@@ -257,11 +253,10 @@ function model:find_all(where_string)
 	else
 		where_string = ''
 	end
-	local cur = db.query("select * from "..self.db.table..where_string..";")
-	local res = {}
-	while(self:fetch_object(cur,res)) do end
-	cur:close()
-	db.close()
+	local res = db.query("select * from "..self.db.table..where_string..";")
+	for k,_ in ipairs(res) do
+		res[k] = sailor.model(self["@name"]):new(res[k])
+	end
 	return res
 end
 
@@ -348,11 +343,10 @@ end
 function model.generate_model(table_name)
 	db.connect()
 	local check_query = [[SHOW TABLES LIKE ']]..table_name..[[';]]
-	local cur = db.query(check_query)
-	local row = cur:fetch ({}, "a")
-	if not row then
+	local res = db.query(check_query)
+
+	if not res or not next(res) then
 		db:close()
-		cur:close()
 		error("The table '"..table_name.."' does not exist.")
 		return false
    	else
@@ -372,17 +366,15 @@ M.attributes = {
 
 
 		local key
-		cur = db.query(query)
-		local res = {}
-		row = cur:fetch ({}, "a")
-		while row do
+		res = db.query(query)
+		
+		for _,row in ipairs(res) do
 			if row.COLUMN_KEY == "PRI" then
 				key = row.COLUMN_NAME
 			end
 			code = code..[[
 	{ ]]..row.COLUMN_NAME..[[ = "safe" },
 ]]
-			row = cur:fetch (row, "a")
 		end
 		code = code..[[
 }
@@ -397,7 +389,6 @@ M.relations = {}
 return M
 
 ]]
-		cur:close()
 		db.close()
 		local file = io.open("models/"..table_name..".lua", "w")
 		if file:write(code) then
@@ -454,11 +445,9 @@ end]]
 -- Gets the amount of stored objects
 function model:count()
 	db.connect()
-	local cur = db.query("select count(*) from "..self.db.table..";")
-	local count = cur:fetch()
-	cur:close()
+	local res = db.query("select count(*) from "..self.db.table..";")
 	db.close()
-	return tonumber(count)
+	return tonumber(res[1]['count(*)'])
 end
 
 return model
