@@ -41,7 +41,7 @@
 	<?lua for k,v in pairs(page.trace) do ?>
 		<tr>
 			<td>
-				<%= string.gsub(tstring(v),"<br/>","",1) %>
+				<%= (string.gsub(tstring(v),"<br/>","",1)) %>
 			</td>
 		</tr>
 	<?lua end ?>
