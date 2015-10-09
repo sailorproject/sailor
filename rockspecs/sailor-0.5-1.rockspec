@@ -65,7 +65,6 @@ build = {
    },
    install = {
       lua = {
-         lua = {
          ["sailor.blank-app.htaccess"] = "src/sailor/blank-app/.htaccess",
          ["sailor.blank-app.conf.htaccess"] = "src/sailor/blank-app/conf/.htaccess",
          ["sailor.blank-app.controllers.htaccess"] = "src/sailor/blank-app/controllers/.htaccess",
@@ -97,6 +96,7 @@ build = {
          ["sailor.blank-app.themes.default.fonts.glywoff"] = "src/sailor/blank-app/themes/default/fonts/glyphicons-halflings-regular.woff",
          ["sailor.blank-app.themes.default.config"] = "src/sailor/blank-app/themes/default/config.json",
          ["sailor.blank-app.themes.default.main"] = "src/sailor/blank-app/themes/default/main.lp",
+
       },
       bin = {
          sailor = "sailor"

@@ -29,7 +29,7 @@ before_install:
   - luarocks install luasql-mysql MYSQL_INCDIR=/usr/include/mysql
 
 install:
-  - luarocks make rockspecs/sailor-0.5-1.rockspec
+  - luarocks make rockspecs/sailor-current-1.rockspec
 
 before_script:
   - mysql -e 'create database sailor_test;'
