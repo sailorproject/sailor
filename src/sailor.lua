@@ -19,7 +19,7 @@ local sailor = {
 -- Loads Lua@client's settings from Sailor conf.
 -- If lua_at_client table is missing, use default Lua@client settings
 local lp = require "web_utils.lp_ex"
-lp.lat.conf.lua_at_client = conf.lua_at_client or require "latclient.conf"
+lp.lat.conf.lua_at_client = conf.lua_at_client or require"latclient.conf".lua_at_client
 
 local lfs = require "lfs"
 local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
