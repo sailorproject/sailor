@@ -37,14 +37,6 @@ function sailor.launch(native_request)
         -- Apache with CGILua or mod_pLua
         httpd = remy.httpd
         sailor.remy_mode = remy.init(sailor.remy_mode, native_request)
-        if sailor.remy_mode == remy.MODE_LIGHTTPD then
-            -- FIXME: os.tmpname(), used by web_utils\utils.lua not
-            -- working in LightTPD (affects Windows build only?)
-            -- This breaks every script using "session"
-            function os.tmpname()
-                return 'tmp'
-            end
-        end
         remy.contentheader('text/html')
         remy.run(sailor.handle_request)
     end
