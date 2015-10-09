@@ -55,8 +55,7 @@ end
 
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
-    if sailor.remy_mode == remy.MODE_LIGHTTPD then
-    -- Ideally, this should not be needed (needs improvement/removal)
+    if sailor.remy_mode ~= nil then
         sailor.path = sailor.get_filename_path(r)
     else
         local dir = lfs.currentdir()
