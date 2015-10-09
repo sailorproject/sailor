@@ -27,6 +27,7 @@ build = {
    modules = {
        latclient = "src/latclient.lua",
       ['latclient.common'] = "src/latclient/common.lua",
+      ['latclient.conf'] = "src/latclient/conf.lua",
       ['latclient.lp_handler'] = "src/latclient/lp_handler.lua",
       ['latclient.lua51js'] = "src/latclient/lua51js.lua",
       ['latclient.luavmjs'] = "src/latclient/luavmjs.lua",
