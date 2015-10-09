@@ -1,7 +1,8 @@
--- Use the same config file as Sailor
-require "conf.conf"
-local conf = require "conf.conf"
-if not conf.lua_at_client or not conf.lua_at_client.vm then
-       conf.lua_at_client = { vm = 'starlight'} -- default
-end
+local conf = {
+	lua_at_client = {
+		vm = "starlight", -- starlight is default. Other options are moonshine, lua51js and luavmjs.
+		vm_url = nil -- allows to set a custom URL for the VM JavaScript files.
+	}
+}
+
 return conf

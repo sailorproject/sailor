@@ -11,10 +11,6 @@ function M.translate (s)
 end
 
 function M.setoutfunc (f)
-	local conf = require "conf.conf"
-	local vm = require("latclient."..conf.lua_at_client.vm)
-	vm.js_served = false
-	vm.modules_served = {}
 	lp.setoutfunc(f)
 end
 

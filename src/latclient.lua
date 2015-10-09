@@ -1,18 +1,21 @@
 --[[
-Lua@Client 0.3.1
+Lua@Client 0.3.2
 Lua Pages Template Preprocessor Extension
 Copyright (c) 2014-2015 Felipe Daragon
 
 License: MIT
 ]]
 
-local M = {}
-
 local conf = require "latclient.conf"
-local vm = require("latclient."..conf.lua_at_client.vm)
-vm.js_url = conf.lua_at_client.vm_url or "./pub"
+
+local M = {
+  conf = conf
+}
 
 function M.translate(src)
+  local vm = require("latclient."..conf.lua_at_client.vm)
+  vm.js_url = conf.lua_at_client.vm_url or "./pub"
+
   -- Reset for persistent environments (like Lighttpd)
   vm.js_served = false
   vm.modules_served = {}
