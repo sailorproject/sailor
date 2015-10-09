@@ -254,6 +254,9 @@ function model:find_all(where_string)
 		where_string = ''
 	end
 	local res = db.query("select * from "..self.db.table..where_string..";")
+
+	if not res then return {} end
+
 	for k,_ in ipairs(res) do
 		res[k] = sailor.model(self["@name"]):new(res[k])
 	end
