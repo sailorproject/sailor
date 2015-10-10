@@ -52,23 +52,10 @@ function sailor.handle_request(r)
     return sailor.route(page)
 end
 
-function sailor.get_filename_path(r)
-    local filename = r.uri:match( "([^/]+)$")
-    return r.filename:match("^@?(.-)/"..filename.."$")
-end
-
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
-    if sailor.remy_mode ~= nil then
-        sailor.path = sailor.get_filename_path(r)
-    else
-        local dir = lfs.currentdir()
-        if dir == '/' or not dir then
-            sailor.path = sailor.get_filename_path(r)
-        else
-            sailor.path = dir
-        end
-    end
+    local filename = r.uri:match( "([^/]+)$")
+    sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
 end
 
 -- Encapsulates request_rec functions inside the Page object
