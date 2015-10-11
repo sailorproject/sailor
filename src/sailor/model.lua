@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.7: basic model creator, uses db module
+-- model.lua, v0.7.1: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -19,6 +19,7 @@ function model:new(obj)
 	obj = util.deepcopy(obj)
 
 	setmetatable(obj,self)
+	-- REWRITE 
 	self.__index = function (table, key)
 		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] and key ~= "errors" then
 			if obj.relations and obj.relations[key] then
@@ -254,7 +255,7 @@ function model:find_all(where_string)
 		where_string = ''
 	end
 	local res = db.query("select * from "..self.db.table..where_string..";")
-
+	db.close()
 	if not res then return {} end
 
 	for k,_ in ipairs(res) do
