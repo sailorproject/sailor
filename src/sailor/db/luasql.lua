@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- luasql.lua, v0.2.1: DB module for connecting and querying through LuaSQL
+-- luasql.lua, v0.3: DB module for connecting and querying through LuaSQL
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -10,6 +10,31 @@ local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local luasql = require("luasql."..conf.driver)
 local db = {}
+
+-- Reads the cursor information after reading from db and returns a table
+local function fetch_row(cur, res)
+	res = res or {}
+	local row = cur:fetch ({}, "a")
+
+	if not row then
+		cur:close()
+		return false
+	end
+
+	local types = cur:getcoltypes()
+	local names = cur:getcolnames()
+
+	for k,t in pairs(types) do
+		if t:find('number') then
+			row[names[k]] = tonumber(row[names[k]])
+		end
+	end
+
+	table.insert(res,row)
+	fetch_row(cur,res)
+
+	return res
+end
 
 -- Creates the connection of the instance
 function db.connect()
@@ -31,7 +56,7 @@ function db.query(query)
 	if type(cur) == 'number' then
 		return cur
 	end
-	return db.fetch_row(cur)
+	return fetch_row(cur)
 end
 
 -- Escapes a string or a table (its values). Should be used before concatenating strings on a query.
@@ -85,31 +110,6 @@ function db.query_insert(query)
 	end
 
 	return id
-end
-
--- Reads the cursor information after reading from db and returns a table
-function db.fetch_row(cur, res)
-	res = res or {}
-	local row = cur:fetch ({}, "a")
-
-	if not row then
-		cur:close()
-		return false
-	end
-
-	local types = cur:getcoltypes()
-	local names = cur:getcolnames()
-
-	for k,t in pairs(types) do
-		if t:find('number') then
-			row[names[k]] = tonumber(row[names[k]])
-		end
-	end
-
-	table.insert(res,row)
-	db.fetch_row(cur,res)
-
-	return res
 end
 
 return db
