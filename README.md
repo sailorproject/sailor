@@ -1,7 +1,7 @@
 #Sailor
 A Lua MVC Framework. www.sailorproject.org
 
-[![HuBoard badge](http://img.shields.io/badge/Hu-Board-7965cc.svg)](https://huboard.com/Etiene/sailor)
+[![Build Status](https://travis-ci.org/Etiene/sailor.svg?branch=master)](https://travis-ci.org/Etiene/sailor)
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Features
