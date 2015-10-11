@@ -7,6 +7,7 @@
 --------------------------------------------------------------------------------
 
 local sailor = require "sailor"
+local lfs = require "lfs"
 
 local M = {req = {}}
 
@@ -23,7 +24,7 @@ end
 -- Loads tests fixtures into the database
 -- Warning, this will truncate the table, make sure you have configured a test database
 -- Returns table with objects created
-function M.load_fixtures(model_name)
+function load_fixtures(model_name)
 	local db = require "sailor.db"
 
 	local Model = sailor.model(model_name)
@@ -38,6 +39,21 @@ function M.load_fixtures(model_name)
 	  table.insert(objects, o)
 	end
 	return objects
+end
+
+function M.load_fixtures(model_name)
+	-- if model name is specific, load fixtures from a file
+	if model_name then 
+		return load_fixtures(model_name)
+	end
+
+	-- if not specified, loads all fixtures in fixtures dir
+	for filename,_ in lfs.dir(sailor.path..'/tests/fixtures') do
+    	model_name = string.match(filename,'(%w*).lua')
+    	if model_name then
+    		load_fixtures(model_name)
+    	end
+  	end
 end
 
 -- Function that is a part of the request response.
