@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.11: core functionalities of the framework
+-- sailor.lua, v0.4.12: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4.11",
+    _VERSION = "Sailor 0.4.12",
 }
 
 -- Loads Lua@client's settings from Sailor conf.
@@ -54,8 +54,12 @@ end
 
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
-    local filename = r.uri:match( "([^/]+)$")
-    sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+    if r.uri and r.filename then
+        local filename = r.uri:match( "([^/]+)$") 
+        sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+    else
+        sailor.path = lfs.currentdir()
+    end
 end
 
 -- Encapsulates request_rec functions inside the Page object
