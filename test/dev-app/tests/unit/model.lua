@@ -1,3 +1,4 @@
+local sailor = require "sailor"
 local helper = require "tests.helper"
 local access = require "sailor.access"
 
@@ -12,12 +13,22 @@ describe("Testing #UserModel", function()
  
   end)
 
-  it("should create object", function()
-    
+  it("should cound objects", function()
+    assert.is_equal(#users,User:count())
+  end)
+
+  it("should create different objects", function()
+    u = User:new(fixtures[1])
+    u2 = User:new(fixtures[2])
+    assert.is_equal(u.name,fixtures[1].name)
+    assert.is_equal(u2.name,fixtures[2].name)
+  end)
+
+  it("should save object", function()
     local s = spy.on(User,'validate')
     local s2 = spy.on(User,'insert')
     count_before = User:count()
-    u = User:new(fixtures[1] or nil)
+    u = User:new(fixtures[1])
     assert.is_true(u:save(false))
     assert.is_equal(User:count(),count_before+1)
     assert.spy(s).was_not_called()
@@ -37,8 +48,21 @@ describe("Testing #UserModel", function()
   end)
 
   it("should find object by id", function()
-    local u = User:find_by_id(1)
+    u = User:find_by_id(1)
     assert.are_same(u.id,users[1].id)
+  end)
+
+  it("should find user relations", function()
+    u = User:find_by_id(1)
+    local post_fixtures = require "tests.fixtures.post" or {}
+    local amount = 0
+    for k, v in ipairs(post_fixtures) do
+      if v.author_id == 1 then
+        amount = amount + 1
+        assert.is_equal(u.posts[amount].body,v.body)
+      end
+    end
+    assert.is_equal(amount,#(u.posts))
   end)
 
   it("should not find object by id", function()
@@ -68,7 +92,16 @@ describe("Testing #UserModel", function()
     assert.is_equal(User:count(),#(User:find_all()))
   end)
 
-   it("should login", function()
+  it("should find some objects", function()
+    assert.is_equal(2,#(User:find_all("password LIKE '12345%'")))
+  end)
+
+  it("should find one object", function()
+    u = User:find("password LIKE '12345%'")
+    assert.is_equal(users[1].id,u.id)
+  end)
+   
+  it("should login", function()
     assert.is_true(User.authenticate(fixtures[1].username,fixtures[1].password,false))
   end)
 
