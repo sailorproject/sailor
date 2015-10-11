@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.12: core functionalities of the framework
+-- sailor.lua, v0.4.13: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4.12",
+    _VERSION = "Sailor 0.4.13",
 }
 
 -- Loads Lua@client's settings from Sailor conf.
@@ -56,10 +56,12 @@ end
 function sailor.set_application_path(r)
     if r.uri and r.filename then
         local filename = r.uri:match( "([^/]+)$") 
-        sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
-    else
-        sailor.path = lfs.currentdir()
+        if filename then
+            sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
+            return
+        end
     end
+    sailor.path = lfs.currentdir()
 end
 
 -- Encapsulates request_rec functions inside the Page object
@@ -67,6 +69,7 @@ end
 -- r: webserver's request object
 function sailor.init(r)
     sailor.set_application_path(r)
+    sailor.base_path = ((r.uri):match('^@?(.-)/index.lua$') or '')
     r.content_type = "text/html"
 
     local GET, GETMULTI = {}, {}
@@ -94,7 +97,7 @@ function sailor.init(r)
         layout = conf.sailor.layout,
         title = conf.sailor.app_name,
         trace = {},
-        base_path = ((r.uri):match('^@?(.-)/index.lua$') or '')
+        base_path = sailor.base_path
     }
     sailor.r = r
     lp.setoutfunc("page:print")
@@ -347,11 +350,14 @@ end
 function sailor.make_url(route,params)
     params = params or {}
     local url = route
-    local base_path = ((sailor.r.uri):match('^@?(.-)/index.lua$') or '')
+    local base_path = sailor.base_path
     if base_path ~= '' then
         base_path = base_path..'/'
     end
     if conf.sailor.friendly_urls then
+        if base_path == '' then
+            base_path = '/'
+        end
         url =  base_path..url
         for k,v in pairs(params) do
             url = url.."/"..k.."/"..v
