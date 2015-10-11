@@ -30,9 +30,9 @@ describe("Testing Sailor core functions", function()
     assert.is_equal('/sailor/test/dev-app/?r=test/etc',url)
 
     url = sailor.make_url('test', parms)
-    exp = '?r=test'
+    exp = '/sailor/test/dev-app/?r=test'
     for k,v in pairs(parms) do exp = exp .. '&' .. k .. '=' .. v end
-    assert.is_equal('/sailor/test/dev-app/?r=test&id=5&name=a_test',url)
+    assert.is_equal(exp,url)
 
     url = sailor.make_url('test/etc')
     assert.is_equal('/sailor/test/dev-app/?r=test/etc',url)
@@ -46,7 +46,7 @@ describe("Testing Sailor core functions", function()
 
   it("should create URLs accordingly with friendly urls", function()
     conf.sailor.friendly_urls = true
-
+    sailor.base_path = ''
     local url = sailor.make_url('test')
     assert.is_equal('/test',url)
 
