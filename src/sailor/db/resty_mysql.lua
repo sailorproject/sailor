@@ -12,7 +12,6 @@ local mysql = require "resty.mysql"
 
 local db = {instance = nil}
 
-local luasql = require("luasql."..conf.driver)
 function db.instantiate()
 	if not db.instance then
 		local instance, err = mysql:new()
