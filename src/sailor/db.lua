@@ -10,12 +10,15 @@ local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local remy = require "remy"
 
-local db
-
-if remy.detect() == remy.MODE_NGINX and conf.driver == "mysql" then
-	db = require "sailor.db.resty_mysql"
-else	
-	db = require "sailor.db.luasql"
+function detect()
+	local m
+	if remy.detect() == remy.MODE_NGINX and conf.driver == "mysql" then
+		m = require "sailor.db.resty_mysql"
+	else	
+		m = require "sailor.db.luasql"
+	end
+	m.detect = detect
+	return m
 end
 
-return db
+return detect()

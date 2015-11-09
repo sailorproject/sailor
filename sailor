@@ -92,11 +92,22 @@ local function create()
 end
 
 local function test()
+	local resty = false
 	local flags = ''
 	for i=2,#arg do
-		flags = flags..arg[i]..' '
+		if arg[i] == '--resty' then
+			resty = true
+		else
+			flags = flags..arg[i]..' '
+		end
 	end
-	local ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..'tests/unit/* tests/functional/*')
+	local ok, code
+	if resty then
+		ok, code = os.execute('resty tests/bootstrap_resty.lua')
+	else
+		ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..'tests/unit/* tests/functional/*')
+	end
+
 	if type(ok) == "number" then return ok end -- Lua 5.1 just returns the status code
 	return ok and 0 or 1 -- don't care about actual value
 end

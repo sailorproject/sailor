@@ -13,12 +13,11 @@ local mysql = require "resty.mysql"
 local db = {instance = nil}
 
 local luasql = require("luasql."..conf.driver)
-
 function db.instantiate()
 	if not db.instance then
 		local instance, err = mysql:new()
     	if not instance then
-        	error("Failed to instantiate mysql: ".. err)
+        	error("Failed to instantiate mysql: ".. (err or ''))
     	end
     	db.instance = instance
 	end
@@ -26,8 +25,8 @@ end
 -- Creates the connection of the instance
 function db.connect()
 	db.instantiate()
-	conf.host = string.gsub(conf.host, "localhost", "127.0.0.1")
 
+	conf.host = string.gsub(conf.host, "localhost", "127.0.0.1")
 	local ok, err, errno, sqlstate = db.instance:connect{
         host = conf.host,
         port = 3306,
@@ -36,6 +35,7 @@ function db.connect()
         password = conf.pass,
         max_packet_size = 1024 * 1024 
     }
+
     if not ok then
 	    error("Failed to connect to database: ".. err ..": ".. (errno or '') .." "..(sqlstate or ''))
 	end

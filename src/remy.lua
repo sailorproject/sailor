@@ -11,8 +11,10 @@ local remy = {
 	MODE_MOD_PLUA = 1,
 	MODE_NGINX = 2,
 	MODE_LWAN = 3,
-	MODE_LIGHTTPD = 4
+	MODE_LIGHTTPD = 4,
 }
+
+forced_mode = nil
 
 local emu = {}
 
@@ -124,6 +126,7 @@ end
 -- Detects the Lua environment
 function remy.detect(native_request)
 	local mode = nil
+	if forced_mode then return forced_mode end
 	if package.loaded.cgilua ~= nil then
 		mode = remy.MODE_CGILUA
 	elseif package.loaded.ngx ~= nil then
@@ -176,6 +179,10 @@ end
 function remy.sha1(str)
 	local sha1 = require "sha1"
 	return sha1(str)
+end
+
+function remy.force_mode(mode)
+	forced_mode = mode
 end
 
 return remy

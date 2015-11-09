@@ -8,16 +8,17 @@
 
 local sailor = require "sailor"
 local lfs = require "lfs"
+local db = require "sailor.db"
+local M = {req = {}, page = nil}
 
-local M = {req = {}}
-
-local page
+local body
+local function write(_,data) body = body .. data end
 
 -- Prepares for making a request
-function M:prepare(write_func, headers_in)
+function M:prepare(headers_in)
 	headers_in = headers_in or {}
-	M.req = { uri = '', write = write_func, puts = write_func, headers_in = headers_in, headers_out = {} }
-	page = sailor.init(M.req)
+	self.req = { uri = '', write = write, puts = write, headers_in = headers_in, headers_out = {} }
+	self.page = sailor.init(M.req)
 	return self
 end
 
@@ -25,7 +26,7 @@ end
 -- Warning, this will truncate the table, make sure you have configured a test database
 -- Returns table with objects created
 function load_fixtures(model_name)
-	local db = require "sailor.db"
+	
 
 	local Model = sailor.model(model_name)
 	local fixtures = require("tests.fixtures."..model_name) or {}
@@ -33,12 +34,15 @@ function load_fixtures(model_name)
 	db.connect()
 	db.query('truncate table ' .. Model.db.table .. ';') -- Reseting current state
 	db.close()
+
+	
 	for _,v in pairs(fixtures) do  -- loading fixtures
 	  local o = Model:new(v)
 	  o:save(false)
 	  table.insert(objects, o)
 	end
 	return objects
+
 end
 
 function M.load_fixtures(model_name)
@@ -74,18 +78,19 @@ end
 -- body: string. The body of the response.
 -- headers: table. Any headers out that were set.
 -- redirected: function. The above redirect function
+
+
 function M.request(path, data, additional_headers)
 	local conf = require "conf.conf"
 	data = data or {}
-	local body = ''
-	local function write(_,data) body = body .. data end
+	body = ''
 	conf.sailor.friendly_urls = false
 
-	M:prepare(write,additional_headers)
-	page.POST = data.post or {}
-	page.GET = data.get or {}
-	page.GET[conf.sailor.route_parameter] = path
-	local status = sailor.route(page)
+	M:prepare(additional_headers)
+	M.page.POST = data.post or {}
+	M.page.GET = data.get or {}
+	M.page.GET[conf.sailor.route_parameter] = path
+	local status = sailor.route(M.page)
 
 	return {status = status, body = body, headers = M.req.headers_out, redirected = redirected}
 end
