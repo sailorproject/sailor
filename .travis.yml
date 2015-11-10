@@ -21,16 +21,15 @@ env:
       - LUA=lua5.2 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
       - LUA=luajit DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
       # latest stable version (2.0.4)
-      - LUA=luajit+openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
       # Luas on postgres
       - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
       - LUA=lua5.2 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
       - LUA=luajit DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
       # latest stable version (2.0.4)
-      - LUA=luajit+openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
       # - LUA=lua5.3
       # - LUA=luajit2.0  # current head of 2.0 branch
       # - LUA=luajit2.1  # current head of 2.1 branch
+      - LUA=luajit SERVER=openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test 
 
 
 before_install:
@@ -44,8 +43,8 @@ before_script:
 
 script:
   - cd test/dev-app
-  - if [ ${LUA} != "luajit+openresty" ]; then sailor test --verbose; fi
-  - if [ ${LUA} = "luajit+openresty" ]; then sailor test --resty; fi
+  - if [ ${SERVER} != "openresty" ]; then sailor test --verbose; fi
+  - if [ ${SERVER} = "openresty" ]; then sailor test --resty; fi
 
 notifications:
   email:
