@@ -11,7 +11,7 @@ user.attributes = {
 
 user.db = {
 	key = 'id',
-	table = 'user'
+	table = 'users'
 }
 
 user.relations = {
