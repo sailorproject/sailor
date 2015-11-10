@@ -23,8 +23,8 @@ make install
 export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/openresty/nginx/sbin
 export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/openresty/bin
 
-cd ../
-rm -rf ngx_openresty-$OPENRESTY_VERSION
-
 nginx -v 
 resty -v 
+
+cd $TRAVIS_BUILD_DIR
+rm -rf ngx_openresty-$OPENRESTY_VERSION
