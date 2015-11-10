@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
     - libmysqlclient-dev
+    - libpq-dev
 
 env:
   global:
