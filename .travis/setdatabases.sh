@@ -1,4 +1,5 @@
 if [ "$DB_DRIVER" == "postgres" ]; then
+	pg_config
 	luarocks install luasql-postgres PGSQL_INCDIR=/usr/include/postgresql
 
 	psql -c 'create database sailor_test;' -U postgres
