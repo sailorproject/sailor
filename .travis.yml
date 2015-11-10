@@ -8,6 +8,10 @@ addons:
     - libmysqlclient-dev
     - libpq-dev
 
+services:
+  - mysql
+  - postgresql
+
 env:
   global:
     - LUAROCKS=2.2.2
