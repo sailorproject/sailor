@@ -10,36 +10,32 @@ addons:
 env:
   global:
     - LUAROCKS=2.2.2
-    - DB_DRIVER=mysql
-    - DB_USER=travis
-    #- DB_PASS=
-    - DB_NAME=sailor_test
+    - DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+    - DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
 
   matrix:
-    - LUA=lua5.1
-    - LUA=lua5.2
-    #- LUA=lua5.3
-    - LUA=luajit     # latest stable version (2.0.4)
-    # - LUA=luajit2.0  # current head of 2.0 branch
-    # - LUA=luajit2.1  # current head of 2.1 branch
+      - LUA=lua5.1
+      - LUA=lua5.2
+      #- LUA=lua5.3
+      - LUA=luajit     # latest stable version (2.0.4)
+      # - LUA=luajit2.0  # current head of 2.0 branch
+      # - LUA=luajit2.1  # current head of 2.1 branch
+      - LUA=luajit+openresty
 
 
 before_install:
   - source .travis/setenv_lua.sh
-  - luarocks install luasql-mysql MYSQL_INCDIR=/usr/include/mysql
 
 install:
   - luarocks make rockspecs/sailor-current-1.rockspec
 
 before_script:
-  - mysql -e 'create database sailor_test;'
-  - mysql $DB_NAME < test/dev-app/sql/mysql.sql
+  - source .travis/setdabases.sh
 
 script:
   - cd test/dev-app
-  - sailor test --verbose
-  - if [ ${LUA} = "luajit" ]; then sailor test --resty; fi
-  #- busted --helper=tests/bootstrap.lua --verbose tests/unit/* tests/functional/*
+  - if [ ${LUA} != "luajit+openresty" ]; sailor test --verbose; fi
+  - if [ ${LUA} = "luajit+openresty" ]; then sailor test --resty; fi
 
 notifications:
   email:

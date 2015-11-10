@@ -2,7 +2,8 @@ export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/luar
 export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/openresty/nginx/sbin
 export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/openresty/bin
 bash .travis/setup_lua.sh
-if [ "$LUA" = "luajit" ]; then
+if [ "$LUA" = "luajit+openresty" ]; then
 	bash .travis/setup_servers.sh
 fi
+
 eval `$HOME/.lua/luarocks path`
