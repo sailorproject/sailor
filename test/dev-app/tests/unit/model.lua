@@ -2,12 +2,12 @@ local sailor = require "sailor"
 local helper = require "tests.helper"
 local access = require "sailor.access"
 local db = require "sailor.db"
+local fixtures = require "tests.fixtures.user" or {}
 
 
 describe("Testing #UserModel", function()
   --helper.blah()
   local User = sailor.model('user')
-  local fixtures = require "tests.fixtures.user" or {}
   local users = User:find_all()
   local u, count_before
   local db_spies = {}
@@ -21,7 +21,7 @@ describe("Testing #UserModel", function()
   end
 
   setup(function()
-    table.insert(db_spies, spy.on(db,'connect',function() print "hey" end))
+    table.insert(db_spies, spy.on(db,'connect'))
     table.insert(db_spies, spy.on(db,'close'))
   end)
 
@@ -144,6 +144,56 @@ describe("Testing #UserModel", function()
 
   it("should know the user is logged out", function()
     assert.is_true(access.is_guest())
+  end)
+
+  it("should create objects but rollback", function()
+    local Post = sailor.model('post')
+    count_before = User:count()
+    local count_post = Post:count()
+    assert_db_close(2)
+
+    db.begin_transaction()
+
+      u = User:new(fixtures[1])
+      assert.is_true(u:save(false))
+      assert.is_equal(User:count(),count_before+1)
+      
+      local p = Post:new()
+      p.author_id = u.id
+      assert.is_true(p:save(false))
+      assert.is_equal(Post:count(),count_post+1)
+
+    db.rollback()
+    assert_db_close()
+
+    assert.is_equal(User:count(),count_before)
+    assert.is_equal(Post:count(),count_post)
+    assert_db_close(2)
+  end)
+
+  it("should create objects and commit", function()
+    local Post = sailor.model('post')
+    count_before = User:count()
+    local count_post = Post:count()
+    assert_db_close(2)
+
+    db.begin_transaction()
+
+      u = User:new(fixtures[1])
+      assert.is_true(u:save(false))
+      assert.is_equal(User:count(),count_before+1)
+      
+      local p = Post:new()
+      p.author_id = u.id
+      assert.is_true(p:save(false))
+      assert.is_equal(Post:count(),count_post+1)
+
+    db.commit()
+    assert_db_close()
+
+    assert.is_equal(User:count(),count_before+1)
+    assert.is_equal(Post:count(),count_post+1)
+    assert_db_close(2)
   end)
 
 end)

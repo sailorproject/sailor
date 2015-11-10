@@ -1,6 +1,6 @@
 -- MySQL
-drop table if exists user;
-create table user(
+drop table if exists users;
+create table users(
 	id int primary key auto_increment,
 	username varchar(20),
 	password varchar(20)
@@ -10,14 +10,14 @@ drop table if exists post;
 create table post(
 	id int primary key auto_increment,
 	body text,
-	author_id int references user (id)
+	author_id int references users (id)
 );
 
 drop table if exists comment;
 create table comment(
 	id int primary key auto_increment,
 	body text,
-	author_id int references user (id),
+	author_id int references users (id),
 	post_id int references post (id)
 );
 
@@ -34,8 +34,8 @@ create table post_category(
 	primary key(post_id,category_id)
 );
 
-insert into user values (1,'etiene','geronimo');
-insert into user values (2,'pedro','fantastic');
+insert into users values (1,'etiene','geronimo');
+insert into users values (2,'pedro','fantastic');
 
 insert into post values (1,'This is a post',1);
 insert into post values (2,'This is another post',2);

@@ -1,6 +1,6 @@
 package.path =  ((debug.getinfo(1).source):match('^@?(.-)/index.lua$') or '')..'../../src/?.lua;'..package.path
 
-require "sailor"
+local sailor = require "sailor"
 local test = require "sailor.test"
 local access = require "sailor.access"
 local User = sailor.model('user')
@@ -28,6 +28,5 @@ describe("Testing #UserController", function()
   it("should know the user is logged out", function()
     assert.is_true(access.is_guest())
   end)
-
 
 end)

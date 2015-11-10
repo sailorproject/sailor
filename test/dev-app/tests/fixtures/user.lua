@@ -2,12 +2,12 @@
 
 return {
 	{
-		username = 'joao',
+		username = 'serena',
 		password = '123456'
 	},
 	
 	{
-		username = 'maria',
+		username = 'lua',
 		password = '1234'
 	},
 

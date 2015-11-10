@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- db.lua, v0.1: DB module for connecting and querying through MySQL on openresty servers
+-- rest_mysql.lua, v0.2: DB module for connecting and querying through MySQL on openresty servers
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -10,7 +10,7 @@ local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local mysql = require "resty.mysql"
 
-local db = {instance = nil}
+local db = {instance = nil, transaction = false}
 
 function db.instantiate()
 	if not db.instance then
@@ -23,8 +23,8 @@ function db.instantiate()
 end
 -- Creates the connection of the instance
 function db.connect()
+	if db.transaction then return end
 	db.instantiate()
-
 	conf.host = string.gsub(conf.host, "localhost", "127.0.0.1")
 	local ok, err, errno, sqlstate = db.instance:connect{
         host = conf.host,
@@ -34,14 +34,14 @@ function db.connect()
         password = conf.pass,
         max_packet_size = 1024 * 1024 
     }
-
     if not ok then
-	    error("Failed to connect to database: ".. err ..": ".. (errno or '') .." "..(sqlstate or ''))
+	   error("Failed to connect to database: ".. tostring(err)..": ".. (errno or '') .." "..(sqlstate or ''))
 	end
 end
 
 -- Closes the connection of the instance
 function db.close()
+	if db.transaction then return end
 	local ok, err = db.instance:close()
     if not ok then
         error("Failed to close database connection: ".. err)
@@ -58,8 +58,25 @@ function db.query(query)
     	error(query)
         error("Bad result: ".. err ..": ".. (errno or '') .." "..(sqlstate or ''))
     end
-    --if #res == 1 then res = res[1] end
     return res
+end
+
+-- Runs a query and get one single value
+-- @param query string: the query to be executed
+-- @return string | number: the result
+function db.query_one(query)
+	local res = db.query(query)
+	local value
+	if next(res) then
+		for _,v in pairs(res[1]) do value = v end
+	end
+	return value
+end
+
+-- Truncates a table
+-- @param table_name string: the name of the table to be truncated
+function db.truncate(table_name)
+	return db.query('truncate table ' .. table_name .. ';')
 end
 
 -- Escapes a string or a table (its values). Should be used before concatenating strings on a query.
@@ -101,6 +118,27 @@ function db.escape(q)
 		return
 	end
 	return q
+end
+
+-- Starts a transation
+function db.begin_transaction()
+	db.connect()
+	db.query("START TRANSACTION;")
+	db.transaction = true
+end
+
+-- Commits a transaction, everything went alright
+function db.commit()
+	db.query("COMMIT;")
+	db.transaction = false
+	db.close()
+end
+
+-- Rollback everything done during transaction
+function db.rollback()
+	db.query("ROLLBACK;")
+	db.transaction = false
+	db.close()
 end
 
 --- Runs a query and returns the id of the last inserted row. Used for saving

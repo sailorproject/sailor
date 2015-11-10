@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- test.lua, v0.4: Helper functions for testing functionality
+-- test.lua, v0.5: Helper functions for testing functionality
 -- This file is a part of Sailor project
 -- Copyright (c) 2014-2015 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -9,6 +9,9 @@
 local sailor = require "sailor"
 local lfs = require "lfs"
 local db = require "sailor.db"
+local main_conf = require "conf.conf"
+local db_conf = main_conf.db[main_conf.sailor.environment]
+
 local M = {req = {}, page = nil}
 
 local body
@@ -26,13 +29,11 @@ end
 -- Warning, this will truncate the table, make sure you have configured a test database
 -- Returns table with objects created
 function load_fixtures(model_name)
-	
-
 	local Model = sailor.model(model_name)
 	local fixtures = require("tests.fixtures."..model_name) or {}
 	local objects = {}
 	db.connect()
-	db.query('truncate table ' .. Model.db.table .. ';') -- Reseting current state
+	db.truncate(Model.db.table) -- Reseting current state
 	db.close()
 
 	

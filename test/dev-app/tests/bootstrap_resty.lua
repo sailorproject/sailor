@@ -6,8 +6,8 @@ local lfs = require 'lfs'
 -- load fixtures
 
 t.load_fixtures('user')
-t.load_fixtures('category')
 t.load_fixtures('post')
+t.load_fixtures('category')
 
 -- prepare busted
 busted()

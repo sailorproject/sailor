@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- luasql.lua, v0.3: DB module for connecting and querying through LuaSQL
+-- luasql_common.lua, v0.4: DB module for connecting and querying through LuaSQL
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -9,7 +9,7 @@
 local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local luasql = require("luasql."..conf.driver)
-local db = {}
+local db = { transaction = false}
 
 -- Reads the cursor information after reading from db and returns a table
 local function fetch_row(cur, res)
@@ -18,7 +18,7 @@ local function fetch_row(cur, res)
 
 	if not row then
 		cur:close()
-		return false
+		return res
 	end
 
 	local types = cur:getcoltypes()
@@ -31,32 +31,61 @@ local function fetch_row(cur, res)
 	end
 
 	table.insert(res,row)
-	fetch_row(cur,res)
-
-	return res
+	
+	return fetch_row(cur,res)
 end
 
 -- Creates the connection of the instance
 function db.connect()
+	if db.transaction then return end
 	db.env = assert (luasql[conf.driver]())
 	db.con = assert (db.env:connect(conf.dbname,conf.user,conf.pass,conf.host))
 end
 
 -- Closes the connection of the instance
 function db.close()
+	if db.transaction then return end
 	db.con:close()
 	db.env:close()
 end
 
 -- Runs a query
 -- @param query string: the query to be executed
--- @return table: a cursor
+-- @return table: the rows with the results
 function db.query(query)
 	local cur = assert(db.con:execute(query))
 	if type(cur) == 'number' then
 		return cur
 	end
 	return fetch_row(cur)
+end
+
+-- Runs a query and get one single value
+-- @param query string: the query to be executed
+-- @return string | number: the result
+function db.query_one(query)
+	local res = db.query(query)
+	local value
+	if next(res) then
+		for _,v in pairs(res[1]) do value = v end
+	end
+	return value
+end
+
+-- Truncates a table
+-- @param table_name string: the name of the table to be truncated
+function db.truncate(table_name)
+	local query = ''
+	if conf.driver == "postgres" then 
+		query = 'truncate table ' .. table_name .. ' RESTART IDENTITY CASCADE;' 
+	elseif conf.driver == "sqlite3" then
+		query = 'delete from '.. table_name .. ';'
+		db.query(query)
+		query = "delete from sqlite_sequence where name='" .. table_name .. "';"
+	else 
+		query = 'truncate table ' .. table_name .. ';'
+	end
+	return db.query(query)
 end
 
 -- Escapes a string or a table (its values). Should be used before concatenating strings on a query.
@@ -94,22 +123,70 @@ end
 	return res
 end]]
 
+
+
 --- Runs a query and returns the id of the last inserted row. Used for saving
 -- a model and obtaining the model id.
 -- @param query string: the query to be executed
 -- return number or string: the id of the last inserted row.
-function db.query_insert(query)
-	local id
-	if conf.driver == "postgresql" then
-		query = query .. "RETURNING uid; "
-		id = assert(db.con:execute(query))
+local function query_insert_postgres(query,key)
+	key = key or 'id'
+	
+	query = query .. " RETURNING id; "
+	local cur = assert(db.con:execute(query))
+
+	if type(cur) == 'number' then
+		return cur
 	else
-		query  = query .. "; "
-		assert(db.con:execute(query))
-		id = db.con:getlastautoid()
+		local res = fetch_row(cur)
+		if next(res) then
+			return tonumber(res[1][key])
+		end
 	end
+	return nil
+end
+
+local function query_insert_common(query,key)
+	key = key or 'id'
+	local id
+	
+	query  = query .. "; "
+	assert(db.con:execute(query))
+	id = db.con:getlastautoid()
 
 	return id
+end
+
+function db.query_insert(query,key)
+	if conf.driver == 'postgres' then
+		return query_insert_postgres(query,key)
+	end
+	return query_insert_common(query,key)
+end
+
+-- Starts a transation
+function db.begin_transaction()
+	db.connect()
+	local query = "START TRANSACTION;"
+	if conf.driver == 'sqlite3' then
+		query = "BEGIN TRANSACTION;"
+	end
+	db.query(query)
+	db.transaction = true
+end
+
+-- Commits a transaction, everything went alright
+function db.commit()
+	db.query("COMMIT;")
+	db.transaction = false
+	db.close()
+end
+
+-- Rollback everything done during transaction
+function db.rollback()
+	db.query("ROLLBACK;")
+	db.transaction = false
+	db.close()
 end
 
 return db

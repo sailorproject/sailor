@@ -1,5 +1,6 @@
 local form = require "sailor.form"('category')
 local test = require "sailor.test"
+local helper = require "tests.helper"
 
 describe("Testing #CategoryController", function()
   local Category = sailor.model('category')
@@ -36,8 +37,10 @@ describe("Testing #CategoryController", function()
 
   it("should delete category", function()
   	local count_before = Category:count()
+    --print(helper.tostring(count_before,0,' ','\n'))
+
     local res = test.request('category/delete', {get = {id = 1}})
-    assert.same(Category:count(), count_before - 1)
+    assert.same(count_before - 1, Category:count())
     assert.falsy(Category:find_by_id(1))
     assert.is_true(res:redirected('category/index'))
   end)
