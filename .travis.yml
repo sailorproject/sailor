@@ -13,19 +13,24 @@ services:
   - postgresql
 
 env:
-  - DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-  - DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
   global:
     - LUAROCKS=2.2.2
   matrix:
-      - LUA=lua5.1
-      - LUA=lua5.2
-      #- LUA=lua5.3
-      - LUA=luajit     # latest stable version (2.0.4)
+      # Luas on mysql
+      - LUA=lua5.1 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      - LUA=lua5.2 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      - LUA=luajit DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      # latest stable version (2.0.4)
+      - LUA=luajit+openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      # Luas on postgres
+      - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+      - LUA=lua5.2 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+      - LUA=luajit DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+      # latest stable version (2.0.4)
+      - LUA=luajit+openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      # - LUA=lua5.3
       # - LUA=luajit2.0  # current head of 2.0 branch
       # - LUA=luajit2.1  # current head of 2.1 branch
-      - LUA=luajit+openresty
-      
 
 
 before_install:
