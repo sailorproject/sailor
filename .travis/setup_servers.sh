@@ -7,7 +7,7 @@ OPENRESTY_VERSION="1.9.3.1"
 wget https://openresty.org/download/ngx_openresty-$OPENRESTY_VERSION.tar.gz
 tar xzvf ngx_openresty-$OPENRESTY_VERSION.tar.gz
 cd ngx_openresty-$OPENRESTY_VERSION/
-./configure
+./configure --prefix="$TRAVIS_BUILD_DIR/install/nginx"
 make
 make install
 
