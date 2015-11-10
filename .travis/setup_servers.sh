@@ -20,11 +20,14 @@ fi
 make
 make install
 
+ln -s $OPENRESTY_DIR/bin/resty $HOME/.lua/resty
+ln -s $OPENRESTY_DIR/nginx/sbin/nginx $HOME/.lua/nginx
+
 export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/openresty/nginx/sbin
 export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/openresty/bin
 
 nginx -v 
-resty -v 
+resty -V 
 
 cd ../
 rm -rf ngx_openresty-$OPENRESTY_VERSION
