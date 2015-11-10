@@ -26,5 +26,7 @@ export PATH=${PATH}:$HOME/.lua:$HOME/.local/bin:${TRAVIS_BUILD_DIR}/install/open
 nginx -v 
 resty -v 
 
-cd $TRAVIS_BUILD_DIR
+cd ../
 rm -rf ngx_openresty-$OPENRESTY_VERSION
+cd $TRAVIS_BUILD_DIR
+
