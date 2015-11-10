@@ -10,11 +10,9 @@ tar xzvf ngx_openresty-$OPENRESTY_VERSION.tar.gz
 cd ngx_openresty-$OPENRESTY_VERSION/
 
 if [ "$LUA" == "lua5.1" ]; then
-	./configure --prefix="$OPENRESTY_DIR" --with-lua51=$TRAVIS_BUILD_DIR/install/lua
-elif [ "$LUA" == "lua5.2" ]; then
-	./configure --prefix="$OPENRESTY_DIR"
+	./configure --prefix="$OPENRESTY_DIR" --with-lua51
 elif [ "$LUA" == "luajit" ]; then
-	./configure --prefix="$OPENRESTY_DIR" --with-luajit=$TRAVIS_BUILD_DIR/install/lua
+	./configure --prefix="$OPENRESTY_DIR" --with-luajit
 fi
 
 make

@@ -38,7 +38,9 @@ before_script:
 script:
   - cd test/dev-app
   - sailor test --verbose
-  - sailor test --resty
+  if [ ${LUA} != "lua5.2" ]; then
+    - sailor test --resty
+  fi
   #- busted --helper=tests/bootstrap.lua --verbose tests/unit/* tests/functional/*
 
 notifications:
