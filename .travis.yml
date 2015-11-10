@@ -34,7 +34,7 @@ before_script:
 
 script:
   - cd test/dev-app
-  - if [ ${LUA} != "luajit+openresty" ]; sailor test --verbose; fi
+  - if [ ${LUA} != "luajit+openresty" ]; then sailor test --verbose; fi
   - if [ ${LUA} = "luajit+openresty" ]; then sailor test --resty; fi
 
 notifications:
