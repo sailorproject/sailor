@@ -27,6 +27,7 @@ env:
 before_install:
   - source .travis/setenv_lua.sh
   - luarocks install luasql-mysql MYSQL_INCDIR=/usr/include/mysql
+  - source .travis/setup_servers.sh
 
 install:
   - luarocks make rockspecs/sailor-current-1.rockspec
