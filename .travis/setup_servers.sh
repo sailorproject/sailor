@@ -5,6 +5,10 @@
 OPENRESTY_VERSION="1.9.3.1"
 OPENRESTY_DIR=$TRAVIS_BUILD_DIR/install/openresty
 
+if [ "$LUA" == "lua5.1" ]; then
+	luarocks install LuaBitOp
+fi
+
 wget https://openresty.org/download/ngx_openresty-$OPENRESTY_VERSION.tar.gz
 tar xzvf ngx_openresty-$OPENRESTY_VERSION.tar.gz
 cd ngx_openresty-$OPENRESTY_VERSION/
