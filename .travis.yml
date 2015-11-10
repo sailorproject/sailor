@@ -30,7 +30,7 @@ install:
   - luarocks make rockspecs/sailor-current-1.rockspec
 
 before_script:
-  - source .travis/setdabases.sh
+  - source .travis/setdatabases.sh
 
 script:
   - cd test/dev-app
