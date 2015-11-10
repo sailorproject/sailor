@@ -15,8 +15,6 @@ services:
 env:
   global:
     - LUAROCKS=2.2.2
-    - DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-    - DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
 
   matrix:
       - LUA=lua5.1
@@ -26,6 +24,8 @@ env:
       # - LUA=luajit2.0  # current head of 2.0 branch
       # - LUA=luajit2.1  # current head of 2.1 branch
       - LUA=luajit+openresty
+      - DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      - DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
 
 
 before_install:
