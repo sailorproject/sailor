@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- page.lua, v0.1 - The Page object
+-- page.lua, v0.2 - The Page object
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -11,7 +11,9 @@ local lp = require "web_utils.lp_ex"
 local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
 local match,tostring,gsub = string.match,tostring,string.gsub
 
-local page = {
+local M = {}
+
+local Page = {
 	-- These values are set on sailor.init passed to page.new. 
 	-- Here only for reference.
 	r = nil, -- request (varies a lot upon server used)
@@ -26,18 +28,18 @@ local page = {
 -- Prepares the page object
 -- @param obj table: table with some useful functions established by sailor
 -- returns page object
-function page:new(obj)
+function M.new(obj)
 	obj = obj or {}
 	for k,v in pairs(obj) do
-		self[k] = v
+		Page[k] = v
 	end
 
-    self.trace = {} -- used for page.inspect
-    self.theme = conf.sailor.theme
-    self.layout = conf.sailor.layout
-    self.title = conf.sailor.app_name
+    Page.trace = {} -- used for page.inspect
+    Page.theme = conf.sailor.theme
+    Page.layout = conf.sailor.layout
+    Page.title = conf.sailor.app_name
 
-	return self
+	return Page
 end
 
 -- Aux function
@@ -72,7 +74,7 @@ end
 -- Includes a .lp file from a .lp file
 -- path: string, full file path
 -- parms: table, vars being passed ahead
-function page:include(path,parms)
+function Page:include(path,parms)
     parms = parms or {}
 
     local incl_src = read_src(sailor.path..'/'..path)
@@ -85,7 +87,7 @@ end
 -- Renders a view from a controller action
 -- filename: string, filename without ".lp". The file must be inside /views/<controller name>
 -- parms: table, vars being passed ahead.
-function page:render(filename,parms,src)
+function Page:render(filename,parms,src)
     parms = parms or {}
     if src ~= nil then return render_page(filename,parms,src) end -- shortcut for autogen module
 
@@ -132,7 +134,7 @@ end
 -- Redirects to another action or another address
 -- route: string, '<controller name>/<action_name>'
 -- args: table, vars to be passed in url get style
-function page:redirect(route,args)
+function Page:redirect(route,args)
     args = args or {}
     if not route:match('^https?://') then
         route = page:make_url(route,args)
@@ -151,7 +153,7 @@ end
 -- Shows an a trace message on the bottom of the page
 -- value: a variable to be inspected
 -- [message]: an optional debug message
-function page:inspect(value,message)
+function Page:inspect(value,message)
     if conf.debug.inspect then
         local inspect
         if not message then
@@ -171,7 +173,7 @@ end
 -- @param ln: optional, default: <br/>, the separator for new lines
 -- @param inspect: string, the string where the pretty printed is constructed recursively
 -- @return: string: the string to be printed
-function page:tostring (val, indent, sep, ln, inspect)
+function Page:tostring (val, indent, sep, ln, inspect)
     indent = indent or 0
     inspect = inspect or ''
     sep = sep or '&nbsp;'
@@ -194,7 +196,7 @@ end
 -- creates a url string based on friendly url configuration
 -- route: string, controller/action or controller
 -- params: table, get vars and values. example: {id = 3, color = "blue"}
-function page:make_url(route,params)
+function Page:make_url(route,params)
     params = params or {}
     local url = route
     local base_path = self.base_path
@@ -218,4 +220,4 @@ function page:make_url(route,params)
     return url
 end
 
-return page
+return M

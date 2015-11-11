@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.5: core functionalities of the framework
+-- sailor.lua, v0.5.1: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -81,7 +81,7 @@ function sailor.init(r)
         GET, GETMULTI = r:parseargs()
     end
 
-    local p = page:new{
+    local p = page.new{
         r = r,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
