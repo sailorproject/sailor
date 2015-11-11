@@ -1,5 +1,6 @@
-local sailor = require "sailor"
 local conf = require "conf.conf"
+local test = require "sailor.test"
+local page = test.page
 
 describe("Testing Sailor core functions", function()
   local base_path
@@ -9,76 +10,76 @@ describe("Testing Sailor core functions", function()
     conf.sailor.friendly_urls = false
     
 
-    local url = sailor.make_url('test')
+    local url = page:make_url('test')
     assert.is_equal('?r=test',url)
 
-    url = sailor.make_url('test/etc')
+    url = page:make_url('test/etc')
     assert.is_equal('?r=test/etc',url)
 
-    url = sailor.make_url('test', parms)
+    url = page:make_url('test', parms)
     local exp = '?r=test'
     for k,v in pairs(parms) do exp = exp .. '&' .. k .. '=' .. v end
     assert.is_equal(exp,url)
 
-    url = sailor.make_url('test/etc', parms)
+    url = page:make_url('test/etc', parms)
     exp = '?r=test/etc'
     for k,v in pairs(parms) do exp = exp .. '&' .. k .. '=' .. v end
     assert.is_equal(exp,url)
 
-    base_path, sailor.base_path = sailor.base_path, '/sailor/test/dev-app'
-    url = sailor.make_url('test/etc')
+    base_path, page.base_path = page.base_path, '/sailor/test/dev-app'
+    url = page:make_url('test/etc')
     assert.is_equal('/sailor/test/dev-app/?r=test/etc',url)
 
-    url = sailor.make_url('test', parms)
+    url = page:make_url('test', parms)
     exp = '/sailor/test/dev-app/?r=test'
     for k,v in pairs(parms) do exp = exp .. '&' .. k .. '=' .. v end
     assert.is_equal(exp,url)
 
-    url = sailor.make_url('test/etc')
+    url = page:make_url('test/etc')
     assert.is_equal('/sailor/test/dev-app/?r=test/etc',url)
 
-    url = sailor.make_url('test/etc', parms)
+    url = page:make_url('test/etc', parms)
     exp = '/sailor/test/dev-app/?r=test/etc'
     for k,v in pairs(parms) do exp = exp .. '&' .. k .. '=' .. v end
     assert.is_equal(exp,url)
-    base_path, sailor.base_path = sailor.base_path, base_path
+    base_path, page.base_path = page.base_path, base_path
   end)
 
   it("should create URLs accordingly with friendly urls", function()
     conf.sailor.friendly_urls = true
-    sailor.base_path = ''
-    local url = sailor.make_url('test')
+    page.base_path = ''
+    local url = page:make_url('test')
     assert.is_equal('/test',url)
 
-    url = sailor.make_url('test/etc')
+    url = page:make_url('test/etc')
     assert.is_equal('/test/etc',url)
 
-    url = sailor.make_url('test',parms)
+    url = page:make_url('test',parms)
     local exp = '/test'
     for k,v in pairs(parms) do exp = exp .. '/' .. k .. '/' .. v end
     assert.is_equal(exp,url)
 
-    url = sailor.make_url('test/etc',parms)
+    url = page:make_url('test/etc',parms)
     local exp = '/test/etc'
     for k,v in pairs(parms) do exp = exp .. '/' .. k .. '/' .. v end
     assert.is_equal(exp,url)
 
-    base_path, sailor.base_path = sailor.base_path, '/sailor/test/dev-app'
-    url = sailor.make_url('test/etc')
+    base_path, page.base_path = page.base_path, '/sailor/test/dev-app'
+    url = page:make_url('test/etc')
     assert.is_equal('/sailor/test/dev-app/test/etc',url)
 
-    url = sailor.make_url('test')
+    url = page:make_url('test')
     assert.is_equal('/sailor/test/dev-app/test',url)
 
-    url = sailor.make_url('test',parms)
+    url = page:make_url('test',parms)
     exp = '/sailor/test/dev-app/test'
     for k,v in pairs(parms) do exp = exp .. '/' .. k .. '/' .. v end
     assert.is_equal(exp,url)
 
-    url = sailor.make_url('test/etc',parms)
+    url = page:make_url('test/etc',parms)
     exp = '/sailor/test/dev-app/test/etc'
     for k,v in pairs(parms) do exp = exp .. '/' .. k .. '/' .. v end
     assert.is_equal(exp,url)
-    base_path, sailor.base_path = sailor.base_path, base_path
+    base_path, page.base_path = page.base_path, base_path
   end)
 end)

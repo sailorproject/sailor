@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.5.1: core functionalities of the framework
+-- sailor.lua, v0.4.14: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4.13",
+    _VERSION = "Sailor 0.4.14",
 }
 
 -- Loads Lua@client's settings from Sailor conf.

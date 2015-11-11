@@ -5,6 +5,7 @@
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
+local sailor = require "sailor"
 local conf = require "conf.conf"
 local lp = require "web_utils.lp_ex"
 

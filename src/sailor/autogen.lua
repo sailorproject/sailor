@@ -148,7 +148,7 @@ function M.generate_index(model)
 	code = code .. [[
 	</tr&gt;
 	<?lua for k,v in pairs(]]..model["@name"]..[[s) do ?&gt;
-		<tr onclick="location.href='<%= sailor.make_url(']]..model["@name"]..[[/view',{id = v.id}) %&gt;'" &gt;
+		<tr onclick="location.href='<%= page:make_url(']]..model["@name"]..[[/view',{id = v.id}) %&gt;'" &gt;
 ]]
 
 	for _,attributes in pairs (model.attributes) do
@@ -163,7 +163,7 @@ function M.generate_index(model)
 	<?lua end ?&gt;
 </table&gt;
 <br/&gt;
-<a href="<%= sailor.make_url(']]..model["@name"]..[[/create') %&gt;" class="btn btn-primary"&gt;Create new ]]..model["@name"]..[[</a&gt;
+<a href="<%= page:make_url(']]..model["@name"]..[[/create') %&gt;" class="btn btn-primary"&gt;Create new ]]..model["@name"]..[[</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
@@ -182,8 +182,8 @@ function M.generate_view(model)
 	local code = [[
 <h2&gt;
 	View ]]..model["@name"]..[[ #<%= ]]..model["@name"]..[[.id %&gt;
-	<small>(<a href="<%= sailor.make_url(']]..model["@name"]..[[/update', {id = ]]..model["@name"]..[[.id} ) %&gt;" >update</a&gt;)</small&gt;
-	<small>(<a href="<%= sailor.make_url(']]..model["@name"]..[[/delete', {id = ]]..model["@name"]..[[.id} ) %&gt;" >delete</a&gt;)</small&gt;
+	<small>(<a href="<%= page:make_url(']]..model["@name"]..[[/update', {id = ]]..model["@name"]..[[.id} ) %&gt;" >update</a&gt;)</small&gt;
+	<small>(<a href="<%= page:make_url(']]..model["@name"]..[[/delete', {id = ]]..model["@name"]..[[.id} ) %&gt;" >delete</a&gt;)</small&gt;
 </h2&gt;
 <table class="table"&gt;
 ]]
@@ -196,7 +196,7 @@ function M.generate_view(model)
 	code = code ..[[
 </table&gt;
 <br/&gt;
-<a href="<%= sailor.make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
+<a href="<%= page:make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
@@ -233,7 +233,7 @@ function M.generate_create(model)
 	<input type="submit" class="btn btn-primary"/&gt;
 </form&gt;
 <br/&gt;
-<a href="<%= sailor.make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
+<a href="<%= page:make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
@@ -269,7 +269,7 @@ function M.generate_update(model)
 	<input type="submit" class="btn btn-primary"/&gt;
 </form&gt;
 <br/&gt;
-<a href="<%= sailor.make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
+<a href="<%= page:make_url(']]..model["@name"]..[[/index') %&gt;"&gt;<- Back to View All</a&gt;
 ]]
 
 	code = string.gsub(code,"&gt;",">")
