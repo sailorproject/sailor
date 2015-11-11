@@ -46,8 +46,8 @@ before_script:
 
 script:
   - cd test/dev-app
-  - sailor test --verbose
-  - if [ ${SERVER} == "openresty" ]; then sailor test --resty; fi
+  - if [ "$SERVER" != "openresty" ]; then sailor test --verbose; fi
+  - if [ "$SERVER" == "openresty" ]; then sailor test --resty; fi
 
 notifications:
   email:
