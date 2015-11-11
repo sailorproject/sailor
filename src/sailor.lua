@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.13: core functionalities of the framework
+-- sailor.lua, v0.5: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -22,10 +22,7 @@ local lp = require "web_utils.lp_ex"
 lp.lat.conf.lua_at_client = conf.lua_at_client or require"latclient.conf".lua_at_client
 
 local lfs = require "lfs"
-local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
-local match,tostring,gsub = string.match,tostring,string.gsub
-local traceback,xpcall = debug.traceback,xpcall
-local Page = {}
+local match, traceback,xpcall = string.match, debug.traceback,xpcall
 local httpd = {}
 
 -- Cross-environment compatible launcher. Makes Sailor adapt to
@@ -39,6 +36,7 @@ function sailor.launch(native_request)
     else
         -- This is a non-Apache (such as Nginx, Lighttpd, etc) or
         -- Apache with CGILua or mod_pLua
+        -- Handled by Remy extension
         httpd = remy.httpd
         sailor.remy_mode = remy.init(sailor.remy_mode, native_request)
         remy.contentheader('text/html')
@@ -68,6 +66,8 @@ end
 -- Useful for posterior compatibility with other servers
 -- r: webserver's request object
 function sailor.init(r)
+    local page = require "sailor.page"
+
     sailor.set_application_path(r)
     sailor.base_path = ((r.uri):match('^@?(.-)/index.lua$') or '')
     r.content_type = "text/html"
@@ -81,174 +81,21 @@ function sailor.init(r)
         GET, GETMULTI = r:parseargs()
     end
 
-    local page = {
+    local p = page:new{
         r = r,
-        render = Page.render,
-        redirect = Page.redirect,
-        include = Page.include,
-        inspect = Page.inspect,
-        tostring = Page.tostring,
         write = function(_,...) r:write(...) end,
         print = function(_,...) r:puts(...) end,
         GET = GET,
         POST = POST,
         POSTMULTI = POSTMULTI,
-        theme = conf.sailor.theme,
-        layout = conf.sailor.layout,
-        title = conf.sailor.app_name,
-        trace = {},
         base_path = sailor.base_path
     }
     sailor.r = r
     lp.setoutfunc("page:print")
 
-    return page
+    return p
 end
 
--- Aux function
--- Renders a previously read and parsed .lp file
--- path: string for debug purposes, shown on error messages
--- src: the parsed string
--- parms: table, the parameters being passed ahead to the rendered page
-local function render_page(path,src,parms)
-    parms.sailor = sailor
-
-    local f
-    if _VERSION == "Lua 5.1" then
-        f = assert(loadstring(src,'@'..path))
-        local env = getfenv(f)
-        for k,v in pairs(parms) do env[k] = v end
-        setfenv(f,env)
-    else
-        for k,v in pairs(_G) do parms[k] = v end
-        f = assert(load(src,'@'..path,'t',parms))
-    end
-
-    f()
-end
-
--- Opens and reads a file and returns the read string
--- path: string, file path without ".lp"
-local function read_src(path)
-    local lua_page = assert (open (path..".lp", "rb"))
-    local src = lua_page:read("*all")
-    lua_page:close()
-    return src
-end
-
--- Includes a .lp file from a .lp file
--- path: string, full file path
--- parms: table, vars being passed ahead
-function Page:include(path,parms)
-    parms = parms or {}
-
-    local incl_src = read_src(sailor.path..'/'..path)
-    incl_src = lp.translate(incl_src)
-    parms.page = self
-    render_page(path,incl_src,parms)
-end
-
--- Renders a view from a controller action
--- filename: string, filename without ".lp". The file must be inside /views/<controller name>
--- parms: table, vars being passed ahead.
-function Page:render(filename,parms)
-    parms = parms or {}
-
-    local src
-    local filepath
-
-    -- If there's a default theme, parse the theme first
-    if self.theme ~= nil and self.theme ~= '' then
-        self.theme_path = self.base_path.."/themes/"..self.theme
-        filepath = ((sailor.path):match('(.*)'..self.base_path:gsub('-','%%-') ) or '')..self.theme_path.."/"..self.layout
-
-        local theme_src = read_src(filepath)
-        local filename_var = "sailor_filename_"..tostring(random(1000))
-        local parms_var = "sailor_parms_"..tostring(random(1000))
-        -- Then remove theme and continue parsing
-        src = gsub(theme_src,"{{content}}",' <? page.theme = nil; page:render('..filename_var..','..parms_var..') ?> ')
-        parms[filename_var] = filename
-        parms[parms_var] = parms
-
-    else
-        local dir = self.controller_view_path or 'views'
-        -- filename is nil if the controller script is missing in /controllers/
-        -- ToDo: print error informing about missing controller?
-        if filename ~= nil then
-            filepath = sailor.path..'/'..dir..'/'..filename
-            src = read_src(filepath)
-        end
-
-    end
-
-    if conf.debug and conf.debug.inspect and ( (conf.sailor.theme and self.theme) or not conf.sailor.theme )then
-        local debug_src = read_src(sailor.path.."/views/error/inspect")
-        src = src..debug_src
-    end
-
-    if filename ~= nil then
-        src = lp.translate(src)
-        parms.page = self
-        render_page(filepath..".lp",src,parms)
-    end
-end
-
-
--- Redirects to another action or another address
--- route: string, '<controller name>/<action_name>'
--- args: table, vars to be passed in url get style
-function Page:redirect(route,args)
-
-    args = args or {}
-    if not route:match('^https?://') then
-        route = sailor.make_url(route,args)
-    end
-
-    if self.r.redirect then
-        self.r.redirect(route)
-    else
-
-        self.r.headers_out['Location'] = route
-        self.r.status = 302
-        return self.r.status
-    end
-end
-
--- Shows an a trace message on the bottom of the page
--- value: a variable to be inspected
--- [message]: an optional debug message
-function Page:inspect(value,message)
-    if conf.debug.inspect then
-        local inspect
-        if not message then
-            inspect = value
-        else
-            inspect = {}
-            inspect[message] = value
-        end
-        table.insert(self.trace,inspect)
-    end
-end
-
-function Page:tostring (val, indent, sep, ln, inspect)
-    indent = indent or 0
-    inspect = inspect or ''
-    sep = sep or '&nbsp;'
-    ln = ln or "<br/>"
-
-    if type(val) ~= "table" then
-        inspect = inspect .. tostring(val)
-    else
-        for k, v in pairs(val) do
-            if(k ~= "__newindex") then
-                local formatting = ln..string.rep(sep, indent) .. k .. ": "
-                inspect = inspect.. formatting 
-                inspect = self:tostring(v, indent+8, sep, ln, inspect)    
-            end
-        end
-    end
-    return inspect
-end
 
 -- Auxiliary function to open the autogen page for models and CRUDs
 -- page: our page object
@@ -257,7 +104,7 @@ local function autogen(page)
 
     local src = autogen.gen()
     src = lp.translate(src)
-    render_page('sailor/autogen',src,{page=page})
+    page:render('sailor/autogen',src,{page=page})
 end
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
@@ -345,6 +192,8 @@ function sailor.route(page)
 end
 
 -- creates a url string based on friendly url configuration
+-- DEPRECATED - it was moved to the page object
+--              it will no longer be here on sailor versions >= 0.6
 -- route: string, controller/action or controller
 -- params: table, get vars and values. example: {id = 3, color = "blue"}
 function sailor.make_url(route,params)

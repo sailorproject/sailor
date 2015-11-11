@@ -60,6 +60,7 @@ build = {
       ['sailor.form'] = "src/sailor/form.lua",
       ['sailor.model'] = "src/sailor/model.lua",
       ['sailor.session'] = "src/sailor/session.lua",
+      ['sailor.page'] = "src/sailor/page.lua",
       ['sailor.test'] = "src/sailor/test.lua",
       ['web_utils.lp'] = "src/web_utils/lp.lua",
       ['web_utils.lp_ex'] = "src/web_utils/lp_ex.lua",
