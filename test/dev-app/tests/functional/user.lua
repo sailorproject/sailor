@@ -1,9 +1,6 @@
-package.path =  ((debug.getinfo(1).source):match('^@?(.-)/index.lua$') or '')..'../../src/?.lua;'..package.path
-
-local sailor = require "sailor"
 local test = require "sailor.test"
 local access = require "sailor.access"
-local User = sailor.model('user')
+local User = require "sailor.model"('user')
 local fixtures = require "tests.fixtures.user" or {}
 
 describe("Testing #UserController", function()

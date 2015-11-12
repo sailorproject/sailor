@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.8: basic model creator, uses db module
+-- model.lua, v0.9: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -12,6 +12,22 @@ local db = require("sailor.db")
 local autogen = require ("sailor.autogen")
 local util = require "web_utils.utils"
 
+-- Creates a sailor model that can be instantiated in objects with :new()
+-- There must be a .lua file with the model's name under /model
+-- @param model_name: string, model's name.
+-- Usage: local MyModel = require "sailor.model"('my_model')
+local o = {__call = function(self,model_name)
+	    local obj = require("models."..model_name)
+	    obj["@name"] = model_name
+	    obj.errors = {}
+
+	    return self:new(obj)
+	end
+}
+setmetatable(model,o)
+
+-- Encapsulates db functions, does not call them if a transaction is going on
+-- Assures correct counting of db.close on auto integrity tests
 local function db_connect()
 	if db.transaction then return end
 	db.connect()

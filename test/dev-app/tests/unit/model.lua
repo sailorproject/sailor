@@ -1,4 +1,4 @@
-local sailor = require "sailor"
+local model = require "sailor.model"
 local helper = require "tests.helper"
 local access = require "sailor.access"
 local db = require "sailor.db"
@@ -7,7 +7,7 @@ local fixtures = require "tests.fixtures.user" or {}
 
 describe("Testing #UserModel", function()
   --helper.blah()
-  local User = sailor.model('user')
+  local User = model('user')
   local users = User:find_all()
   local u, count_before
   local db_spies = {}
@@ -147,7 +147,7 @@ describe("Testing #UserModel", function()
   end)
 
   it("should create objects but rollback", function()
-    local Post = sailor.model('post')
+    local Post = model('post')
     count_before = User:count()
     local count_post = Post:count()
     assert_db_close(2)
@@ -172,7 +172,7 @@ describe("Testing #UserModel", function()
   end)
 
   it("should create objects and commit", function()
-    local Post = sailor.model('post')
+    local Post = model('post')
     count_before = User:count()
     local count_post = Post:count()
     assert_db_close(2)

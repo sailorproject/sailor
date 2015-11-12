@@ -1,9 +1,10 @@
+local model = require "sailor.model"
 local form = require "sailor.form"('category')
 local test = require "sailor.test"
 local helper = require "tests.helper"
 
 describe("Testing #CategoryController", function()
-  local Category = sailor.model('category')
+  local Category = model('category')
   local fixtures = require "tests.fixtures.category"
 
   setup(function()

@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.14: core functionalities of the framework
+-- sailor.lua, v0.4.15: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4.14",
+    _VERSION = "Sailor 0.4.15",
 }
 
 -- Loads Lua@client's settings from Sailor conf.
@@ -191,9 +191,9 @@ function sailor.route(page)
     return 500
 end
 
--- creates a url string based on friendly url configuration
 -- DEPRECATED - it was moved to the page object
 --              it will no longer be here on sailor versions >= 0.6
+-- creates a url string based on friendly url configuration
 -- route: string, controller/action or controller
 -- params: table, get vars and values. example: {id = 3, color = "blue"}
 function sailor.make_url(route,params)
@@ -220,6 +220,7 @@ function sailor.make_url(route,params)
     return url
 end
 
+-- DEPRECATED, it will no longer be here on sailor versions >= 0.6
 -- Creates a sailor model and returns an instantiated object
 -- There must be a .lua file with the model's name under /model
 -- model_name: string, model's name.
@@ -230,6 +231,8 @@ function sailor.new(model_name)
     return sailor.model(model_name):new(obj)
 end
 
+-- DEPRECATED, moved to __call on model module
+--             it will no longer be here on sailor versions >= 0.6
 -- Creates a sailor model that can be instantiated in objects with :new()
 -- There must be a .lua file with the model's name under /model
 -- model_name: string, model's name.
