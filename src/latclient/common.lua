@@ -47,7 +47,7 @@ function M.js_string_escape(s)
 		end
 
 
-		return '`' .. s:gsub('[\\"/%z\1-\031\128-\255]', matches) .. ''
+		return '`' .. s:gsub('[\\"/%z\1-\031\128-\255]', matches) .. '`'
 
 end
 
