@@ -138,16 +138,16 @@ end
 function Page:redirect(route,args)
     args = args or {}
     if not route:match('^https?://') then
-        route = page:make_url(route,args)
+        route = self:make_url(route,args)
     end
 
-    if page.r.redirect then
-        page.r.redirect(route)
+    if self.r.redirect then
+        self.r.redirect(route)
 
     else
-        page.r.headers_out['Location'] = route
-        page.r.status = 302
-        return page.r.status
+        self.r.headers_out['Location'] = route
+        self.r.status = 302
+        return self.r.status
     end
 end
 
