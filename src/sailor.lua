@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.15: core functionalities of the framework
+-- sailor.lua, v0.4.16: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4.15",
+    _VERSION = "Sailor 0.4.16",
 }
 
 -- Loads Lua@client's settings from Sailor conf.
@@ -104,7 +104,7 @@ local function autogen(page)
 
     local src = autogen.gen()
     src = lp.translate(src)
-    page:render('sailor/autogen',src,{page=page})
+    page:render('sailor/autogen',{page=page},src)
 end
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
@@ -163,8 +163,8 @@ function sailor.route(page)
         end
 
         if conf.sailor.enable_autogen and controller == "autogen" then
-            local res = xpcall(function () autogen(page) end, error_handler)
-            return res or httpd.OK
+            local _,res = xpcall(function () autogen(page) end, error_handler)
+            return res or httpd.OK or page.r.status or 200
         end
 
         local ctr
