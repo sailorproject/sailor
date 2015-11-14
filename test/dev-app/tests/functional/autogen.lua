@@ -33,7 +33,6 @@ describe("Testing #Autogen", function()
   	local path = 'models/category.lua'
   	os.remove(path)
     local res = test.request('autogen',{post={table_name ='category'}})
-    print(res.body)
     assert.truthy(res.body:match('Model generated with success'))
     assert.truthy(lfs.attributes(path))
   end)

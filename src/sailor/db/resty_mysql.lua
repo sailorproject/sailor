@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- resty_mysql.lua, v0.3: DB module for connecting and querying through MySQL on openresty servers
+-- resty_mysql.lua, v0.3.1: DB module for connecting and querying through MySQL on openresty servers
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -172,10 +172,12 @@ function db.get_columns(table_name)
 
 	local query = "SELECT column_name, column_key FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"..table_name.."';"
 	local res = db.query(query)
-	for k,v in pairs(res.column_key) do
-		if v == 'PRI' then key = k end
+	local helper = require "tests.helper"
+	for _,v in ipairs(res) do
+		if v.column_key == 'PRI' then key = v.column_name end
+		columns[#columns+1] = v.column_name
 	end
-	columns = res.column_name
+	
 	
 	return columns, key
 end

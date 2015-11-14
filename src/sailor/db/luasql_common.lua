@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- luasql_common.lua, v0.5: DB module for connecting and querying through LuaSQL
+-- luasql_common.lua, v0.5.1: DB module for connecting and querying through LuaSQL
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -197,7 +197,7 @@ function db.table_exists(table_name)
 	table_name = db.escape(table_name)
 	local query
  	if conf.driver == 'postgres' then 
- 		query = "SELECT to_regclass('public."..table_name.."');" 	
+ 		query = "SELECT relname FROM pg_class WHERE relname = '"..table_name.."';" 	
 	elseif conf.driver == 'sqlite3' then
     	query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"..table_name.."';"
  	else
