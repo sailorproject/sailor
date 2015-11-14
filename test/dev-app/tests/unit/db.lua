@@ -70,11 +70,17 @@ describe("Testing db module", function()
 		db.connect()
 		local columns,key = db.get_columns("category")
 		db.close()
-		print(helper.tostring(columns))
-		
-		print(helper.tostring(key))
+
+		local col_id,col_name = false
+
+		for _,v in ipairs(columns) do
+			if v == 'id' then col_id = true end
+			if v == 'name' then col_name = true end
+		end
+
 		assert.same(2,#columns)
-		assert.same('name',columns[2])
+		assert.is_true(col_id)
+		assert.is_true(col_name)
 		assert.same('id',key)
 	end)
 
