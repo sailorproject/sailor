@@ -1,11 +1,19 @@
 local test = require "sailor.test"
 local lfs = require "lfs"
 local conf = require "conf.conf"
+local model = require "sailor.model"
+
+
+local db = require "sailor.db"
+local helper = require "tests.helper"
+
+
 
 describe("Testing #Autogen", function()
 
   it("should not open autogen page", function()
-  	conf.sailor.enable_autogen = false
+    
+ 	  conf.sailor.enable_autogen = false
     local res = test.request('autogen')
     assert.truthy(res.body:match('Error'))
   end)

@@ -1,3 +1,4 @@
+--[-[
 local model = require "sailor.model"
 local form = require "sailor.form"('category')
 local test = require "sailor.test"
@@ -87,3 +88,4 @@ describe("Testing #CategoryController", function()
   end)
 
 end)
+--]]

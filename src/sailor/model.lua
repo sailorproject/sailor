@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.9: basic model creator, uses db module
+-- model.lua, v0.9.1: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -373,17 +373,13 @@ end
 -- table_name, the name of the table
 function model.generate_model(table_name)
 	db_connect()
-	local check_query = [[SHOW TABLES LIKE ']]..table_name..[[';]]
-	local res = db.query(check_query)
 
-	if not res or not next(res) then
+	if not db.table_exists(table_name)  then
 		db:close()
 		error("The table '"..table_name.."' does not exist.")
 		return false
    	else
-		local query = [[SELECT *
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE table_name = ']]..table_name..[[';]]
+
 
 		local code = [[-- Uncomment this to use validation rules
 -- local val = require "valua"
@@ -396,15 +392,13 @@ M.attributes = {
 ]]
 
 
-		local key
-		res = db.query(query)
+		local collumns,key = db.get_columns(table_name)
+		db_close()
 		
-		for _,row in ipairs(res) do
-			if row.COLUMN_KEY == "PRI" then
-				key = row.COLUMN_NAME
-			end
+		for k,col in ipairs(collumns) do
+			
 			code = code..[[
-	{ ]]..row.COLUMN_NAME..[[ = "safe" },
+	{ ]]..col..[[ = "safe" },
 ]]
 		end
 		code = code..[[
@@ -420,7 +414,7 @@ M.relations = {}
 return M
 
 ]]
-		db_close()
+		
 		local file = io.open("models/"..table_name..".lua", "w")
 		if file:write(code) then
 			file:close()

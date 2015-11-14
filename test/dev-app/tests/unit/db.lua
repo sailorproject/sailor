@@ -1,4 +1,5 @@
 local db = require "sailor.db"
+local helper = require "tests.helper"
 
 describe("Testing db module", function()
 
@@ -54,6 +55,32 @@ describe("Testing db module", function()
 		db.close()
 		count = count -1
 		assert.is_equal(count,tonumber(res2))
+	end)
+
+	it("should see if a table exists",function()
+		db.connect()
+		local res = db.table_exists("category")
+		local res2 = db.table_exists("asdasda")
+		db.close()
+		assert.is_true(res)
+		assert.is_false(res2)
+	end)
+
+	it("should get columns and key of a table",function()
+		db.connect()
+		local columns,key = db.get_columns("category")
+		db.close()
+		assert.same(2,#columns)
+		assert.same('name',columns[2])
+		assert.same('id',key)
+	end)
+
+	it("should not get columns ",function()
+		db.connect()
+		local columns,key = db.get_columns("asdas")
+		db.close()
+		assert.same(0,#columns)
+		assert.same(nil,key)
 	end)
 
 end)

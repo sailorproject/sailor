@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- rest_mysql.lua, v0.2: DB module for connecting and querying through MySQL on openresty servers
+-- resty_mysql.lua, v0.3: DB module for connecting and querying through MySQL on openresty servers
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -150,5 +150,34 @@ function db.query_insert(query)
 	return res.insert_id
 end
 
+-- Checks if a table exists
+function db.table_exists(table_name)
+	local query = "SHOW TABLES LIKE '"..db.escape(table_name).."';"
+	local res = db.query_one(query)
+	return res == table_name
+end
+
+-- Gets columns
+-- @param table_name string: the name of the table
+-- @return table{strings}, string (primary key column name)
+function db.get_columns(table_name)
+	local columns = {}
+	local key
+
+	if not db.table_exists(table_name) then 
+		return columns, key 
+	end
+
+	table_name = db.escape(table_name)
+
+	local query = "SELECT column_name, column_key FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"..table_name.."';"
+	local res = db.query(query)
+	for k,v in pairs(res.column_key) do
+		if v == 'PRI' then key = k end
+	end
+	columns = res.column_name
+	
+	return columns, key
+end
 return db
 

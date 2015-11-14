@@ -13,6 +13,7 @@ function M.tmpname ()
     return tempname
 end
 
+-- deep copies a table
 function M.deepcopy(orig)
     local orig_type = type(orig)
     local copy
@@ -26,6 +27,14 @@ function M.deepcopy(orig)
         copy = orig
     end
     return copy
+end
+
+-- performs string split
+function M.split(str,sep)
+    local sep, fields = sep or ":", {}
+    local pattern = string.format("([^%s]+)", sep)
+    str:gsub(pattern, function(c) fields[#fields+1] = c end)
+    return fields
 end
 
 return M

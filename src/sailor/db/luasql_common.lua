@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- luasql_common.lua, v0.4: DB module for connecting and querying through LuaSQL
+-- luasql_common.lua, v0.5: DB module for connecting and querying through LuaSQL
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -10,6 +10,7 @@ local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local luasql = require("luasql."..conf.driver)
 local db = { transaction = false}
+local utils = require "web_utils.utils"
 
 -- Reads the cursor information after reading from db and returns a table
 local function fetch_row(cur, res)
@@ -187,6 +188,88 @@ function db.rollback()
 	db.query("ROLLBACK;")
 	db.transaction = false
 	db.close()
+end
+
+-- Checks if a table exists
+-- @param table_name string: the name of the table
+-- @return boolean
+function db.table_exists(table_name)
+	table_name = db.escape(table_name)
+	local query
+ 	if conf.driver == 'postgres' then 
+ 		query = "SELECT to_regclass('public."..table_name.."');" 	
+	elseif conf.driver == 'sqlite3' then
+    	query = "SELECT name FROM sqlite_master WHERE type='table' AND name='"..table_name.."';"
+ 	else
+    	query = "SHOW TABLES LIKE '"..table_name.."';"
+	end
+	local res = db.query_one(query)
+	return res == table_name
+end
+
+-- Gets columns
+-- @param table_name string: the name of the table
+-- @return table{strings}, string (primary key column name)
+local function get_columns_pg(table_name)
+	local columns = {}
+	local key
+	local query_col = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"..table_name.."';"
+	local query_key = "SELECT column_name FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE table_name = '"..table_name.."';"
+
+	for _,v in ipairs(db.query(query_col)) do
+		columns[#columns+1] = v.column_name
+	end
+	key = db.query_one(query_key)
+	return columns,key
+end
+
+
+local function get_columns_sqlite3(table_name)
+	local columns = {}
+	local key
+	local query = [[SELECT sql FROM sqlite_master WHERE type='table' AND name = ']]..table_name..[[';]]
+	local res = db.query_one(query)
+	local res = res:match("%((.*)%)")
+	local s = utils.split(res,',')
+	for _,s2 in pairs(s) do
+		local words = utils.split(s2,' ')
+		columns[#columns+1] = (words[1]:gsub("^%s*(.-)%s*$", "%1")) --trim
+		for i,w in ipairs(words) do
+			if w == 'primary' and words[i+1] == 'key' then
+				key = (words[1]:gsub("^%s*(.-)%s*$", "%1")) --trim
+			end
+		end
+	end
+	return columns,key
+end
+
+function db.get_columns(table_name)
+	local columns = {}
+	local key
+
+	if not db.table_exists(table_name) then 
+		return columns, key 
+	end
+	table_name = db.escape(table_name)
+
+ 	if conf.driver == 'postgres' then 
+ 		return get_columns_pg(table_name)
+
+	elseif conf.driver == 'sqlite3' then
+		return get_columns_sqlite3(table_name)
+ 	end
+
+	local query = "SELECT column_name, column_key FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '"..table_name.."';"
+	
+	local res = db.query(query)
+	
+	for _,v in ipairs(res) do
+		if v.column_key == 'PRI' then key = v.column_name end
+		columns[#columns+1] = v.column_name
+	end
+	
+	
+	return columns, key
 end
 
 return db
