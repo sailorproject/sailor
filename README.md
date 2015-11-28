@@ -1,8 +1,10 @@
 #Sailor
+
 A Lua MVC Framework. www.sailorproject.org
 
 [![Build Status](https://travis-ci.org/Etiene/sailor.svg?branch=master)](https://travis-ci.org/Etiene/sailor)
 [![Issue Stats](http://issuestats.com/github/Etiene/sailor/badge/pr)](http://issuestats.com/github/Etiene/sailor)
+[![Join the chat at https://gitter.im/Etiene/sailor](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Etiene/sailor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Features
