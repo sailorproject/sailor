@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- autogen.lua, v0.2: has codes in strings for autogenerating CRUDS based on sailor models
+-- autogen.lua, v0.3: has codes in strings for autogenerating CRUDS based on sailor models
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -60,12 +60,12 @@ function M.generate_controller(model)
 local M = {}
 
 function M.index(page)
-	local ]]..model["@name"]..[[s = sailor.model("]]..model["@name"]..[["):find_all()
+	local ]]..model["@name"]..[[s = require "sailor.model"("]]..model["@name"]..[["):find_all()
 	page:render('index',{]]..model["@name"]..[[s = ]]..model["@name"]..[[s})
 end
 
 function M.create(page)
-	local ]]..model["@name"]..[[ = sailor.model("]]..model["@name"]..[["):new()
+	local ]]..model["@name"]..[[ = require "sailor.model"("]]..model["@name"]..[["):new()
 	local saved
 	if next(page.POST) then
 		]]..model["@name"]..[[:get_post(page.POST)
@@ -78,7 +78,7 @@ function M.create(page)
 end
 
 function M.update(page)
-	local ]]..model["@name"]..[[ = sailor.model("]]..model["@name"]..[["):find_by_id(page.GET.id)
+	local ]]..model["@name"]..[[ = require "sailor.model"("]]..model["@name"]..[["):find_by_id(page.GET.id)
 	if not ]]..model["@name"]..[[ then
 		return 404
 	end
@@ -94,7 +94,7 @@ function M.update(page)
 end
 
 function M.view(page)
-	local ]]..model["@name"]..[[ = sailor.model("]]..model["@name"]..[["):find_by_id(page.GET.id)
+	local ]]..model["@name"]..[[ = require "sailor.model"("]]..model["@name"]..[["):find_by_id(page.GET.id)
 	if not ]]..model["@name"]..[[ then
 		return 404
 	end
@@ -102,7 +102,7 @@ function M.view(page)
 end
 
 function M.delete(page)
-	local ]]..model["@name"]..[[ = sailor.model("]]..model["@name"]..[["):find_by_id(page.GET.id)
+	local ]]..model["@name"]..[[ = require "sailor.model"("]]..model["@name"]..[["):find_by_id(page.GET.id)
 	if not ]]..model["@name"]..[[ then
 		return 404
 	end
