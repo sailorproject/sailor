@@ -2,6 +2,7 @@
 A Lua MVC Framework. www.sailorproject.org
 
 [![Build Status](https://travis-ci.org/Etiene/sailor.svg?branch=master)](https://travis-ci.org/Etiene/sailor)
+[![Issue Stats](http://issuestats.com/github/Etiene/sailor/badge/pr)](http://issuestats.com/github/Etiene/sailor)
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Features
@@ -14,6 +15,7 @@ A Lua MVC Framework. www.sailorproject.org
   * Routing
   * Basic Object-relational mapping
   * Validation
+  * Transactions
   * App comes already shipped with Bootstrap
   * Include, redirect
   * Sessions, cookies
@@ -33,13 +35,14 @@ A Lua MVC Framework. www.sailorproject.org
 
 ### Roadmap
 * Integration with mod_lua's DB API and DB module refactor
-* Improvements with the ORM
-* Improvements on the openresty compatibility
+* Improvements to the form and validation module
 
 More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
 
 ### Directory tree info
 * /docs - this one is supposed to have documentation
+* /lua-to-js-vms - different Lua->Javascript virtual machines for use of Lua on the browser with Sailor
+* /rockspecs - Rockspec files for LuaRocks install
 * /src - Lua modules with nice stuff from sailor and other places.
  * /sailor - Sailor modules
  * /sailor/blank-app - blank Sailor web app, can be copy-pasted as base for your own apps
@@ -72,9 +75,10 @@ A default Sailor app will have the following directory tree structure:
 Go to /controllers and create your first controller! It should be a lua module. Name it whatever you want, our example is "site.lua". We will serve two pages, one accessible via <domain>/?r=site which will run site.index() by default and another one acessible via <domain>/?r=site/notindex.
 ```lua
 local site = {}
+local model = require "sailor.model"
 function site.index(page)
   local foo = 'Hello world'
-  local User = sailor.model("user")
+  local User = model("user")
   local u = User:new()
   u.username = "etiene"
   u.password = "a_password"
