@@ -132,7 +132,7 @@ Offers to translate the guides to your language are also welcome. In this case, 
 
 ## Commit message
 
-Some of these [conventions](http://blog.thoughtram.io/announcements/tools/2014/09/18/announcing-clog-a-conventional-changelog-generator-for-the-rest-of-us.html) were invented by Google folks for Angular JS and using clog. We are not
+Some of these [conventions](http://blog.thoughtram.io/announcements/tools/2014/09/18/announcing-clog-a-conventional-changelog-generator-for-the-rest-of-us.html) were invented by Google folks for Angular JS and using clog. We are not using clog yet but we might.
 
  * The first line should ideally have less than 50 character 
  * It must indicate at the beginning what type of modification your commit poses and the scope 
