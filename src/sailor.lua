@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.4.16: core functionalities of the framework
+-- sailor.lua, v0.5.0: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.4.16",
+    _VERSION = "Sailor 0.5.0",
 }
 
 -- Loads Lua@client's settings from Sailor conf.
@@ -90,6 +90,14 @@ function sailor.init(r)
         POSTMULTI = POSTMULTI,
         base_path = sailor.base_path
     }
+
+    if conf.extensions and conf.extensions.enable then
+        for _,e in pairs(conf.extensions.enable) do
+            package.path = 'extensions/' .. e .. '/?.lua;' .. package.path
+            local c = require "controllers.user"
+        end
+    end
+
     sailor.r = r
     lp.setoutfunc("page:print")
 
@@ -134,6 +142,10 @@ function sailor.route(page)
     -- Encapsulated error function for showing detailed traceback
     -- Needs improvement
     local function error_handler(msg)
+        if sailor.conf.hide_stack_trace then
+            page:write("<pre>Error 500: Internal Server Error</pre>")
+            return 500
+        end
         page:write("<pre>"..traceback(msg,2).."</pre>")
     end
     -- Error for controller or action not found
