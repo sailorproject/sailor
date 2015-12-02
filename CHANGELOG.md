@@ -48,3 +48,10 @@
 * **tests**
   * Adds openresty simulation on automated tests ([a5f4cd06](https://github.com/Etiene/sailor/commit/a5f4cd06))
 * **db** Adds support to openresty internal MySQL API. ([7e0bd062](https://github.com/Etiene/sailor/commit/7e0bd062))
+
+### Breaking changes
+  * `sailor` is no longer on global namespace, if you are accessing sailor attributes now you need to require
+  
+### Deprecations
+  * sailor.make_url has been copied to page:make_url and will be removed on next versions
+  * sailor.model has been copied to a call metamethod on the model module and will be removed on next version
