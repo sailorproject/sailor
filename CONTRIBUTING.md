@@ -90,7 +90,7 @@ These are general conventions to try to follow for consistency and not strict ru
   * File names and variable names, including functions, use snake_case
   * A variable for a model class can use PascalCase
   * Avoid 1 letter variable names when deemed apropriate
-  * Add spaces between operators, after commands and inside curly braces
+  * Add spaces between operators, after commas and inside curly braces
   * Identation normally uses 4 spaces
   * Use the constructor syntax for tables when possible. 
   * When tables have functions use `self` to refer to itself 
@@ -125,14 +125,14 @@ Do not forget to highlight anything that is a breaking change to apps developed 
 
 If you added any new features or modified something that changes how to use Sailor, update the Reference manual and corresponding tutorials found on [docs](https://github.com/Etiene/sailor/tree/master/docs). 
 
-You may also contribute with additional documentation or modifying the current docs to be easier to understand, correcting errors, typos, or updating them in case they are out of sync with the current Sailor. 
+Even if you did not contribute with modifications to Sailor's code, you may also contribute with additional documentation or modifying the current docs to be easier to understand, correcting errors, typos, or updating them in case they are out of sync with the current Sailor. 
 
 ### Translating
 Offers to translate the guides to your language are also welcome. In this case, add a new folder for it inside `docs`, for example, `docs/pt_br`. 
 
 ## Commit message
 
-Some of these [conventions](http://blog.thoughtram.io/announcements/tools/2014/09/18/announcing-clog-a-conventional-changelog-generator-for-the-rest-of-us.html) were invented by Google folks for Angular JS and using clog. We are not using clog yet but we might.
+These are only recommendations for a better commit message. Some of these [conventions](http://blog.thoughtram.io/announcements/tools/2014/09/18/announcing-clog-a-conventional-changelog-generator-for-the-rest-of-us.html) were invented by Google folks for Angular JS and using clog. We are not using clog yet but we might. 
 
  * The first line should ideally have less than 50 character 
  * It must indicate at the beginning what type of modification your commit poses and the scope 
