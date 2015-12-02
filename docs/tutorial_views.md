@@ -69,7 +69,7 @@ Here are some examples of Lua code that will run on the browser using the `starl
         print('This is being printed from a Lua function being called in JS')
     end
     
-    window:myJSFunctionReceivesCallback(callback)
+    window:myJSFunctionReceivesCallback(lua_callback)
     
     ?>
 
