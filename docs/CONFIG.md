@@ -24,6 +24,8 @@ You will find Sailor's config file under `conf/conf.lua`. This file contains a t
 
 `environment` is a string with the name of your current environment. Example: 'test'
 
+`hide_stack_trace` is a boolean that if set to true will make Sailor not throw the full stack trace on errors but a default 500 Internal Server Error message
+
 `db` contains a table with your different database setups. They must contain the following fields:
 
     `driver` is your database driver, example: 'mysql'.

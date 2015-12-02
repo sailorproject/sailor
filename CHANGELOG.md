@@ -19,6 +19,7 @@
 	  * Make Lighttpd support work again ([e9190523](https://github.com/Etiene/sailor/commit/e9190523))
 	  * Fixes openresty environment issue ([42545098](https://github.com/Etiene/sailor/commit/42545098))
 * **core**
+  * Allow hiding stack trace ([b75c9181](https://github.com/Etiene/sailor/commit/b75c9181))
   *  Path fixes on set_application_path and make_url. ([7d4528d5](https://github.com/Etiene/sailor/commit/7d4528d5))
   *  Fixing set application path ([9d9a1ab6](https://github.com/Etiene/sailor/commit/9d9a1ab6))
   * Fixing route paths and status code for Xavante and Apache ([e2369138](https://github.com/Etiene/sailor/commit/e2369138))
