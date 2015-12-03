@@ -84,7 +84,7 @@ end
 -- @return string or nil: if q is a string, returns the new escaped string. If q is a table
 --							it simply returns, since it already escaped the table's values
 
-function escape_string(s)
+local function escape_string(s)
 	-- Based on luajson code
 	-- https://github.com/harningt/luajson/blob/master/lua/json/encode/strings.lua
 	local matches = {

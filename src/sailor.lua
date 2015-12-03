@@ -180,7 +180,7 @@ function sailor.route(page)
         end
 
         local ctr
-        _, res = xpcall(function() ctr = require("controllers."..controller) end, error_404)
+        local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_404)
         
         if ctr then
             local custom_path = ctr.path or (ctr.conf and ctr.conf.path)
@@ -193,7 +193,7 @@ function sailor.route(page)
             if not ctr[action] then return error_404() end
 
             -- run action
-            local _, res = xpcall(function() return ctr[action](page) end, error_handler)
+            _, res = xpcall(function() return ctr[action](page) end, error_handler)
             if res == 404 then return error_404() end
         end
 
