@@ -28,7 +28,7 @@ end
 -- Loads tests fixtures into the database
 -- Warning, this will truncate the table, make sure you have configured a test database
 -- Returns table with objects created
-function load_fixtures(model_name)
+local function load_fixtures(model_name)
 	local Model = sailor.model(model_name)
 	local fixtures = require("tests.fixtures."..model_name) or {}
 	local objects = {}
