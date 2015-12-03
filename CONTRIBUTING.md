@@ -44,7 +44,7 @@ sudo apt-get install lua5.1 luarocks sqlite3
 ```
 git clone http://github.com/your_username/sailor
 ```
- * Setup the current rockspec, it will install almost all the necessary dependancies
+ * Setup the current rockspec, it will install almost all the necessary dependencies
 ```
 luarocks install rockspecs/sailor-current-1.rockspec
 ```
@@ -65,7 +65,7 @@ sqlite3 test/db/sailor_test < test/dev-app/sql/sqlite3.sql
 ```lua
 db = {
 	test = {
-		driver = sqlite3',
+		driver = 'sqlite3',
 		host = 'localhost',
 		user = nil,
 		pass = nil,
@@ -89,15 +89,15 @@ These are general conventions to try to follow for consistency and not strict ru
   * It's okay to cache global standard functions into local functions for performance but pay attention to naming
   * File names and variable names, including functions, use snake_case
   * A variable for a model class can use PascalCase
-  * Avoid 1 letter variable names when deemed apropriate
+  * Avoid 1 letter variable names when deemed appropriate
   * Add spaces between operators, after commas and inside curly braces
-  * Identation normally uses 4 spaces
+  * Indentation normally uses 4 spaces
   * Use the constructor syntax for tables when possible. 
   * When tables have functions use `self` to refer to itself 
   * Use the dot operator to access known fields of tables when possible
   * Assign variables on the top of the scope whenever possible
   * Return from functions as early as possible
-  * Try to take advantage of tail calls when deemed apropriate
+  * Try to take advantage of tail calls when deemed appropriate
   * Do not use semicolons
   * Remember Lua table index starts at 1 and do not use the table length operator (#) if your table has 'holes' in it
 
@@ -160,7 +160,7 @@ docs(guide): Add tutorial for lua at client
 <OBLIGATORY BLANK LINE>
 A more detailed description goes here if necessary. Try to 
 explain the problem that was fixed or the motivation for the change.
-It is interesting to explain why this commmit is being done, not how.
+It is interesting to explain why this commit is being done, not how.
 <optional blank lines between paragraphs are ok>
 You can add code examples indented with 4 spaces or bullet points 
 using hyphens or asterisks.
