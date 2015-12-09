@@ -68,7 +68,7 @@
     <div id="footer">
       <div class="container">
       	<!-- Yes, you are allowed to remove this -->
-        <p class="text-muted">© 2014 Etiene Dalcol. Powered by <a href="http://sailorproject.org" target="_blank">Sailor MVC</a>
+        <p class="text-muted">© <%= os.date('%Y') %> Etiene Dalcol. Powered by <a href="http://sailorproject.org" target="_blank">Sailor MVC</a>
         and <a href="http://lua.org" target="_blank">Lua</a>
         </p>
       </div>

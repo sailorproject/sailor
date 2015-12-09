@@ -39,7 +39,7 @@ A Lua MVC Framework. www.sailorproject.org
 * Integration with mod_lua's DB API and DB module refactor
 * Improvements to the form and validation module
 
-More about this project's motivation can be found here: http://etiene.net/sailor-building-a-lua-based-mvc-framework/
+More about the motivation to build this project can be found here: http://etiene.net/10/sailor
 
 ### Directory tree info
 * /docs - this one is supposed to have documentation

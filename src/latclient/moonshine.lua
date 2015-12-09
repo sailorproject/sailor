@@ -8,6 +8,7 @@ local M = {
 }
 
 local common = require "latclient.common"
+local loadstring = loadstring or load
 
 function M.get_header(s)
 	if M.js_served == false then
