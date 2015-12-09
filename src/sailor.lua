@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.5.0: core functionalities of the framework
+-- sailor.lua, v0.5.1: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,7 +13,7 @@ local sailor = {
     conf = conf.sailor,
     _COPYRIGHT = "Copyright (C) 2014-2015 Etiene Dalcol",
     _DESCRIPTION = "Sailor is a framework for creating MVC web applications.",
-    _VERSION = "Sailor 0.5.0",
+    _VERSION = "Sailor 0.5.1",
 }
 
 -- Loads Lua@client's settings from Sailor conf.
@@ -134,30 +134,34 @@ end
 -- Reads route GET var to decide which controller/action or default page to run.
 -- page: Page object with utilitary functions and request
 function sailor.route(page)
+    local error_404, error_handler
 
     apache_friendly_url(page)
 
     local route_name = page.GET[conf.sailor.route_parameter]
 
+    -- Error for controller or action not found
+    error_404 = function()
+        local _, res
+        if sailor.conf.default_error404 and sailor.conf.default_error404 ~= '' then
+            page.controller_view_path = nil
+            _, res = xpcall(function () page:render(sailor.conf.default_error404) end, error_handler)
+            return res or httpd.OK or page.r.status or 200
+        end
+        page.r.status = 404
+        return res or page.r.status
+    end
     -- Encapsulated error function for showing detailed traceback
     -- Needs improvement
-    local function error_handler(msg)
+    error_handler = function (msg)
+        if msg:match('not found:') then
+            return error_404()
+        end
         if sailor.conf.hide_stack_trace then
             page:write("<pre>Error 500: Internal Server Error</pre>")
             return 500
         end
         page:write("<pre>"..traceback(msg,2).."</pre>")
-    end
-    -- Error for controller or action not found
-    local function error_404()
-        local _, res
-        if conf.sailor.default_error404 and conf.sailor.default_error404 ~= '' then
-            page.controller_view_path = nil
-            _, res = xpcall(function () page:render(conf.sailor.default_error404) end, error_handler)
-            return res or httpd.OK or page.r.status or 200
-        end
-        page.r.status = 404
-        return res or page.r.status
     end
 
     -- If a default static page is configured, run it and prevent routing
@@ -180,8 +184,7 @@ function sailor.route(page)
         end
 
         local ctr
-        _, res = xpcall(function() ctr = require("controllers."..controller) end, error_404)
-        
+        _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
         if ctr then
             local custom_path = ctr.path or (ctr.conf and ctr.conf.path)
             page.controller_view_path = (custom_path and custom_path..'/views/'..controller) or 'views/'..controller
