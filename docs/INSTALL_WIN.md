@@ -30,7 +30,7 @@ Windows XP - <http://www.apachelounge.com/download/win32/>
 
 Unzip the package (eg: httpd-2.4.9-win32.zip) to C:\Apache24\
 
-Copy the files in the `src/sailor/demo-app` directory of this repository to C:/Apache24/htdocs/sailor/
+Copy the files in the `src/sailor/blank-app` directory of this repository to C:/Apache24/htdocs/sailor/
 
 ####Configuring mod_lua
 
@@ -93,7 +93,7 @@ Unzip the nginx ZIP to a directory of your choice.
 
 Copy the `lua5.1.dll` and `lua51.dll` files from C:/Program Files/Lua/5.1/ to the root of the nginx directory, replacing lua51.dll from the original package.
 
-Copy the files in the `src/sailor/demo-app` directory of this repository to the html/sailor directory of the nginx dir.
+Copy the files in the `src/sailor/blank-app` directory of this repository to the html/sailor directory of the nginx dir.
 
 ####Configuring Nginx
 
