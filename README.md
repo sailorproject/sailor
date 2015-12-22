@@ -8,6 +8,7 @@ A Lua MVC Framework. www.sailorproject.org
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Features
+  * Compatible with Lua 5.1, Lua 5.2 and LuaJIT
   * Luarocks setup
   * Runs over Apache2 (with mod_lua), NginX (openresty), Mongoose, Lighttpd, Xavante and Lwan web servers
   * Using Windows, Mac or Linux systems
