@@ -5,6 +5,7 @@ A Lua MVC Framework. www.sailorproject.org
 [![Build Status](https://travis-ci.org/Etiene/sailor.svg?branch=master)](https://travis-ci.org/Etiene/sailor)
 [![Issue Stats](http://issuestats.com/github/Etiene/sailor/badge/pr)](http://issuestats.com/github/Etiene/sailor)
 [![Join the chat at https://gitter.im/Etiene/sailor](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Etiene/sailor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE)
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 ### Features
@@ -144,3 +145,5 @@ https://twitter.com/etiene_d
 
 
 ##### If you are having trouble to get Sailor working or if you got it working using different specs, please make contact so we can exchange info and I can improve the manual. Thanks!
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Etiene/sailor/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
