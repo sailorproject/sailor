@@ -95,7 +95,7 @@ describe("Testing #UserModel", function()
 
   it("should find object by attributes", function()
     local u = User:find_by_attributes({username = users[1].username})
-    assert.are_same(u.id,users[1].id)
+    assert.are_same(users[1].id,u.id)
     assert_db_close()
   end)
 
@@ -104,6 +104,23 @@ describe("Testing #UserModel", function()
     assert.is_false(u)
     assert_db_close()
   end)
+
+  it("should find all objects by attributes", function()
+    local us = User:find_all_by_attributes({password = users[3].password})
+    assert.is_equal(2,#us)
+    for _,u in ipairs(us) do
+      assert.are_same(users[3].password,u.password)
+    end
+    assert_db_close()
+  end)
+
+
+  it("should not find objects by attributes", function()
+    local u = User:find_all_by_attributes({username = ''})
+    assert.is_false(u)
+    assert_db_close()
+  end)
+
 
   it("should validate object", function()
     assert.is_true(users[1]:validate())
@@ -119,7 +136,7 @@ describe("Testing #UserModel", function()
   end)
 
   it("should find some objects", function()
-    assert.is_equal(2,#(User:find_all("password LIKE '12345%'")))
+    assert.is_equal(3,#(User:find_all("password LIKE '12345%'")))
     assert_db_close()
   end)
 

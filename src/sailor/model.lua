@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.9.1: basic model creator, uses db module
+-- model.lua, v0.10: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
-
+local h = require "tests.helper"
 local sailor = require "sailor"
 local model = {}
 local db = require("sailor.db")
@@ -234,12 +234,8 @@ function model:find_by_id(id)
 	return false
 end
 
--- (escaped) Finds objects with the given attributes
--- attributes: table, Example {name='joao',age = 26}
--- Might need a refactor to include other comparisons such as LIKE, > etc.
-function model:find_by_attributes(attributes)
-	db_connect()
-
+-- build 'where' part of query based on attribute table
+local function build_attributes_query(attributes)
 	local n = 0
     local where = ' where '
     for k,v in pairs(attributes) do
@@ -251,10 +247,38 @@ function model:find_by_attributes(attributes)
         n = n+1
     end
 
-    local res = db.query("select * from "..self.db.table..where..";")
+    return where
+end
+
+-- (escaped) Finds one object with the given attributes
+-- attributes: table, Example {name='joao',age = 26}
+-- Might need a refactor to include other comparisons such as LIKE, > etc.
+function model:find_by_attributes(attributes)
+	db_connect()
+	local where = build_attributes_query(attributes)
+    local res = db.query("select * from "..self.db.table..where.." limit 1;")
 	db_close()
 
 	if res and next(res) then return sailor.model(self["@name"]):new(res[1]) end
+	return false
+end
+
+-- (escaped) Finds all objects with the given attributes
+-- attributes: table, Example {name='joao',age = 26}
+-- Might need a refactor to include other comparisons such as LIKE, > etc.
+function model:find_all_by_attributes(attributes)
+	db_connect()
+	local where = build_attributes_query(attributes)
+    local res = db.query("select * from "..self.db.table..where..";")
+	db_close()
+
+	if res and next(res) then
+		local objects = {}
+		for _,r in pairs(res) do
+			objects[#objects+1] = sailor.model(self["@name"]):new(r)
+		end
+		return objects 
+	end
 	return false
 end
 
