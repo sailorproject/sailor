@@ -7,6 +7,11 @@ A Lua MVC Framework. www.sailorproject.org
 [![Join the chat at https://gitter.im/Etiene/sailor](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Etiene/sailor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE)
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
+[![Bountysource](https://img.shields.io/bountysource/team/sailor/activity.svg)](https://www.bountysource.com/teams/sailor)
+
+[![LuaRocks](https://img.shields.io/badge/LuaRocks-0.5.0-blue.svg)](https://luarocks.org/modules/etiene/sailor)
+[![Lua](https://img.shields.io/badge/Lua-5.1%2C%20JIT%2C%205.2-blue.svg)](https://img.shields.io/badge/Lua-5.1%2C%20JIT%2C%205.2-blue.svg)
+[![Twitter Follow](https://img.shields.io/twitter/follow/sailor_lua.svg?style=social)](https://twitter.com/sailor_lua)
 
 ### Features
   * Compatible with Lua 5.1, Lua 5.2 and LuaJIT
