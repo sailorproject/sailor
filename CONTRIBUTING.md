@@ -18,13 +18,13 @@
 
 ## Code of conduct
 We are committed to making participation in this project a harassment-free
-experience for everyone. Please read and follow our [Code of conduct](https://github.com/Etiene/sailor/blob/master/CODE_OF_CONDUCT.md).
+experience for everyone. Please read and follow our [Code of conduct](https://github.com/sailorproject/sailor/blob/master/CODE_OF_CONDUCT.md).
 
 ## Questions
 If you have questions about how to use Sailor, please direct them to our [Google group](https://groups.google.com/forum/#!forum/sailor-l).
 
 ## Issue found
-If you found a problem or a bug at Sailor that does not pose a security risk, please report on the [Github issue tracker of Sailor's repository](https://github.com/Etiene/sailor/issues). Before creating a new issue, search if someone hasn't reported it already. If it's not listed, then you can create a new issue. Please be very descriptive and offer means for us to reproduce the error. If the problem you found can cause a security risk to current users of Sailor, please email it to dalcol@etiene.net
+If you found a problem or a bug at Sailor that does not pose a security risk, please report on the [Github issue tracker of Sailor's repository](https://github.com/sailorproject/sailor/issues). Before creating a new issue, search if someone hasn't reported it already. If it's not listed, then you can create a new issue. Please be very descriptive and offer means for us to reproduce the error. If the problem you found can cause a security risk to current users of Sailor, please email it to dalcol@etiene.net
 
 ## Verifying issues
 One important way you can help is by verifying and confirming bug reports. You can make comments to make the description more extensive, clearer or more reproducible and add test cases that are failing. 
@@ -40,7 +40,7 @@ Example code given for Ubuntu users, if you are not under Ubuntu, follow these s
 ```
 sudo apt-get install lua5.1 luarocks sqlite3
 ```
- * Fork [Sailor's repository](http://github.com/Etiene/sailor) by clicking on Fork then clone it:
+ * Fork [Sailor's repository](http://github.com/sailorproject/sailor) by clicking on Fork then clone it:
 ```
 git clone http://github.com/your_username/sailor
 ```
@@ -109,10 +109,10 @@ If you made any modifications to Sailor, it is ideal that you add a test a case 
 
 Even if you did not make a new modification you can also contribute with additional test cases for parts of Sailor that you feel could be better tested. 
 
-Please read the [testing tutorial](https://github.com/Etiene/sailor/blob/master/docs/tutorial_testing.md) for designing new tests. Ideally each Sailor module should have its own file inside `test/dev-app/tests/unit`, named in the same way as the module being tested. If your test case tests a combination of uses of modules please refer to `test/dev-app/tests/functional`. You might have to create a new file or add test cases to current files. 
+Please read the [testing tutorial](https://github.com/sailorproject/sailor/blob/master/docs/tutorial_testing.md) for designing new tests. Ideally each Sailor module should have its own file inside `test/dev-app/tests/unit`, named in the same way as the module being tested. If your test case tests a combination of uses of modules please refer to `test/dev-app/tests/functional`. You might have to create a new file or add test cases to current files. 
 
 ## Documentation
-Don't forget to document your code and to update the [CHANGELOG](https://github.com/Etiene/sailor/blob/master/CODE_OF_CONDUCT.md) adding a new entry on the top if applicable. Modifications that require updating the changelog:
+Don't forget to document your code and to update the [CHANGELOG](https://github.com/sailorproject/sailor/blob/master/CODE_OF_CONDUCT.md) adding a new entry on the top if applicable. Modifications that require updating the changelog:
  * Bug fix
  * Adding or removing feature
  * Deprecating a feature
@@ -123,7 +123,7 @@ Modifications that do not require updating the changelog:
 
 Do not forget to highlight anything that is a breaking change to apps developed on previous versions of Sailor.
 
-If you added any new features or modified something that changes how to use Sailor, update the Reference manual and corresponding tutorials found on [docs](https://github.com/Etiene/sailor/tree/master/docs). 
+If you added any new features or modified something that changes how to use Sailor, update the Reference manual and corresponding tutorials found on [docs](https://github.com/sailorproject/sailor/tree/master/docs). 
 
 Even if you did not contribute with modifications to Sailor's code, you may also contribute with additional documentation or modifying the current docs to be easier to understand, correcting errors, typos, or updating them in case they are out of sync with the current Sailor. 
 

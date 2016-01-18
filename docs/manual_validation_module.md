@@ -1,6 +1,6 @@
 ##Reference Manual
 ###Valua: the validation module
-This is a module external to Sailor that is useful for setting validation rules to model attributes but it can also be used elsewhere. It needs to be required: `local valua = require "valua"`. It works in chains. First you need to create your validation object then you chain the validation functions you wish in the order you wish. If a test fails, it will break the chain. More info: <a href="https://github.com/Etiene/valua" target="_blank">Valua - validation for Lua</a>
+This is a module external to Sailor that is useful for setting validation rules to model attributes but it can also be used elsewhere. It needs to be required: `local valua = require "valua"`. It works in chains. First you need to create your validation object then you chain the validation functions you wish in the order you wish. If a test fails, it will break the chain. More info: <a href="https://github.com/sailorproject/valua" target="_blank">Valua - validation for Lua</a>
 ####Examples
 Example 1 - Just create, chain and use:
 

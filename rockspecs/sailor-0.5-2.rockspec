@@ -1,14 +1,15 @@
 package = "Sailor"
-version = "current-1"
+version = "0.5-2"
 source = {
    url = "git://github.com/sailorproject/sailor",
+   tag = "v0.5-alpha"
 }
 description = {
    summary = "A Lua MVC Framework",
    detailed = [[
       Sailor is a web framework written in Lua that follows the MVC design pattern.
    ]],
-   homepage = "http://sailorproject.org",
+   homepage = "http://sailorproject.org", 
    license = "MIT"
 }
 dependencies = {
@@ -17,15 +18,15 @@ dependencies = {
    'luafilesystem >= 1.6.2',
    'valua >= 0.2.2',
    'lbase64 >= 20120807',
-   'cgilua >= 5.1.4 < 5.2',
+   'cgilua >= 5.1.4, < 5.2',
    'xavante >= 2.3',
    'wsapi-xavante >= 1.6.1',
-   'busted >= 2.0.rc9'
+   'busted >= 2.0.rc9' 
 }
 build = {
    type = "builtin",
    modules = {
-       latclient = "src/latclient.lua",
+      latclient = "src/latclient.lua",
       ['latclient.common'] = "src/latclient/common.lua",
       ['latclient.conf'] = "src/latclient/conf.lua",
       ['latclient.lp_handler'] = "src/latclient/lp_handler.lua",
@@ -99,6 +100,7 @@ build = {
          ["sailor.blank-app.themes.default.fonts.glywoff"] = "src/sailor/blank-app/themes/default/fonts/glyphicons-halflings-regular.woff",
          ["sailor.blank-app.themes.default.config"] = "src/sailor/blank-app/themes/default/config.json",
          ["sailor.blank-app.themes.default.main"] = "src/sailor/blank-app/themes/default/main.lp",
+
       },
       bin = {
          sailor = "sailor"

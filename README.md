@@ -63,11 +63,11 @@ Sailor has been tested under Linux, Mac OS X and Windows and is currently compat
 
 ### Installation
 
-For Linux, see [INSTALL_LINUX.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_LINUX.md) (Ubuntu) or [INSTALL_LINUX_ARCH.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_LINUX_ARCH.md) (Arch Linux)
+For Linux, see [INSTALL_LINUX.md](https://github.com/sailorproject/sailor/blob/master/docs/INSTALL_LINUX.md) (Ubuntu) or [INSTALL_LINUX_ARCH.md](https://github.com/sailorproject/sailor/blob/master/docs/INSTALL_LINUX_ARCH.md) (Arch Linux)
 
-For Windows, see [INSTALL_WIN.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_WIN.md)
+For Windows, see [INSTALL_WIN.md](https://github.com/sailorproject/sailor/blob/master/docs/INSTALL_WIN.md)
 
-For Mac, see [INSTALL_MAC.md](https://github.com/Etiene/sailor/blob/master/docs/INSTALL_MAC.md)
+For Mac, see [INSTALL_MAC.md](https://github.com/sailorproject/sailor/blob/master/docs/INSTALL_MAC.md)
 
 ### Using Sailor
 A default Sailor app will have the following directory tree structure:
@@ -130,7 +130,7 @@ If you made an extension for Sailor and would like to share, please get in conta
 This repository contains the following third-party MIT licensed code:
 
 * LP Templates - http://keplerproject.github.io/cgilua/manual.html#templates
-* Valua - https://github.com/Etiene/valua
+* Valua - https://github.com/sailorproject/valua
 * Lua at client - https://github.com/felipedaragon/lua_at_client
 * Moonshine - http://moonshinejs.org/
 * Lua5.1.js - https://github.com/logiceditor-com/lua5.1.js
