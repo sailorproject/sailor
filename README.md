@@ -14,7 +14,7 @@ A Lua MVC Framework. www.sailorproject.org
 [![Twitter Follow](https://img.shields.io/twitter/follow/sailor_lua.svg?style=social)](https://twitter.com/sailor_lua)
 
 ### Features
-  * Compatible with Lua 5.1, Lua 5.2 and LuaJIT
+  * Compatible with Lua 5.1, Lua 5.2 and LuaJIT. (5.3 compatibility so far untested)
   * Luarocks setup
   * Runs over Apache2 (with mod_lua), NginX (openresty), Mongoose, Lighttpd, Xavante and Lwan web servers
   * Using Windows, Mac or Linux systems
