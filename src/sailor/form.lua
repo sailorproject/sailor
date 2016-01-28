@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- form.lua, v0.3: generates html for forms
+-- form.lua, v0.4: generates html for forms
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -17,31 +17,62 @@ meta.__call = function(_,mname)
 end
 setmetatable(form,meta)
 
+local generic_input_types = {
+	text = true,
+	password = true,
+	color = true,
+	date = true,
+	datetime = true,
+	email = true,
+	month = true,
+	number = true,
+	range = true,
+	search = true,
+	tel = true,
+	time = true,
+	url = true,
+	week = true
+}
+
 local function defaults(model,attribute,html_options)
-	return model[attribute] or '', model['@name']..':'..attribute, html_options or ''
+	local value = model[attribute] and ' value="'..tostring(model[attribute])..'"' or ' '
+	local name = model['@name']..':'..attribute
+	local id = ' id="'..name..'"'
+	name = ' name="'..name..'"'
+	html_options = html_options and ' '..html_options or ' '
+
+	return name, id, html_options, value
 end
 
-function form.text(model,attribute,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
-	return '<input type="text" value="'..value..'" name="'..name..'" '..html_options..' />'
+-- Inputs that work exactly the same changing only the type
+meta.__index = function(table,key)
+	if generic_input_types[key] then
+		return function(...)
+				local name, id, html_options, value = defaults(...)
+				return '<input type="'..key..'"'..value..name..id..html_options..' />'
+			end
+	end
+	return nil
 end
 
+-- More form inputs
 function form.textarea(model,attribute,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
-	return '<textarea name="'..name..'" '..html_options..'>'..value..'</textarea>'
+	local name, id, html_options = defaults(model,attribute,html_options)
+	return '<textarea'..name..id..html_options..' />'..(model[attribute] or ' ')..'</textarea>'
 end
 
 function form.file(model,attribute,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
-	return '<input type="file" name="'..name..'" '..html_options..'>'..value..'</textarea>'
+	local name, id, html_options = defaults(model,attribute,html_options)
+	return '<input type="file"'..name..id..html_options..'/>'
 end
 
 function form.dropdown(model,attribute,list,prompt,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
+	local name, id, html_options = defaults(model,attribute,html_options)
+	local value = model[attribute]
 	list = list or {}
 
 	local html = {}
-	tinsert(html,'<select name="'..name..'" '..html_options..'>')
+	tinsert(html,'<select '..name..id..html_options..' />')
 	if prompt then
 		tinsert(html,'<option value="" selected>'..prompt..'</option>')
 	end
@@ -57,23 +88,21 @@ function form.dropdown(model,attribute,list,prompt,html_options)
 	return tconcat(html)
 end
 
-function form.password(model,attribute,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
-	return '<input type="password" value="'..value..'" name="'..name..'" '..html_options..' />'
-end
+
 
 -- layout: horizontal(default) or vertical
 function form.radio_list(model,attribute,list,default,layout,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
+	local name, _, html_options = defaults(model,attribute,html_options)
+	local value = model[attribute]
 	list = list or {}
 
 	local html = {}
 	for k,v in pairs(list) do
-		local check = ''
-		if k == value  or (value == '' and k == default) then
+		local check = ' '
+		if k == value  or (value == nil and k == default) then
 			check = ' checked'
 		end
-		tinsert(html, '<input type="radio" name="'..name..'" '..'value="'..k..'" '..check..html_options..'/> '..v)
+		tinsert(html, '<input type="radio"'..name..'value="'..k..'"'..check..html_options..'/> '..v)
 	end
 	if layout == 'vertical' then
 		return tconcat(html,'<br/>')
@@ -83,7 +112,8 @@ end
 
 -- checked: boolean
 function form.checkbox(model,attribute,label,checked,html_options)
-	local value, name, html_options = defaults(model,attribute,html_options)
+	local name, id, html_options = defaults(model,attribute,html_options)
+	local value = model[attribute]
 	label = label or attribute
 
 	local check = ''
@@ -91,7 +121,7 @@ function form.checkbox(model,attribute,label,checked,html_options)
 		check = ' checked '
 	end
 
-	return '<input type="checkbox" name="'..name..'"'..check..html_options..'/> '..label
+	return '<input type="checkbox" '..name..id..check..html_options..'/> '..label
 end
 
 function form.ify(data)
