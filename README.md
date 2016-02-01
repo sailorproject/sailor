@@ -6,7 +6,7 @@ A Lua MVC Framework. www.sailorproject.org
 [![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 [![Build Status](https://travis-ci.org/sailorproject/sailor.svg?branch=master)](https://travis-ci.org/sailorproject/sailor)
-[![Coverage Status](https://coveralls.io/repos/github/sailorproject/sailor/badge.svg?branch=coveralls)](https://coveralls.io/github/sailorproject/sailor?branch=coveralls)
+[![Coverage Status](https://coveralls.io/repos/github/sailorproject/sailor/badge.svg?branch=master)](https://coveralls.io/github/sailorproject/sailor?branch=master)
 [![Issue Stats](http://issuestats.com/github/sailorproject/sailor/badge/pr)](http://issuestats.com/github/sailorproject/sailor)
 
 [![LuaRocks](https://img.shields.io/badge/LuaRocks-0.5.0-blue.svg)](https://luarocks.org/modules/etiene/sailor)
