@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- luasql_common.lua, v0.5.1: DB module for connecting and querying through LuaSQL
+-- luasql_common.lua, v0.5.2: DB module for connecting and querying through LuaSQL
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -26,7 +26,7 @@ local function fetch_row(cur, res)
 	local names = cur:getcolnames()
 
 	for k,t in pairs(types) do
-		if t:find('number') then
+		if t:find('number') or t:find('int') then
 			row[names[k]] = tonumber(row[names[k]])
 		end
 	end
