@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.10: basic model creator, uses db module
+-- model.lua, v0.10.1: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -193,34 +193,6 @@ function model:update()
 	local u = (db.query(query) ~= 0)
 	db_close()
 	return u
-end
-
--- Reads the cursor information after reading from db and turns it into an object
--- If searching for multiple results, a table as the second parameter is needed
-function model:fetch_object(cur,res_table)
-	local row = cur:fetch ({}, "a")
-
-	if not row then
-		cur:close()
-		return false
-	end
-
-	local types = cur:getcoltypes()
-	local names = cur:getcolnames()
-
-	for k,t in pairs(types) do
-		if t:find('number') then
-			row[names[k]] = tonumber(row[names[k]])
-		end
-	end
-	local obj = sailor.model(self["@name"]):new(row)
-	if res_table ~= nil then
-		table.insert(res_table,obj)
-	else
-		cur:close()
-	end
-
-	return obj
 end
 
 -- (escaped) Finds objects with the given id
