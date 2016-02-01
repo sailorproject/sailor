@@ -3,7 +3,7 @@ local helper = require "tests.helper"
 local access = require "sailor.access"
 local db = require "sailor.db"
 local fixtures = require "tests.fixtures.user" or {}
-
+local post_fixtures = require "tests.fixtures.post" or {}
 
 describe("Testing #UserModel", function()
   --helper.blah()
@@ -11,13 +11,14 @@ describe("Testing #UserModel", function()
   local users = User:find_all()
   local u, count_before
   local db_spies = {}
-  local db_spies_count = 0
 
   local function assert_db_close(n)
     n = n or 1
-    db_spies_count = db_spies_count + n
-    assert.spy(db_spies[1]).was_called(db_spies_count)
-    assert.spy(db_spies[2]).was_called(db_spies_count)
+    for _,s in ipairs(db_spies) do
+      local _, calls = s:called()
+      assert.is_equal(n,calls)
+      s:clear()
+    end
   end
 
   setup(function()
@@ -32,9 +33,13 @@ describe("Testing #UserModel", function()
 
   it("should create different objects", function()
     u = User:new(fixtures[1])
-    u2 = User:new(fixtures[2])
+    local u2 = User:new(fixtures[2])
     assert.is_equal(u.name,fixtures[1].name)
     assert.is_equal(u2.name,fixtures[2].name)
+  end)
+
+  it("should not access attributes that do not exist", function()
+    assert.falsy(u.blahblah)
   end)
 
   it("should save object", function()
@@ -47,6 +52,18 @@ describe("Testing #UserModel", function()
     assert.spy(s).was_not_called()
     assert.spy(s2).was_called()
     assert_db_close(3)
+  end)
+
+  it("should not save object because there was a validation issue", function()
+    local s = spy.on(User,'validate')
+    local s2 = spy.on(User,'insert')
+    count_before = User:count()
+    local u = User:new(fixtures[2])
+    assert.is_false(u:save(true))
+    assert.is_equal(User:count(),count_before)
+    assert.spy(s).was_called()
+    assert.spy(s2).was_not_called()
+    assert_db_close(2)
   end)
 
   it("should update object", function()
@@ -62,9 +79,10 @@ describe("Testing #UserModel", function()
   end)
 
   it("should delete object", function()
+    count_before = User:count()
     u:delete()
-    assert.is_equal(User:count(),count_before)
-    assert_db_close(2)
+    assert.is_equal(count_before-1,User:count())
+    assert_db_close(3)
   end)
 
   it("should find object by id", function()
@@ -73,9 +91,8 @@ describe("Testing #UserModel", function()
     assert_db_close()
   end)
 
-  it("should find user relations", function()
+  it("should find user has many relations", function()
     u = User:find_by_id(1)
-    local post_fixtures = require "tests.fixtures.post" or {}
     local amount = 0
     for k, v in ipairs(post_fixtures) do
       if v.author_id == 1 then
@@ -85,6 +102,21 @@ describe("Testing #UserModel", function()
     end
     assert.is_equal(amount,#(u.posts))
     assert_db_close(2)
+  end)
+
+  it("should find post belongs to relation", function()
+    local p = model('post'):find_by_id(1)
+    assert_db_close()
+    assert.is_equal(post_fixtures[1].author_id,p.author.id)
+    assert_db_close()
+    local p2
+    for _,post in pairs(p.author.posts) do
+      if post.id == p.id then
+        p2 = post
+      end
+    end
+    assert_db_close()
+    assert.truthy(p2)
   end)
 
   it("should not find object by id", function()
@@ -143,6 +175,12 @@ describe("Testing #UserModel", function()
   it("should find one object", function()
     u = User:find("password LIKE '12345%'")
     assert.is_equal(users[1].id,u.id)
+    assert_db_close()
+  end)
+
+  it("should not find anything", function()
+    u = User:find("password LIKE 'adadad%'")
+    assert.is_false(u)
     assert_db_close()
   end)
    
