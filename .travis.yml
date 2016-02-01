@@ -52,7 +52,9 @@ script:
   - if [ "$SERVER" == "openresty" ]; then sailor test --resty; fi
 
 after_success:
-  - luacov-coveralls -e $TRAVIS_BUILD_DIR/lua_install
+  - mv luacov.stats.out ../..
+  - cd ../..
+  - luacov-coveralls -c test/dev-app/.luacov
 
 notifications:
   email:
