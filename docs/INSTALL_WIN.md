@@ -4,7 +4,7 @@
 
 First, download and install Lua for Windows. You can get it from:
 
-<https://code.google.com/p/luaforwindows/>
+<https://github.com/rjpcomputing/luaforwindows>
 
 Copy the files in the `src` directory of this repository to C:/Program Files/Lua/5.1/lua/
 
