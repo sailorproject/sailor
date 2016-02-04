@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.5.2: core functionalities of the framework
+-- sailor.lua, v0.5.2.1: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -154,9 +154,6 @@ function sailor.route(page)
     -- Encapsulated error function for showing detailed traceback
     -- Needs improvement
     error_handler = function (msg)
-        if msg:match('not found:') then
-            return error_404()
-        end
         if sailor.conf.hide_stack_trace then
             page:write("<pre>Error 500: Internal Server Error</pre>")
             return 500
