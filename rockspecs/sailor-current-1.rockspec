@@ -20,7 +20,8 @@ dependencies = {
    'cgilua >= 5.1.4',
    'xavante >= 2.3',
    'wsapi-xavante >= 1.6.1',
-   'busted >= 2.0.rc9'
+   'busted >= 2.0.rc9',
+   'luasec >= 0.5'
 }
 build = {
    type = "builtin",
