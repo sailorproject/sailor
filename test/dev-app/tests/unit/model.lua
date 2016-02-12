@@ -42,6 +42,11 @@ describe("Testing #UserModel", function()
     assert.falsy(u.blahblah)
   end)
 
+  it("should not allow to assign attributes that do not exist", function()
+    
+    assert.has_error(function() u.blahblah = "hey" end, "blahblah is not a valid attribute for this model.")
+  end)
+
   it("should save object", function()
     local s = spy.on(User,'validate')
     local s2 = spy.on(User,'insert')
@@ -131,8 +136,22 @@ describe("Testing #UserModel", function()
     assert_db_close()
   end)
 
+
   it("should not find object by attributes", function()
     local u = User:find_by_attributes({username = ''})
+    assert.is_false(u)
+    assert_db_close()
+  end)
+
+  it("should find object by multiple attributes", function()
+    local u = User:find_by_attributes({username = users[1].username, password = '123456'})
+    assert.are_same(users[1].id,u.id)
+    assert_db_close()
+  end)
+
+
+  it("should not find object by nultiple attributes", function()
+    local u = User:find_by_attributes({username = '', password = '123456'})
     assert.is_false(u)
     assert_db_close()
   end)
