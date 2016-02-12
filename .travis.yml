@@ -17,21 +17,21 @@ env:
     - LUAROCKS=2.2.2
   matrix:
       # Lua 5.1 on different DBs
-      - LUA=lua5.1 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-      - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
-      - LUA=lua5.1 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+     # - LUA=lua5.1 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+     # - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+     # - LUA=lua5.1 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
       # Lua 5.2 on different DBs
-      - LUA=lua5.2 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-      - LUA=lua5.2 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
-      - LUA=lua5.2 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+     # - LUA=lua5.2 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+     # - LUA=lua5.2 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+     # - LUA=lua5.2 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
       # Lua 5.3 on different DBs
       - LUA=lua5.3 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
       # LuaJIT latest stable version (2.0.4) on different DBs
-      - LUA=luajit DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-      - LUA=luajit DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
-      - LUA=luajit DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+     # - LUA=luajit DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+     # - LUA=luajit DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+     # - LUA=luajit DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
       # Openresty + LuaJIT + mysql
-      - LUA=luajit SERVER=openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test 
+     # - LUA=luajit SERVER=openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test 
       # - LUA=luajit2.0  # current head of 2.0 branch
       # - LUA=luajit2.1  # current head of 2.1 branch
       # Not supported

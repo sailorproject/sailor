@@ -12,7 +12,7 @@ description = {
    license = "MIT"
 }
 dependencies = {
-   "lua >= 5.1, < 5.3",
+   "lua >= 5.1, < 5.4",
    'datafile >= 0.1',
    'luafilesystem >= 1.6.2',
    'valua >= 0.2.2',
