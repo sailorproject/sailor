@@ -273,7 +273,7 @@ function M.generate_update(model)
 ]]
 
 	code = string.gsub(code,"&gt;",">")
-	local file = assert(io.open("views/"..model["@name"].."/update.lp", "w")_
+	local file = assert(io.open("views/"..model["@name"].."/update.lp", "w"))
 	if file:write(code) then
 		file:close()
 		return true
