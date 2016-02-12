@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.10.1: basic model creator, uses db module
+-- model.lua, v0.10.2: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -142,7 +142,7 @@ function model:insert()
 		for attr,_ in pairs(n) do
 			if attr ~= self.db.key then
 				table.insert(attrs,attr)
-				if not self[attr] then
+				if self[attr] == nil then
 					table.insert(values,"null")
 				elseif type(self[attr]) == 'number' then
 					table.insert(values,self[attr])
@@ -160,7 +160,6 @@ function model:insert()
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..")"
 
 	local id = db.query_insert(query,self.db.key)
-
 	self[self.db.key] = id
 	db_close()
 	return true
@@ -349,7 +348,6 @@ function model.generate_crud(model_name)
 	local f=io.open(sailor.path.."/models/"..model_name..".lua","r")
 	if f == nil then
    		error("The model '"..model_name.."'does not exist")
-   		return false
    	else
    		io.close(f)
 
@@ -373,7 +371,6 @@ function model.generate_model(table_name)
 	if not db.table_exists(table_name)  then
 		db:close()
 		error("The table '"..table_name.."' does not exist.")
-		return false
    	else
 
 
@@ -411,7 +408,7 @@ return M
 
 ]]
 		
-		local file = io.open("models/"..table_name..".lua", "w")
+		local file = assert(io.open("models/"..table_name..".lua", "w"))
 		if file:write(code) then
 			file:close()
 			return true
