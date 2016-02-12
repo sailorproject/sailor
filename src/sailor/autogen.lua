@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- autogen.lua, v0.3: has codes in strings for autogenerating CRUDS based on sailor models
+-- autogen.lua, v0.3.1: has codes in strings for autogenerating CRUDS based on sailor models
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -116,7 +116,7 @@ return M
 ]]
 
 
-	local file = io.open("controllers/"..model["@name"]..".lua", "w")
+	local file = assert(io.open("controllers/"..model["@name"]..".lua", "w"))
 	if file:write(code) then
 		file:close()
 		return true
@@ -168,7 +168,7 @@ function M.generate_index(model)
 
 	code = string.gsub(code,"&gt;",">")
 	lfs.mkdir("views/"..model["@name"])
-	local file = io.open("views/"..model["@name"].."/index.lp", "w")
+	local file = assert(io.open("views/"..model["@name"].."/index.lp", "w"))
 	if file:write(code) then
 		file:close()
 		return true
@@ -200,7 +200,7 @@ function M.generate_view(model)
 ]]
 
 	code = string.gsub(code,"&gt;",">")
-	local file = io.open("views/"..model["@name"].."/view.lp", "w")
+	local file = assert(io.open("views/"..model["@name"].."/view.lp", "w"))
 	if file:write(code) then
 		file:close()
 		return true
@@ -237,7 +237,7 @@ function M.generate_create(model)
 ]]
 
 	code = string.gsub(code,"&gt;",">")
-	local file = io.open("views/"..model["@name"].."/create.lp", "w")
+	local file = assert(io.open("views/"..model["@name"].."/create.lp", "w"))
 	if file:write(code) then
 		file:close()
 		return true
@@ -273,7 +273,7 @@ function M.generate_update(model)
 ]]
 
 	code = string.gsub(code,"&gt;",">")
-	local file = io.open("views/"..model["@name"].."/update.lp", "w")
+	local file = assert(io.open("views/"..model["@name"].."/update.lp", "w")_
 	if file:write(code) then
 		file:close()
 		return true
