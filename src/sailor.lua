@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- sailor.lua, v0.5.2.1: core functionalities of the framework
+-- sailor.lua, v0.5.2.2: core functionalities of the framework
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -175,9 +175,12 @@ function sailor.route(page)
             controller, action = match(route_name, "([^/]+)/?([^/]*)")
         end
 
-        if conf.sailor.enable_autogen and controller == "autogen" then
-            local _,res = xpcall(function () autogen(page) end, error_handler)
-            return res or httpd.OK or page.r.status or 200
+        if controller == "autogen" then 
+            if conf.sailor.enable_autogen then
+                local _,res = xpcall(function () autogen(page) end, error_handler)
+                return res or httpd.OK or page.r.status or 200
+            end
+            return error_404()
         end
 
         local ctr
