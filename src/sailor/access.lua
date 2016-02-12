@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.3: controls user login on sailor apps
+-- access.lua, v0.4: controls user login on sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -8,6 +8,9 @@
 
 local sailor = require "sailor"
 local session = require "sailor.session"
+local bcrypt = require( "bcrypt" )
+local log_rounds = 11
+
 local access = {}
 
 session.open(sailor.r)
@@ -21,7 +24,6 @@ local settings = {
 	model = nil,					-- Setting this field will deactivate default login details and activate below fields
 	login_attributes = {'username'},-- Allows multiple options, for example, username or email. The one used to hash the
 	password_attribute = 'password',--     password should come first.
-	salt_attribute = 'salt',
 	hashing = true
 }
 
@@ -33,24 +35,13 @@ function access.settings(s)
 end
 
 -- Simple hashing algorithm for encrypting passworsd
-function access.hash(username, password, salt)
-	if not settings.hashing then return password end
-	local hash = username .. password
-	salt = salt or ''
+function access.hash(username, password)
+	return bcrypt.digest( username .. password, log_rounds )
+end
 
-	-- Check if bcrypt is embedded
-	if sailor.conf.bcrypt and sailor.r.htpassword then
-		hash = sailor.r:htpassword(salt .. hash, 2, 100) -- Use bcrypt on pwd
-		return hash
-	-- If not, fall back to sha1 hashing
-	else
-		if sailor.r.sha1 then
-			for i = 1, 500 do
-				hash = sailor.r:sha1(salt .. hash)
-			end
-		end
-	end
-	return hash
+function access.verify_hash(username, password, model_password)
+	if not settings.hashing then return model_password == password end	
+	return bcrypt.verify( username..password, model_password )
 end
 
 
@@ -68,14 +59,14 @@ function access.grant(data,time)
 	return session.save(data)
 end
 
-function access.find_model(login)
+function access.find_object(login)
 	local Model = sailor.model(settings.model)
-	local m
+	local o
 	for _, attr in pairs(settings.login_attributes) do
 		local a = {}
 		a[attr] = login
-		m = Model:find_by_attributes(a)
-		if m ~= nil then return m end
+		o = Model:find_by_attributes(a)
+		if o ~= nil then return o end
 	end
 	return false
 end
@@ -83,12 +74,11 @@ end
 function access.login(login,password)
 	local id
 	if settings.model then
-		local model = access.find_model(login)
+		local model = access.find_object(login)
 		if not model then
 			return false, INVALID
 		end
-
-		if model.password ~= access.hash(model[settings.login_attributes[1]], password, model[settings.salt_attribute]) then
+		if not access.verify_hash(model[settings.login_attributes[1]], password, model[settings.password_attribute]) then
 			return false, INVALID
 		end
 

@@ -42,6 +42,17 @@ describe("Testing #UserController", function()
     assert.is_true(access.is_guest())
   end)
 
+  it("should login with encrypted pass", function()
+    local u = User:new()
+    u.username = 'Hermione'
+    local raw_pass = 'freeelf54'
+    u.password = access.hash(u.username,raw_pass)
+    u:save(false)
+    assert.is_true(User.authenticate(u.username,raw_pass,true))
+    assert.is_false(access.is_guest())
+    User.logout()
+  end)
+
   it("should with default settings", function()
     access.settings({model = false, hashing = false, default_login = 'admin', default_password = 'demo'})
     assert.is_true(access.login('admin','demo'))
