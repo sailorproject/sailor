@@ -2,6 +2,7 @@ language: c
 
 
 sudo: true
+dist: trusty
 
 addons:
   apt:
