@@ -4,10 +4,13 @@ sudo: true
 
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
     - libmysqlclient-dev
     - libpq-dev
-
+    - gcc-4.8
+    - g++-4.8
 services:
   - mysql
   - postgresql
@@ -36,9 +39,7 @@ env:
       # - LUA=lua5.2 
 
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -q
-  - sudo apt-get install gcc-4.8 -y
+  - gcc --version
   - source .travis/setenv_lua.sh
 
 install:
