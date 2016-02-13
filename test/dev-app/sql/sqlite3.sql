@@ -3,7 +3,7 @@ drop table if exists users;
 create table users(
 	id integer primary key autoincrement,
 	username varchar(20),
-	password varchar(20)
+	password varchar(64)
 );
 
 drop table if exists post;
