@@ -38,9 +38,10 @@ env:
       # - LUA=lua5.2 
 
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
+ # - sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
+  - sudo apt-add-repository "deb http://security.ubuntu.com/ubuntu trusty-security main"
   - sudo apt-get update
-  - sudo apt-get install libc6 libc6-dev 
+  - sudo apt-get install libc6 2.19
 #  - sudo apt-get upgrade libc6 libc6-dev libc-dev udev
 #  - sudo apt-get install gcc-4.9 g++-4.9
 #  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 20
