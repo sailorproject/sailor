@@ -2,7 +2,7 @@ language: c
 
 
 sudo: true
-#dist: trusty
+dist: trusty
 
 addons:
   apt:
@@ -19,8 +19,8 @@ env:
     - LUAROCKS=2.2.2
   matrix:
       # Lua 5.1 on different DBs
-    #  - LUA=lua5.1 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-    #  - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
+      - LUA=lua5.1 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
+      - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
       - LUA=lua5.1 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
       # Lua 5.2 on different DBs
      # - LUA=lua5.2 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
@@ -40,10 +40,10 @@ env:
 before_install:
  # - sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
  # - sudo apt-add-repository "deb http://security.ubuntu.com/ubuntu trusty-security main"
-  - sudo apt-get update
+ # - sudo apt-get update
  # - sudo apt-get install gcc g++
 #  - sudo apt-get install eglibc-source glibc-doc libc-bin libc-dev-bin libc6 libc6-amd64 libc6-dbg libc6-dev libc6-dev-amd64 libc6-udeb
-  - sudo apt-get install libc6-2.19
+ # - sudo apt-get install libc6-2.19
 #  - sudo apt-get upgrade libc6 libc6-dev libc-dev udev
 #  - sudo apt-get install gcc-4.9 g++-4.9
 #  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 20
@@ -55,14 +55,15 @@ before_install:
   - gcc --version
   - apt-cache show libc6 | grep Version
   - source .travis/setenv_lua.sh
+  - source .travis/setdatabases.sh
 
 install:
   - luarocks install luacov
   - luarocks install luacov-coveralls
   - luarocks make rockspecs/sailor-current-1.rockspec
 
-before_script:
-  - source .travis/setdatabases.sh
+#before_script:
+
 
 script:
   - cd test/dev-app
