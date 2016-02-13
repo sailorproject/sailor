@@ -1,14 +1,13 @@
 language: c
 
-os: osx
 
 sudo: true
 
-#addons:
-#  apt:
-#    packages:
-#    - libmysqlclient-dev
-#    - libpq-dev
+addons:
+  apt:
+    packages:
+    - libmysqlclient-dev
+    - libpq-dev
 
 services:
   - mysql
@@ -49,8 +48,7 @@ before_install:
 #  - sudo update-alternatives --config g++
 #  - sudo update-alternatives --config gcov
 #  - gcc --version
-#  - apt-cache show libc6 | grep Version
-  - brew install mysql-connector-c
+  - apt-cache show libc6 | grep Version
   - source .travis/setenv_lua.sh
 
 install:
