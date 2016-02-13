@@ -11,6 +11,7 @@ addons:
     - libpq-dev
     - gcc-4.8
     - g++-4.8
+    - build-essential
 services:
   - mysql
   - postgresql
