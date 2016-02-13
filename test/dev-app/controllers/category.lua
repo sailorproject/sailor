@@ -1,3 +1,5 @@
+local sailor = require "sailor"
+
 local M = {}
 
 function M.index(page)
