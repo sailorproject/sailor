@@ -6,9 +6,6 @@ local fixtures = require "tests.fixtures.user" or {}
 describe("Testing #UserController", function()
   
   local users
-  setup(function()
-    users = test.load_fixtures('user')
-  end)
 
   it("should know no one has logged in", function()
     assert.is_true(access.is_guest())
@@ -51,6 +48,7 @@ describe("Testing #UserController", function()
     assert.is_true(User.authenticate(u.username,raw_pass,true))
     assert.is_false(access.is_guest())
     User.logout()
+    u:delete()
   end)
 
   it("should with default settings", function()
@@ -66,7 +64,5 @@ describe("Testing #UserController", function()
     assert.is_false(access.login('admin','demon'))
     assert.is_true(access.is_guest())
   end)
-
-   
-
+  
 end)
