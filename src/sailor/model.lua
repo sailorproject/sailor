@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.10.2: basic model creator, uses db module
+-- model.lua, v0.10.3: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -174,7 +174,7 @@ function model:update()
 	for _,n in pairs(self.attributes) do
 		for attr,_ in pairs(n) do
 			local string = attr.."="
-			if not self[attr] then
+			if self[attr] == nil then
 				string = string.."null"
 			elseif type(self[attr]) == 'number' then
 				string = string..self[attr]
