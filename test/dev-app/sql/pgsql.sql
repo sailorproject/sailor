@@ -8,7 +8,7 @@ drop table if exists users cascade;
 create table users(
 	id serial primary key,
 	username varchar(20),
-	password varchar(20)
+	password varchar(64)
 );
 
 drop table if exists post cascade;
