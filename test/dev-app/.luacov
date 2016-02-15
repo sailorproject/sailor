@@ -1,9 +1,5 @@
 return {
    modules = {
-      latclient = "src/latclient.lua",
-      ['latclient.*'] = "src",
-      remy = "src/remy.lua",
-      ['remy.*'] = "src",
       sailor = "src/sailor.lua",
       ['sailor.*'] = "src",
       ['sailor.db.*'] = "src",
