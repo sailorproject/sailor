@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- form.lua, v0.4: generates html for forms
+-- form.lua, v0.6: generates html for forms
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -7,7 +7,7 @@
 --------------------------------------------------------------------------------
 
 local form = {}
-local tinsert, tconcat = table.insert, table.concat
+local tinsert, tconcat, tremove = table.insert, table.concat, table.remove
 local model_name
 
 local meta = {}
@@ -18,6 +18,7 @@ end
 setmetatable(form,meta)
 
 local generic_input_types = {
+	file = true,
 	text = true,
 	password = true,
 	color = true,
@@ -34,22 +35,33 @@ local generic_input_types = {
 	week = true
 }
 
+
 local function defaults(model,attribute,html_options)
-	local value = model[attribute] and ' value="'..tostring(model[attribute])..'"' or ' '
+	local value = model[attribute] and 'value="'..tostring(model[attribute])..'"' 
 	local name = model['@name']..':'..attribute
-	local id = ' id="'..name..'"'
-	name = ' name="'..name..'"'
-	html_options = html_options and ' '..html_options or ' '
+	local id = 'id="'..name..'"'
+	name = 'name="'..name..'"'
+	html_options = html_options 
 
 	return name, id, html_options, value
+end
+
+local pack = function(...) 
+	if not table.pack then
+		return {n=select('#',...),...} 
+	end
+	return table.pack(...)
 end
 
 -- Inputs that work exactly the same changing only the type
 meta.__index = function(table,key)
 	if generic_input_types[key] then
 		return function(...)
-				local name, id, html_options, value = defaults(...)
-				return '<input type="'..key..'"'..value..name..id..html_options..' />'
+				local t = pack(defaults(...))
+				tinsert(t,1,'<input')
+				tinsert(t,2,'type="'..key..'"')
+				tinsert(t,'/>')
+				return tconcat(t,' ')
 			end
 	end
 	return nil
@@ -57,35 +69,36 @@ end
 
 -- More form inputs
 function form.textarea(model,attribute,html_options)
-	local name, id, html_options = defaults(model,attribute,html_options)
-	return '<textarea'..name..id..html_options..' />'..(model[attribute] or ' ')..'</textarea>'
-end
+	local t = pack(defaults(model,attribute,html_options))
+	tinsert(t,1,'<textarea')
+	tinsert(t,'>')
+	tinsert(t,model[attribute] or 'asadas')
+	tinsert(t,'</textarea>')
 
-function form.file(model,attribute,html_options)
-	local name, id, html_options = defaults(model,attribute,html_options)
-	return '<input type="file"'..name..id..html_options..'/>'
+	return tconcat(t,' ')
 end
 
 function form.dropdown(model,attribute,list,prompt,html_options)
-	local name, id, html_options = defaults(model,attribute,html_options)
+	local html = pack(defaults(model,attribute,html_options))
 	local value = model[attribute]
 	list = list or {}
 
-	local html = {}
-	tinsert(html,'<select '..name..id..html_options..' />')
+	tinsert(html,1,'<select')
+	tinsert(html,'>')
 	if prompt then
-		tinsert(html,'<option value="" selected>'..prompt..'</option>')
+		local s = value and '' or 'selected'
+		tinsert(html,'<option value="" '..s..'>'..prompt..'</option>')
 	end
 	for k,v in pairs(list) do
 		local selected = ''
 		if k == value then
-			selected = ' selected'
+			selected = 'selected'
 		end
-	tinsert(html,'<option value="'..k..'"'..selected..'>'..v..'</option>')
+		tinsert(html,'<option value="'..k..'"'..selected..'>'..v..'</option>')
 	end	
 	tinsert(html,'</select>')
 
-	return tconcat(html)
+	return tconcat(html,' ')
 end
 
 
@@ -96,32 +109,43 @@ function form.radio_list(model,attribute,list,default,layout,html_options)
 	local value = model[attribute]
 	list = list or {}
 
-	local html = {}
+	local t = {}
 	for k,v in pairs(list) do
-		local check = ' '
+		local html = {}
+		tinsert(html, '<input type="radio"')
+		tinsert(html, 'value="'..k..'"')
+
 		if k == value  or (value == nil and k == default) then
-			check = ' checked'
+			tinsert(html, 'checked')
 		end
-		tinsert(html, '<input type="radio"'..name..'value="'..k..'"'..check..html_options..'/> '..v)
+		if html_options then 
+			tinsert(html, html_options)
+		end
+		tinsert(html,'/>')
+		tinsert(html,v)
+		
+		tinsert(t,tconcat(html,' '))
 	end
+
 	if layout == 'vertical' then
-		return tconcat(html,'<br/>')
+		return tconcat(t,' <br/>')
 	end
-	return tconcat(html,' ')
+	return tconcat(t,' ')
 end
 
 -- checked: boolean
 function form.checkbox(model,attribute,label,checked,html_options)
-	local name, id, html_options = defaults(model,attribute,html_options)
+	local t = pack(defaults(model,attribute,html_options))
 	local value = model[attribute]
-	label = label or attribute
-
-	local check = ''
+	
+	tinsert(t,1,'<input type="checkbox"')
 	if (value ~= nil and value ~= '' and value ~= 0 and value ~= '0') or checked == true then
-		check = ' checked '
+		tinsert(t,'checked')
 	end
+	tinsert(t,'/>')
+	tinsert(t,(label or attribute))
 
-	return '<input type="checkbox" '..name..id..check..html_options..'/> '..label
+	return tconcat(t,' ')
 end
 
 function form.ify(data)
