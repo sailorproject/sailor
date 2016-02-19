@@ -36,18 +36,18 @@ local function get_sailor_path(current_dir)
 	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor$"))
 
 	local f = sailor_path and io.open(sailor_path.."/src/sailor.lua", "r")
-	if not f then 
+	if not f then
 		local datafile = require("datafile")
 		sailor_path = datafile.path("sailor/cookie.lua"):match("^@?(.-)/sailor/cookie.lua$")
 	else
-		f:close() 
+		f:close()
 		if sailor_path == '.' then
 			sailor_path = current_dir.."/src"
 		elseif sailor_path:match("^.") then
 			local path = sailor_path:match(".(.-)")
 			sailor_path = current_dir.."/sailor"..tostring(path).."/src"
-		elseif not sailor_path:match("^/") then 
-			sailor_path = current_dir.."/src/"..sailor_path 
+		elseif not sailor_path:match("^/") then
+			sailor_path = current_dir.."/src/"..sailor_path
 		else
 			sailor_path = sailor_path.."/src"
 		end
@@ -63,13 +63,13 @@ end
 local function create()
 	local name = string.gsub(arg[2]:lower(),' ','_')
 	local current_dir = lfs.currentdir()
-	local destiny = arg[3] or current_dir 
-	
+	local destiny = arg[3] or current_dir
+
 	local sailor_path = get_sailor_path(current_dir)
-	
+
 	local raw_app = sailor_path.."/sailor/blank-app"
 	local new_app = destiny.."/"..name
-	assert(os.execute("cp -a "..raw_app.." "..new_app))
+	assert(os.execute("cp -a '"..raw_app.."' '"..new_app.."'"))
 
 	local htaccess = assert(io.open (new_app.."/.htaccess" , "r"))
 	local src = htaccess:read("*a")
@@ -118,15 +118,15 @@ local function enable()
 	local sailor_path = get_sailor_path(current_dir)
 
 	assert(os.execute('luarocks install '..name))
-	
+
 	local ext_app = sailor_path.."/sailor/"..arg[2].."/app"
 	assert(os.execute("mkdir -p extensions"))
-	local err = assert(os.execute("cp -a "..ext_app.." extensions/"..arg[2]))
+	local err = assert(os.execute("cp -a '"..ext_app.."' extensions/"..arg[2]))
 	if err == 0 then
 		local index_file = assert(io.open ("index.lua" , "r"))
 		local src = index_file:read("*a")
 		index_file:close()
-		
+
 		local package_path = "package.path =  base_dir..'extensions/"..arg[2].."/?.lua;'..package.path"
 		src = string.gsub(src,"\nlocal sailor",package_path.."\n\nlocal sailor")
 		index_file = assert(io.open ("index.lua" , "w"))
