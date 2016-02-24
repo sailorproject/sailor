@@ -82,4 +82,10 @@ describe("Testing Sailor core functions", function()
     assert.is_equal(exp,url)
     base_path, page.base_path = page.base_path, base_path
   end)
+
+  it("can render a table as JSON", function()
+    assert.has_no.errors(function()
+        page:json(parms)
+    end)
+  end)
 end)

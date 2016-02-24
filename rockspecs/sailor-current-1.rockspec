@@ -24,6 +24,7 @@ dependencies = {
    'bcrypt >= 2.1',
    'remy >= 0.2',
    'latclient >= 0.4',
+   'dkjson ~> 2.5',
 }
 build = {
    type = "builtin",
