@@ -15,7 +15,7 @@ local db_conf = main_conf.db[main_conf.sailor.environment]
 local M = {req = {}, page = nil}
 
 local body
-local function write(_,data) body = body .. data end
+local function write(_,data) body = (body or "") .. data end
 
 -- Prepares for making a request
 function M:prepare(headers_in)
