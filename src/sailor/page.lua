@@ -131,6 +131,17 @@ function Page:render(filename,parms,src)
     end
 end
 
+-- Write a JSON-serialized version of data to the browser
+-- data: The data to be serialized as JSON
+-- args: Parameters passed through to the dkjson library (i.e. {indent=true})
+function Page:json(data, args)
+	local json = require "dkjson"
+	args = args or {}
+	local encoded = json.encode(data, args)
+
+	self.r.content_type = 'application/json'
+	self:write(encoded)
+end
 
 -- Redirects to another action or another address
 -- route: string, '<controller name>/<action_name>'

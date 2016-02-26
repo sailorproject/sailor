@@ -14,21 +14,28 @@ Example: `page:render( 'index', {msg = 'hello'} )`
 Includes a .lp file from a .lp file
 
  * path: string, full file path
- 
+
  * parms: [optional] table, vars being passed ahead (env).
 
 Example: `page:include( '/views/incs/_defaultmenu' )`
 
 ####page:redirect( route [*, args*] )
 Redirects to another action if the route string doesn't start with 'http://' or another address if it does.
- 
+
  * route: string, "controller_name/action_name" or some website address.
- 
+
  * args: [optional] table, vars being passed as get parameters (only for internal redirect).
 
 Example 1: `page:redirect( 'user/update', {id = 2} )`
 
 Example 2: `page:redirect( 'http://google.com' )`
+
+####page:json( data, [*, parms*] )
+Serializes data as JSON and sends it to the response body.
+
+* data: any serializable value (table, string, number)
+
+* parms: [optional] table, vars being passed to the dkjson.encode function. Refer to the [dkjson documentation](http://dkolf.de/src/dkjson-lua.fsl/wiki?name=Documentation) for details. Useful parameters are (indent, keyorder, level).
 
 ####page:write( data )
 Writes a single string to the response body.
@@ -63,7 +70,7 @@ Example 1: `page:inspect( page.POST )`
 ####page.title
 * string *writeable*: By default it is set to the same as conf.sailor.app_name, but you can modify it before rendering a page, for example.
 
-####page.theme 
+####page.theme
 * string *writeable*: Sailor comes bundled with a default theme, using Bootstrap. This is the name of a folder inside /themes folder. You can modify the default theme of your application by edditing conf.sailor.theme. You can modify the theme of just one page by setting page.theme to something else on the controller action before rendering your page. You can set it to nil for displaying no theme at all, like for serving a JSON, for example.
 
 ####page.layout
