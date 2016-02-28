@@ -94,7 +94,6 @@ function sailor.init(r)
     if conf.extensions and conf.extensions.enable then
         for _,e in pairs(conf.extensions.enable) do
             package.path = 'extensions/' .. e .. '/?.lua;' .. package.path
-            local c = require "controllers.user"
         end
     end
 
