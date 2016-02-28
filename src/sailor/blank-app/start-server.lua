@@ -59,7 +59,7 @@ local simplerules = {
 
     { -- cgiluahandler example
       match = {"%.lp$", "%.lp/.*$", "%.lua$", "%.lua/.*$" },
-      with = cgiluahandler.makeHandler (webDir)
+      with = cgiluahandler.makeHandler (webDir, { reload = true })
     },
     
     { -- filehandler example
