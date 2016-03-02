@@ -55,11 +55,6 @@ local function get_sailor_path(current_dir)
 	return sailor_path
 end
 
-local function error()
-	print("\27[33mError generating sailor web app.\27[0m ")
-	print("Please report to developers.")
-end
-
 local function create()
 	local name = string.gsub(arg[2]:lower(),' ','_')
 	local current_dir = lfs.currentdir()
