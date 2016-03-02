@@ -40,7 +40,7 @@ end
 local function create(args, _)
 	local name = string.gsub(args.name:lower(),' ','_')
 	local current_dir = lfs.currentdir()
-	local destiny = arg[3] or current_dir
+	local destiny = args.path or current_dir
 
 	local sailor_path = get_sailor_path(current_dir)
 
@@ -61,7 +61,7 @@ local function create(args, _)
 	src = conf:read("*a")
 	conf:close()
 	conf = assert(io.open (new_app.."/conf/conf.lua" , "w"))
-	src = string.gsub(src,"Sailor! A Lua MVC Framework",arg[2])
+	src = string.gsub(src,"Sailor! A Lua MVC Framework", args.name)
 	conf:write(src)
 	conf:close()
 
@@ -92,35 +92,34 @@ local function test(args, _)
 end
 
 local function enable(args, _)
-	local name = 'sailor-'..arg[2]
+	local name = 'sailor-'..args.name
 	local current_dir = lfs.currentdir()
 	local sailor_path = get_sailor_path(current_dir)
 
 	assert(os.execute('luarocks install '..name))
 
-	local ext_app = sailor_path.."/sailor/"..arg[2].."/app"
+	local ext_app = sailor_path.."/sailor/"..name.."/app"
 	assert(os.execute("mkdir -p extensions"))
-	local err = assert(os.execute("cp -a '"..ext_app.."' extensions/"..arg[2]))
+	local err = assert(os.execute("cp -a '"..ext_app.."' extensions/"..name))
 	if err == 0 then
 		local index_file = assert(io.open ("index.lua" , "r"))
 		local src = index_file:read("*a")
 		index_file:close()
 
-		local package_path = "package.path =  base_dir..'extensions/"..arg[2].."/?.lua;'..package.path"
+		local package_path = "package.path =  base_dir..'extensions/"..name.."/?.lua;'..package.path"
 		src = string.gsub(src,"\nlocal sailor",package_path.."\n\nlocal sailor")
 		index_file = assert(io.open ("index.lua" , "w"))
 		index_file:write(src)
 		index_file:close()
 		print("New files:")
-		print("extensions/"..arg[2].."/*\n")
+		print("extensions/"..name.."/*\n")
 		print("Files modified:")
 		print("index.lua\n")
 		print("done!")
 	end
 end
 
-
-local parser = argparse("script", colors("%{blink yellow}Sailor commands"))
+local parser = argparse("script", colors("%{yellow}Sailor commands"))
     :name(string.match(arg[0], "/*(%w+)/*$"))
     :require_command(true)
 local create_cmd = parser:command("c create", "Generates web application in a directory."):action(create)
