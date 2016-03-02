@@ -44,7 +44,7 @@ function model:new(obj)
 	obj = util.deepcopy(obj)
 
 	setmetatable(obj,self)
-	-- REWRITE 
+	-- REWRITE
 	self.__index = function (table, key)
 		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] and key ~= "errors" then
 			if obj.relations and obj.relations[key] then
@@ -112,7 +112,9 @@ function model:get_relation(key)
 			obj = Model:find_by_attributes( attributes )
 
 		elseif relation.relation == "HAS_MANY" then
-			obj = Model:find_all(relation.attribute..' = '..self[self.db.key])
+			local attributes = {}
+			attributes[relation.attribute] = self[self.db.key]
+			obj = Model:find_all_by_attributes( attributes )
 
 		elseif relation.relation == "MANY_MANY" then
 			db_connect()
@@ -248,7 +250,7 @@ function model:find_all_by_attributes(attributes)
 		for _,r in pairs(res) do
 			objects[#objects+1] = sailor.model(self["@name"]):new(r)
 		end
-		return objects 
+		return objects
 	end
 	return false
 end
@@ -387,9 +389,9 @@ M.attributes = {
 
 		local collumns,key = db.get_columns(table_name)
 		db_close()
-		
+
 		for k,col in ipairs(collumns) do
-			
+
 			code = code..[[
 	{ ]]..col..[[ = "safe" },
 ]]
@@ -407,7 +409,7 @@ M.relations = {}
 return M
 
 ]]
-		
+
 		local file = assert(io.open("models/"..table_name..".lua", "w"))
 		if file:write(code) then
 			file:close()
