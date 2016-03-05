@@ -3,28 +3,35 @@ Sailor's views are Lua Page files (.lp) contained inside your `/views`folder. Th
 
 Let's create our `/views/main/index.lp`: 
 
-    This is valid HTML! You can: <br/>
+    This is valid HTML!
+    
+You can:
 
-    * Use regular HTML <b>tags</b>. <br/>
+* Use regular HTML
+    `<b>tags</b>`
 
-    * Run Javascript on your browser <script> alert("hi");</script><br/>
+* Run Javascript on your browser
+    `<script> alert("hi");</script><br/>`
 
-    * Run Lua scripts from your server 
-    <?lua 
-      page:print(msg) 
-    ?> <!--If this came from the controller we just created in the last section of our tutorial, this will print 'Hello'--> 
-    <%= msg %> <!--This will do the same thing -->
-    <br/>
+* Run Lua scripts from your server 
 
-    * Intercalate Lua code with HTML
-    <?lua
-    for i=1,10 do ?>
-    This message will appear 10 times! This is number <%= i %>.
-    <?lua end ?>
+        <?lua 
+          page:print(msg) 
+        ?> <!--If this came from the controller we just created in the last section of our tutorial, this will print 'Hello'--> 
+        <%= msg %> <!--This will do the same thing -->
+        <br/>
 
-    * Use the page object and all its functions, for example, page:include().
-    <?lua page:include("/path/to/my/.lp/file/without/extension") ?>
-    <?lua page:include("views/docs/_menu") ?>
+* Intercalate Lua code with HTML
+
+        <?lua
+        for i=1,10 do ?>
+        This message will appear 10 times! This is number <%= i %>.
+        <?lua end ?>
+
+* Use the page object and all its functions, for example, page:include().
+
+        <?lua page:include("/path/to/my/.lp/file/without/extension") ?>
+        <?lua page:include("views/docs/_menu") ?>
 
 
 ###Lua at client
@@ -50,7 +57,6 @@ Here are some examples of Lua code that will run on the browser using the `starl
 
 
 #####Accessing Javascript functions and passing callbacks
-
 
     <script>
     function myJSFunction(msg){
