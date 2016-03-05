@@ -3,6 +3,7 @@
 Sailor comes integrated with [Busted](http://olivinelabs.com/busted/) to provide for unit and functional testing of your applications.
 
 Under your application folder you should find a /tests directory with the following structure:
+
   * `/fixtures` - A place for your fixtures
   * `/functional` - A place for your functional tests
   * `/unit` - A place for your unit tests
@@ -89,6 +90,7 @@ You can make functional tests to test your controllers, for example. Sailor test
   * additional_headers: A table containing additional headers you may want to send. Example: {ACCEPT = 'application/json'}
 
 This function will return a table with the following fields:
+
   * res.status: number. The status of the response.
   * res.body: string. The body of the response.
   * res.headers: table. Any headers out that were set.
