@@ -5,8 +5,9 @@ The `page` object is being passed around controllers and views (implicitly) and 
 
 ####page:render( filename [*, parms*] )
 Renders a view from a controller action, if there's a default layout configured, it will render the layout first and then render your view.
-* filename: string, filename without ".lp". The file must be inside /views/controller_name
-* parms: [optional] table, vars being passed ahead (env).
+
+ * filename: string, filename without ".lp". The file must be inside /views/controller_name
+ * parms: [optional] table, vars being passed ahead (env).
 
 Example: `page:render( 'index', {msg = 'hello'} )`
 
