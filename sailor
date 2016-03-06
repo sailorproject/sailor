@@ -138,5 +138,7 @@ local enable_cmd = parser:command("e enable", "Will install an extension to Sail
     enable_cmd:usage(colors("%{bright red}Usage: sailor enable NAME"))
     enable_cmd:argument("name", "The name of the extension to be enabled.")
 
+parser:usage(parser:get_help())
+
 local args = parser:parse()
 --print(inspect(args))
