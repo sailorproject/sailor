@@ -38,7 +38,7 @@ Example code given for Ubuntu users, if you are not under Ubuntu, follow these s
 
  * Install Lua, LuaRocks and a database of choice. E.g. sqlite3
 ```
-sudo apt-get install lua5.1 luarocks sqlite3
+sudo apt-get install lua5.2 luarocks sqlite3
 ```
  * Fork [Sailor's repository](http://github.com/sailorproject/sailor) by clicking on Fork then clone it:
 ```
