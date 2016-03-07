@@ -5,7 +5,7 @@ Sailor is compatible with a variety of operating systems and webservers. On this
 
 If you don't have it already, install Lua. Sailor is compatible with both 5.1 and 5.2.
 
-    sudo apt-get install lua5.2
+    sudo apt-get install lua5.1
 
 ### Installing Apache 2.4
 
