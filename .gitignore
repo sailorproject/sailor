@@ -2,3 +2,4 @@
 .floo*
 *.swp
 *.swo
+test/db/
