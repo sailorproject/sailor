@@ -36,9 +36,9 @@ If you want to request a new feature on Sailor or develop a new feature yourself
 
 Example code given for Ubuntu users, if you are not under Ubuntu, follow these steps adapting to your current operational system.
 
- * Install Lua, LuaRocks and a database of choice. E.g. sqlite3
+ * Install Lua, LuaRocks and your choice of database and web server. E.g. sqlite3 and Xavante
 ```
-sudo apt-get install lua5.1 luarocks sqlite3
+sudo apt-get install lua5.1 luarocks sqlite3 xavante
 ```
  * Fork [Sailor's repository](http://github.com/sailorproject/sailor) by clicking on Fork then clone it:
 ```
