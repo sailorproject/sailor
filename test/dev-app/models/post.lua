@@ -20,4 +20,3 @@ post.db = {
 }
 
 return post
-
