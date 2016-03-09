@@ -16,8 +16,7 @@ M.db = {
 }
 
 M.relations = {
-	posts = {relation = "MANY_MANY", model = "post", table = "post_category", attributes = {"cateogory_id","post_id"}}		
+	posts = {relation = "MANY_MANY", model = "post", table = "post_category", attributes = {"category_id","post_id"}}
 }
 
 return M
-
