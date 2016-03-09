@@ -18,7 +18,7 @@ This is SQL code necessary:
       body text
     );
 
-After you're done, you must create a Lua file under `/models` folder. Our model will be called `post.lua`. We will start by declaring post as a table, then the attribute rules list, relations and public methods. At the end of the file we must return the table we declared. We can also use Valua to create validation rules that will be used to test our model's attributes before saving. You can read more about the validation module at the reference manual. If you don't want to add any rules, please indicate that the attribute is safe.
+After you're done, you must create a Lua file under the `/models` folder. Our model will be called `post.lua`. We will start by declaring post as a table, then the attribute rules list, relations and public methods. At the end of the file we must return the table we declared. We can also use Valua to create validation rules that will be used to test our model's attributes before saving. You can read more about the validation module at the reference manual. If you don't want to add any rules, please indicate that the attribute is safe.
 
     local val = require "valua"
     local post = {}
