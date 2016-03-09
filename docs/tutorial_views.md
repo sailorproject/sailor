@@ -38,7 +38,7 @@ You can:
 You can also write Lua code that will run on the browser, if you want to. This is possible because Sailor will get this piece of code and give it to a Virtual Machine that will handle it and run Javascript behind the scenes. There are different Virtual Machines available, however, `starlight` is the default. Other options are `moonshine`, `lua51js` and `luavmjs`. They have slight differences on features, performance and how they handle DOM manipulation. Since starlight is the default, the following example will work on it, but also on moonshine. You can find more details about these differences on the reference manual.
 
 
-To write Lua code on a view that will run on the browser, you need to annotate your `<?lua ?>` tag. So, code inside `<?lua@client ?>` will run on the browser, inside `<?lua@both ?>` will run both on the server side and on the browser and inside `<?lua@server ?>`, which can be simply written as `<?lua ?>`, is the default and will run on the server side.
+To write Lua code on a view that will run on the browser, you need to annotate your `<?lua ?>` tag. Code inside `<?lua@client ?>` will run on the browser, code inside `<?lua@server ?>` will run on the server side, and code inside `<?lua@both ?>` will run both on the server side and on the browser. Since `<?lua@server ?>` is the default, it can be simply written as `<?lua ?>`.
 
 Here are some examples of Lua code that will run on the browser using the `starlight` virtual machine:
 
