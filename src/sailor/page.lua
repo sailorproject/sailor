@@ -111,10 +111,12 @@ function Page:render(filename,parms,src)
     else
         local dir = self.controller_view_path or 'views'
         -- filename is nil if the controller script is missing in /controllers/
-        -- ToDo: print error informing about missing controller?
         if filename ~= nil then
             filepath = sailor.path..'/'..dir..'/'..filename
             src = read_src(filepath)
+        else
+            error("No view name available.")
+            return
         end
 
     end
