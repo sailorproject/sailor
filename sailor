@@ -90,6 +90,10 @@ local function create()
 
 	print("done!")
 end
+local function start()
+	assert(os.execute("lua start-server.lua"))
+	print("server started")
+end
 
 local function test()
 	local resty = false
