@@ -9,7 +9,7 @@
 --------------------------------------------------------------------------------
 
 local lfs = require "lfs"
-
+local sailor = require "sailor"
 local function help()
 	print("\27[31mUsage: sailor command\27[0m \n")
 	print("Commands:")
@@ -98,7 +98,8 @@ local function start()
 end
 
 local function version()
-	os.execute('ls /usr/local/lib/luarocks/rocks/sailor')
+	-- os.execute('ls /usr/local/lib/luarocks/rocks/sailor') --works only on linux
+	print(sailor._VERSION)
 	
 end
 
