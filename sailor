@@ -19,6 +19,8 @@ local function help()
 	print("     PATH	Optional. The path to where you wish your app to be created. \n\t\tIf not specified, the app will be created at the current dir.\n")
 	print("		\27[31mExample:\27[0m sailor create 'Hey Arnold' /var/www")
 	print("		This will create your web app under /var/www/hey_arnold.\n")
+	print("  \27[31mStart\t\tUsage: sailor start\27[0m	")
+	print("                Will start the appliation. You can go to http://localhost:8080")
 	print("  \27[31mtest\t\tUsage: sailor test [FLAGS]\27[0m")
 	print("    		Will run the tests specified for an application.")
 	print("    		Must be called from the base dir of the application.")
@@ -91,8 +93,8 @@ local function create()
 	print("done!")
 end
 local function start()
-	assert(os.execute("lua start-server.lua"))
-	print("server started")
+	os.execute("lua start-server.lua")
+	-- print("server started")
 end
 
 local function test()
@@ -152,6 +154,8 @@ local function run()
 		return test()
 	elseif arg[1] == 'enable' and arg[2] then
 		enable()
+	elseif arg[1] == 'start' or arg[1] =='s' then
+		return start()
 	else
 		help()
 	end
