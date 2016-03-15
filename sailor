@@ -97,6 +97,11 @@ local function start()
 	-- print("server started")
 end
 
+local function version()
+	os.execute('ls /usr/local/lib/luarocks/rocks/sailor')
+	
+end
+
 local function test()
 	local resty = false
 	local flags = ''
@@ -156,6 +161,8 @@ local function run()
 		enable()
 	elseif arg[1] == 'start' or arg[1] =='s' then
 		return start()
+	elseif arg[1] =='-v' or arg[1] =='--version' then
+		return version()
 	else
 		help()
 	end
