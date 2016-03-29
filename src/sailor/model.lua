@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.9.1: basic model creator, uses db module
+-- model.lua, v0.10.3: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
-
+local h = require "tests.helper"
 local sailor = require "sailor"
 local model = {}
 local db = require("sailor.db")
@@ -44,7 +44,7 @@ function model:new(obj)
 	obj = util.deepcopy(obj)
 
 	setmetatable(obj,self)
-	-- REWRITE 
+	-- REWRITE
 	self.__index = function (table, key)
 		if key ~= "attributes" and key ~= "@name" and key ~= "relations" and key ~= "loaded_relations" and key ~= "db" and not model[key] and key ~= "errors" then
 			if obj.relations and obj.relations[key] then
@@ -112,7 +112,9 @@ function model:get_relation(key)
 			obj = Model:find_by_attributes( attributes )
 
 		elseif relation.relation == "HAS_MANY" then
-			obj = Model:find_all(relation.attribute..' = '..self[self.db.key])
+			local attributes = {}
+			attributes[relation.attribute] = self[self.db.key]
+			obj = Model:find_all_by_attributes( attributes )
 
 		elseif relation.relation == "MANY_MANY" then
 			db_connect()
@@ -142,7 +144,7 @@ function model:insert()
 		for attr,_ in pairs(n) do
 			if attr ~= self.db.key then
 				table.insert(attrs,attr)
-				if not self[attr] then
+				if self[attr] == nil then
 					table.insert(values,"null")
 				elseif type(self[attr]) == 'number' then
 					table.insert(values,self[attr])
@@ -160,7 +162,6 @@ function model:insert()
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..")"
 
 	local id = db.query_insert(query,self.db.key)
-
 	self[self.db.key] = id
 	db_close()
 	return true
@@ -175,7 +176,7 @@ function model:update()
 	for _,n in pairs(self.attributes) do
 		for attr,_ in pairs(n) do
 			local string = attr.."="
-			if not self[attr] then
+			if self[attr] == nil then
 				string = string.."null"
 			elseif type(self[attr]) == 'number' then
 				string = string..self[attr]
@@ -195,34 +196,6 @@ function model:update()
 	return u
 end
 
--- Reads the cursor information after reading from db and turns it into an object
--- If searching for multiple results, a table as the second parameter is needed
-function model:fetch_object(cur,res_table)
-	local row = cur:fetch ({}, "a")
-
-	if not row then
-		cur:close()
-		return false
-	end
-
-	local types = cur:getcoltypes()
-	local names = cur:getcolnames()
-
-	for k,t in pairs(types) do
-		if t:find('number') then
-			row[names[k]] = tonumber(row[names[k]])
-		end
-	end
-	local obj = sailor.model(self["@name"]):new(row)
-	if res_table ~= nil then
-		table.insert(res_table,obj)
-	else
-		cur:close()
-	end
-
-	return obj
-end
-
 -- (escaped) Finds objects with the given id
 function model:find_by_id(id)
 	if not id then return nil end
@@ -234,12 +207,8 @@ function model:find_by_id(id)
 	return false
 end
 
--- (escaped) Finds objects with the given attributes
--- attributes: table, Example {name='joao',age = 26}
--- Might need a refactor to include other comparisons such as LIKE, > etc.
-function model:find_by_attributes(attributes)
-	db_connect()
-
+-- build 'where' part of query based on attribute table
+local function build_attributes_query(attributes)
 	local n = 0
     local where = ' where '
     for k,v in pairs(attributes) do
@@ -251,10 +220,38 @@ function model:find_by_attributes(attributes)
         n = n+1
     end
 
-    local res = db.query("select * from "..self.db.table..where..";")
+    return where
+end
+
+-- (escaped) Finds one object with the given attributes
+-- attributes: table, Example {name='joao',age = 26}
+-- Might need a refactor to include other comparisons such as LIKE, > etc.
+function model:find_by_attributes(attributes)
+	db_connect()
+	local where = build_attributes_query(attributes)
+    local res = db.query("select * from "..self.db.table..where.." limit 1;")
 	db_close()
 
 	if res and next(res) then return sailor.model(self["@name"]):new(res[1]) end
+	return false
+end
+
+-- (escaped) Finds all objects with the given attributes
+-- attributes: table, Example {name='joao',age = 26}
+-- Might need a refactor to include other comparisons such as LIKE, > etc.
+function model:find_all_by_attributes(attributes)
+	db_connect()
+	local where = build_attributes_query(attributes)
+    local res = db.query("select * from "..self.db.table..where..";")
+	db_close()
+
+	if res and next(res) then
+		local objects = {}
+		for _,r in pairs(res) do
+			objects[#objects+1] = sailor.model(self["@name"]):new(r)
+		end
+		return objects
+	end
 	return false
 end
 
@@ -353,7 +350,6 @@ function model.generate_crud(model_name)
 	local f=io.open(sailor.path.."/models/"..model_name..".lua","r")
 	if f == nil then
    		error("The model '"..model_name.."'does not exist")
-   		return false
    	else
    		io.close(f)
 
@@ -377,7 +373,6 @@ function model.generate_model(table_name)
 	if not db.table_exists(table_name)  then
 		db:close()
 		error("The table '"..table_name.."' does not exist.")
-		return false
    	else
 
 
@@ -394,9 +389,9 @@ M.attributes = {
 
 		local collumns,key = db.get_columns(table_name)
 		db_close()
-		
+
 		for k,col in ipairs(collumns) do
-			
+
 			code = code..[[
 	{ ]]..col..[[ = "safe" },
 ]]
@@ -414,8 +409,8 @@ M.relations = {}
 return M
 
 ]]
-		
-		local file = io.open("models/"..table_name..".lua", "w")
+
+		local file = assert(io.open("models/"..table_name..".lua", "w"))
 		if file:write(code) then
 			file:close()
 			return true

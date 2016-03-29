@@ -39,6 +39,8 @@ before_install:
   - source .travis/setenv_lua.sh
 
 install:
+  - luarocks install luacov
+  - luarocks install luacov-coveralls
   - luarocks make rockspecs/sailor-current-1.rockspec
 
 before_script:
@@ -46,8 +48,13 @@ before_script:
 
 script:
   - cd test/dev-app
-  - if [ "$SERVER" != "openresty" ]; then sailor test --verbose; fi
+  - if [ "$SERVER" != "openresty" ]; then sailor test --verbose --coverage; fi
   - if [ "$SERVER" == "openresty" ]; then sailor test --resty; fi
+
+after_success:
+  - mv luacov.stats.out ../..
+  - cd ../..
+  - luacov-coveralls -c test/dev-app/.luacov
 
 notifications:
   email:

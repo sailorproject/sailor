@@ -15,4 +15,9 @@ return {
 		username = 'arnold',
 		password = '12345678'
 	},
+
+	{
+		username = 'harry',
+		password = '12345678'
+	},
 }

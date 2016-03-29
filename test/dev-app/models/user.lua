@@ -32,7 +32,4 @@ function user.logout()
 	return access.logout()
 end
 
-
-
-
 return user

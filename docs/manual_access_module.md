@@ -40,6 +40,7 @@ Example: `access.logout()`
 
 ####access.settings(s)
 Changes settings of the access module.
+
   * s: table with new settings.
 
 Example: ` access.settings{ default_login = 'IamGod', default_password = 'StairwayToHeaven' } `

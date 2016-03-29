@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- page.lua, v0.2 - The Page object
+-- page.lua, v0.3 - The Page object
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -111,10 +111,12 @@ function Page:render(filename,parms,src)
     else
         local dir = self.controller_view_path or 'views'
         -- filename is nil if the controller script is missing in /controllers/
-        -- ToDo: print error informing about missing controller?
         if filename ~= nil then
             filepath = sailor.path..'/'..dir..'/'..filename
             src = read_src(filepath)
+        else
+            error("No view name available.")
+            return
         end
 
     end
@@ -131,6 +133,17 @@ function Page:render(filename,parms,src)
     end
 end
 
+-- Write a JSON-serialized version of data to the browser
+-- data: The data to be serialized as JSON
+-- args: Parameters passed through to the dkjson library (i.e. {indent=true})
+function Page:json(data, args)
+	local json = require "dkjson"
+	args = args or {}
+	local encoded = json.encode(data, args)
+
+	self.r.content_type = 'application/json'
+	self:write(encoded)
+end
 
 -- Redirects to another action or another address
 -- route: string, '<controller name>/<action_name>'
@@ -219,6 +232,43 @@ function Page:make_url(route,params)
         end
     end
     return url
+end
+
+-- Sends variables to the browser virtual machine
+-- Only available to Starlight VM
+-- @param var_table, table: Containes the variable(s) to be sent
+--    E.g. page:to_browser{x="Harry",y="Wizard"}
+-- Important: Does not convert functions. Only numbers, strings and tables.
+-- Functions will be assigned nil
+local function to_string(var)
+    if type(var) == 'number' then
+        return var
+    elseif type(var) == 'string' then
+        return "'".. var .."'"
+    elseif type(var) == 'table' then
+        local code = {}
+        for k,v in pairs(var) do
+            if type(k)=='number' then k = '['..k..']' end
+            table.insert(code,k..'='..to_string(v))
+        end
+        return '{'..table.concat(code,',')..'}'
+    end
+    return 'nil'
+end
+
+function Page:to_browser(var_table)
+    if conf.lua_at_client.vm ~= "starlight" then
+        error("page:to_browser is not yet supported by the current Lua->JS virtual machine. Please switch to Starlight if you need this feature.")
+    end
+    local vm = require("latclient.starlight")
+
+    local code = {}
+    for name, var in pairs(var_table) do
+        table.insert(code, " "..name.." = "..to_string(var))
+    end
+    code = table.concat(code,"\n")
+    local client_code = vm.get_client_js(code)
+    render_page('',{},lp.translate(client_code,true))
 end
 
 return M

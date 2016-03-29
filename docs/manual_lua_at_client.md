@@ -2,7 +2,7 @@
 
 ###Lua at client
 
-With Sailor, you can not only write the backend of your app with Lua, but you can also write Lua code that will run on the browser. This is possible because Sailor will get this piece of code and give it to a Virtual Machine that will handle it and run Javascript behind the scenes. Sailor is compatible with different implementations of Lua-to-Javascript virtual machines. The default is starlight. In case you want to use a different VM, you will have to <a href="https://github.com/Etiene/sailor/tree/master/lua-to-js-vms" target="_blank">download</a> the folder with the libraries, put it inside the `pub` folder of your Sailor app and edit your `conf/conf.lua` to configure your app to use this VM instead.
+With Sailor, you can not only write the backend of your app with Lua, but you can also write Lua code that will run on the browser. This is possible because Sailor will get this piece of code and give it to a Virtual Machine that will handle it and run Javascript behind the scenes. Sailor is compatible with different implementations of Lua-to-Javascript virtual machines. The default is starlight. In case you want to use a different VM, you will have to <a href="https://github.com/sailorproject/sailor/tree/master/lua-to-js-vms" target="_blank">download</a> the folder with the libraries, put it inside the `pub` folder of your Sailor app and edit your `conf/conf.lua` to configure your app to use this VM instead.
 
 Here is a small comparative table of the compatible VMs:
 

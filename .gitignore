@@ -1,2 +1,5 @@
 *.DS_Store
 .floo*
+*.swp
+*.swo
+test/db/

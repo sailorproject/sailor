@@ -1,0 +1,8 @@
+return {
+   modules = {
+      sailor = "src/sailor.lua",
+      ['sailor.*'] = "src",
+      ['sailor.db.*'] = "src",
+      ['web_utils.*'] = "src"
+   }
+}

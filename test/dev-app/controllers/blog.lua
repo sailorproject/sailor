@@ -1,3 +1,5 @@
+local sailor = require "sailor"
+
 local blog = {}
 
 function blog.index (page)
