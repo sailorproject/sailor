@@ -33,11 +33,13 @@ If you wish to use different web servers, please, read on.
 
 ### Alternative setup with Apache 2.4 and mod_lua
     
-This guide assumes that you have already completed Sailor's basic installation through LuaRocks. Now we need Apache, that can be installed view homebrew. The default apache build however, does not come with Lua module by default, so we must edit the brew install file.
+This guide assumes that you have already completed Sailor's basic installation through LuaRocks. Now we need Apache, that can be installed view homebrew. The default apache build however, does not come with Lua module by default, so we must edit the brew install file. Also, Apache is not in the default repository of Homebrew formulas, nor are some dependencies, so we use the "brew tap" command to add other formula repositories.
 
+	brew tap homebrew/dupes
+	brew tap homebrew/apache
     brew edit httpd24
 
-Find the list of enabled flags, after `args = %W[`, add `--enable-lua` and save the file.
+Find the list of enabled flags, after `args = %W[`, add `--enable-lua` and save the file. The file is ususally localted at "/usr/local/Library/Taps/homebrew/homebrew-apache/httpd24.rb"
 
     brew install httpd24
 
