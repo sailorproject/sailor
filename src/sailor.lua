@@ -111,7 +111,16 @@ local function autogen(page)
 
     local src = autogen.gen()
     src = lp.translate(src)
-    page:render('sailor/autogen',{page=page},src)
+    page:render('sailor/autogen',{page=page})
+end
+
+local function admin(page)
+    local admin = require "sailor.admin"
+
+    local src=admin.gen()
+    src = lp.translate(src)
+    page:render('sailor/admin',{page=page},src)
+
 end
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
@@ -178,6 +187,13 @@ function sailor.route(page)
             if conf.sailor.enable_autogen then
                 local _,res = xpcall(function () autogen(page) end, error_handler)
                 return res or httpd.OK or page.r.status or 200
+            end
+            return error_404()
+        end
+        if controller == "admin" then
+            if conf.sailor.enable_admin then
+                local _,res = xpcall(function () admin(page) end, error_handler)
+                return res or httpd.OK or page.r.starts or 200
             end
             return error_404()
         end

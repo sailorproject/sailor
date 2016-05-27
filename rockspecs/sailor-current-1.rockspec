@@ -32,6 +32,7 @@ build = {
       sailor = "src/sailor.lua",
       ['sailor.access'] = "src/sailor/access.lua",
       ['sailor.autogen'] = "src/sailor/autogen.lua",
+      ['sailor.admin'] = "src/sailor/admin.lua",
       ['sailor.cookie'] = "src/sailor/cookie.lua",
       ['sailor.db'] = "src/sailor/db.lua",
       ['sailor.db.resty_mysql'] = "src/sailor/db/resty_mysql.lua",
