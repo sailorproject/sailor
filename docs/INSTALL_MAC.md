@@ -33,21 +33,33 @@ If you wish to use different web servers, please, read on.
 
 ### Alternative setup with Apache 2.4 and mod_lua
     
-This guide assumes that you have already completed Sailor's basic installation through LuaRocks. Now we need Apache, that can be installed view homebrew. The default apache build however, does not come with Lua module by default, so we must edit the brew install file.
+This guide assumes that you have already completed Sailor's basic installation through LuaRocks. Now we need Apache, that can be installed view homebrew. The default apache build however, does not come with Lua module by default, so we must edit the brew install file. Also, Apache is not in the default repository of Homebrew formulas, nor are some dependencies, so we use the "brew tap" command to add other formula repositories.
 
-    brew edit httpd24
+	brew tap djl/homebrew-apache2
+	brew install djl/apache2/apache24
+    brew edit apache24
 
-Find the list of enabled flags, after `args = %W[`, add `--enable-lua` and save the file.
+Find the list of enabled flags, after `args = [`, add `--enable-lua` and save the file. You can add other flags to the argument list if necessary. The file is ususally localted at "/usr/local/Library/Taps/djl/homebrew-apache2/apache24.rb"
 
-    brew install httpd24
+    brew install apache24
 
 Alternatively, if you are having issues downloading Apache via homebrew, you can download it directly from [apache.org](http://apache.org) and compile your own build. Remember to add the `--enable-lua` flag when running `./configure` along with other flags you may wish.
 
-Now, you need to enable `mod_lua` in Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/2.4/httpd.conf`. Add or uncomment the following directive:
+Now, you need to enable `mod_lua` in Apache's configuration file. The file will probably be located at `/usr/local/etc/apache2/httpd.conf`. Add or uncomment the following directive:
 
     LoadModule lua_module modules/mod_lua.so
 
-It's also necessary to allow `.htaccess` files. Look for the `AllowOverride` directive in the configuration file and change from `None` (the default) to `All`. Now you can either add a VirtualHost for Apache to read from the directory of your previously created app or simply create your apps inside the directory Apache is reading from (for example /usr/local/var/www/htdocs).
+Change the DirectoryIndex directive to:
+
+    DirectoryIndex index.lua index.html
+    
+Add the SetHandler directive:
+
+    <FilesMatch "\.lua$">
+      SetHandler lua-script
+    </FilesMatch>
+
+It's also necessary to allow `.htaccess` files. Look for the `AllowOverride` directive in the configuration file and change from `None` (the default) to `All`. Now you can either add a VirtualHost for Apache to read from the directory of your previously created app or simply create your apps inside the directory Apache is reading from (for example /usr/local/var/www/htdocs). It is also necessary to 
 
     sailor create "My app" /usr/local/var/www/htdocs
 
