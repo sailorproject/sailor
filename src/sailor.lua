@@ -52,11 +52,11 @@ end
 
 -- Stores the path of the application in sailor.path
 function sailor.set_application_path(r)
-    if r.uri and r.filename then
-        local filename = r.uri:match( "([^/]+)$") 
-        if filename then
-            sailor.path = r.filename:match("^@?(.-)/"..filename.."$")
-            if sailor.path ~= '.' then return end
+    if r.filename then
+        local new_path = r.filename:match("^@?(.*)/")
+        if new_path and new_path ~= "." then
+            sailor.path = new_path
+            return
         end
     end
     sailor.path = lfs.currentdir()
