@@ -13,11 +13,14 @@ if next(page.POST) then
 
 		if login then
 			?>
+			
 			<p>Login success. (it should redirect form here)</p>
 			<a href="?r=/admin/conf"> Config editor</a><br>
 			<a href="?r=autogen"> Autogen Fucntions</a>
+
 			<?lua
-			else ?><p>Password error. Check config file</p><?lua
+			else ?><p>Password error. Check config file</p>
+				<?lua
 		end
 	end
 end

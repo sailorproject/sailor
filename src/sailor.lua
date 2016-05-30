@@ -108,10 +108,12 @@ end
 -- page: our page object
 local function autogen(page)
     local autogen = require "sailor.autogen"
-
+local access = require "sailor.access"
+if not access.is_guest() then
     local src = autogen.gen()
     src = lp.translate(src)
     page:render('sailor/autogen',{page=page},src)
+end
 end
 
 local function admin(page)
@@ -184,7 +186,7 @@ function sailor.route(page)
         end
 
         if controller == "autogen" then 
-            if conf.sailor.enable_autogen and conf.sailor.enable_admin then
+            if conf.sailor.enable_admin then
                 local _,res = xpcall(function () autogen(page) end, error_handler)
                 return res or httpd.OK or page.r.status or 200
             end
