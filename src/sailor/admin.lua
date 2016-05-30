@@ -4,15 +4,18 @@ function M.gen()
 
 <?lua
 local conf = require "conf.conf"
-
+local access = require "sailor.access"
+access.settings{default_password = conf.sailor.admin_password}
 
 if next(page.POST) then
 	if page.POST.password then
-		if (conf.sailor.admin_password == page.POST.password) then
+		local login, err = access.login('admin', page.POST.password)
+
+		if login then
 			?>
 			<p>Login success. (it should redirect form here)</p>
 			<a href="?r=/admin/conf"> Config editor</a><br>
-			<a href="M.autogen()"> Autogen Fucntions</a>
+			<a href="?r=autogen"> Autogen Fucntions</a>
 			<?lua
 			else ?><p>Password error. Check config file</p><?lua
 		end
@@ -37,18 +40,16 @@ end
 
 
 
-function M.autogen( ... )
-		--copy the autogen fucntions here. 
-
+function M.autogen()
+local code=[[<p>yoloooooo</p>]]
 end
 
 function M.conf( )
 
 local code=[[
-	<?lua@client 
-window:alert("the conf function")
-	?>
+	<p>yolo</p>
 	]]
 	return code
 end
+
 return M
