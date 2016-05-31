@@ -1,14 +1,22 @@
 local M ={}
 function M.gen()
-	local code=[[
+	local code=[ --add one more opening bracket here
 
 <?lua
 local conf = require "conf.conf"
 local access = require "sailor.access"
+local session = require "sailor.session"
 access.settings{default_password = conf.sailor.admin_password}
 
 if next(page.POST) then
 	if page.POST.password then
+		session.open(page.r)
+    session.save({username = "john lennons"})             
+    if session.data then
+        for k,v in pairs(session.data) do
+            page:write(v)
+        end
+    end
 		local login, err = access.login('admin', page.POST.password)
 
 		if login then
