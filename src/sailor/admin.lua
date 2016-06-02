@@ -35,9 +35,20 @@ if access.is_guest() then ?>
 </form>
 <?lua
 else ?>
-	<a href='#'>Logout. THis button doesnt work yet</a>
+		<button id='button'>Logout</button>
 
-	<?lua end ?>
+<?lua@client
+
+function logout(access, page)
+	window:alert('This code was written in Lua')
+	print('yadsf')
+
+end
+
+local btn = window.document:getElementById('button')
+btn.onclick = logout
+?><?lua
+ end ?>
 
 
 	]]
@@ -46,17 +57,5 @@ else ?>
 end
 
 
-
-function M.autogen()
-local code=[[<p>yoloooooo</p>]]
-end
-
-function M.conf( )
-
-local code=[[
-	<p>yolo</p>
-	]]
-	return code
-end
 
 return M

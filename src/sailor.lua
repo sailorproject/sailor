@@ -107,7 +107,6 @@ end
 -- Auxiliary function to open the autogen page for models and CRUDs
 -- page: our page object
 local function autogen(page)
-    local autogen = require "sailor.autogen"
 local access = require "sailor.access"
 if not access.is_guest() then
     local src = autogen.gen()
@@ -126,6 +125,9 @@ local function admin(page)
     page:render('sailor/admin',{page=page},src)
 
 end
+
+local function logout(page)
+
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
 -- TODO - improve
