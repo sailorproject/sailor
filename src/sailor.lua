@@ -113,7 +113,9 @@ if not access.is_guest() then
     local src = autogen.gen()
     src = lp.translate(src)
     page:render('sailor/autogen',{page=page},src)
+else return page:redirect('/admin')
 end
+
 end
 
 local function admin(page)
