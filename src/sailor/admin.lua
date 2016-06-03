@@ -1,6 +1,6 @@
 local M ={}
 function M.gen()
-	local code=[[--add one more opening bracket here
+	local code=[[
 
 <?lua
 local conf = require "conf.conf"
