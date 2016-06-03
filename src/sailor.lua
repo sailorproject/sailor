@@ -108,15 +108,17 @@ end
 -- page: our page object
 local function autogen(page)
 local access = require "sailor.access"
+local autogen = require "sailor.autogen"
 if not access.is_guest() then
     local src = autogen.gen()
     src = lp.translate(src)
     page:render('sailor/autogen',{page=page},src)
-else return page:redirect('/admin')
+else 
+    return page:redirect('/admin')
 end
 
 end
-
+-- Function to open the admin page
 local function admin(page)
     local admin = require "sailor.admin"
 
@@ -128,8 +130,9 @@ end
 
 local function logout(page)
     local access = require "sailor.access"
-    access.logout()
-    page:redirect('/admin')
+    if access.logout() then 
+    return page:redirect('/admin')
+end
 end
 
 
@@ -208,10 +211,17 @@ function sailor.route(page)
             end
             return error_404()
         end
-        if controller == "admin/logout" then
-            logout()
-        end
 
+        if controller == 'logoutadmin' then
+            
+               
+              if conf.sailor.enable_admin then
+                local _,res = xpcall(function () logout(page) end, error_handler)
+                return res or httpd.OK or page.r.status or 200
+            end
+            return error_404()
+        end
+       
         local ctr
         local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
         if ctr then

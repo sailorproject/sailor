@@ -14,9 +14,8 @@ if next(page.POST) then
 		if login then
 			?>
 		
-			<p>Login success. (it should redirect form here)</p>
-			<a href="?r=/admin/conf"> Config editor</a><br>
-			<a href="?r=autogen"> Autogen Fucntions</a>
+			<p>Login success.</p>
+			
 
 			<?lua
 			else ?>
@@ -35,7 +34,10 @@ if access.is_guest() then ?>
 </form>
 <?lua
 else ?>
-		<a href="?r=/admin/logout">Logout</a>
+		<a href="?r=logoutadmin">Logout</a><br>
+		<a href="?r=/admin/conf"> Config editor</a><br>
+			<a href="?r=autogen"> Autogen Fucntions</a>
+
 
 
 <?lua
