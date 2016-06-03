@@ -213,9 +213,7 @@ function sailor.route(page)
         end
 
         if controller == 'logoutadmin' then
-            
-               
-              if conf.sailor.enable_admin then
+            if conf.sailor.enable_admin then
                 local _,res = xpcall(function () logout(page) end, error_handler)
                 return res or httpd.OK or page.r.status or 200
             end
