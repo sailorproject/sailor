@@ -127,6 +127,11 @@ local function admin(page)
 end
 
 local function logout(page)
+    local access = require "sailor.access"
+    access.logout()
+    page:redirect('/admin')
+end
+
 
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
@@ -202,6 +207,9 @@ function sailor.route(page)
                 return res or httpd.OK or page.r.starts or 200
             end
             return error_404()
+        end
+        if controller == "admin/logout" then
+            logout()
         end
 
         local ctr

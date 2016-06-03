@@ -35,19 +35,10 @@ if access.is_guest() then ?>
 </form>
 <?lua
 else ?>
-		<button id='button'>Logout</button>
+		<a href="?r=/admin/logout">Logout</a>
 
-<?lua@client
 
-function logout(access, page)
-	window:alert('This code was written in Lua')
-	print('yadsf')
-
-end
-
-local btn = window.document:getElementById('button')
-btn.onclick = logout
-?><?lua
+<?lua
  end ?>
 
 
