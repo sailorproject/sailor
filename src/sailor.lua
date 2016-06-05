@@ -131,7 +131,10 @@ end
 local function logout(page)
     local access = require "sailor.access"
     if access.logout() then 
-    return page:redirect('/admin')
+        return page:redirect('/admin')
+    else
+        return error_404()
+         
 end
 end
 
