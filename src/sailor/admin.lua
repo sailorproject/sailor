@@ -35,7 +35,7 @@ if access.is_guest() then ?>
 <?lua
 else ?>
 		<a href="?r=logoutadmin">Logout</a><br>
-		<a href="?r=/admin/conf"> Config editor</a><br>
+		<a href="?r=configedit"> Config editor</a><br>
 			<a href="?r=autogen"> Autogen Fucntions</a>
 
 
@@ -51,15 +51,12 @@ end
 
 function M.configedit()
 	local code=[[
-
-	<h1> Configurtion editor</h1>
-	<?lua 
-io.open()
-
-
-
-
-	?>
+<?lua local conf = require "conf.conf" ?>
+	<h1> Config editor</h1><br>
+The admin password:
+	<?lua
+	print(conf.sailor.admin_password)
+?>
 
 
 
