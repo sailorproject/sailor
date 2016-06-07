@@ -135,8 +135,11 @@ local function logout(page)
     else
         return error_404()
          
+    end
 end
-end
+
+local function conf(page)
+    local conf = require "sailor.conf"
 
 
 
@@ -221,6 +224,9 @@ function sailor.route(page)
                 return res or httpd.OK or page.r.status or 200
             end
             return error_404()
+        end
+        if controller == 'confedit' then
+
         end
        
         local ctr
