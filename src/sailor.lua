@@ -138,8 +138,13 @@ local function logout(page)
     end
 end
 
-local function conf(page)
-    local conf = require "sailor.conf"
+local function configedit(page)
+    local admin = require "sailor.admin"
+    local src = admin.configedit()
+    src = lp.translate(src)
+    page:render('sailor/admin', {page=page},src)
+
+end
 
 
 
@@ -225,8 +230,13 @@ function sailor.route(page)
             end
             return error_404()
         end
-        if controller == 'confedit' then
 
+        if controller == 'configedit' then
+            if conf.sailor.enable_admin then
+                local _,res = xpcall(function () configedit(page) end, error_handler)
+                return res or httpd.OK or page.r.status or 200
+            end
+            return error_404() 
         end
        
         local ctr

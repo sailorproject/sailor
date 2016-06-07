@@ -49,6 +49,24 @@ else ?>
 
 end
 
+function M.configedit()
+	local code=[[
 
+	<h1> Configurtion editor</h1>
+	<?lua 
+io.open()
+
+
+
+
+	?>
+
+
+
+
+	]]
+
+	return code
+end
 
 return M
