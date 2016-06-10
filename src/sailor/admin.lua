@@ -55,10 +55,15 @@ function M.configedit()
 <?lua
 
 local conf = require "conf.conf" 
-local form = require "sailor.form"
+local sailor = require "sailor"
 
 if next(page.POST) then
-	conf.sailor.admin_password = page.POST.admin_password
+	local path = sailor.path..'/conf/conf.lua'
+	
+	local  file  = io.open(path, "w")
+	file:write("conf.sailor.admin_password = " ..page.POST.admin_password)
+	file:close()
+
 end
 
 
@@ -68,10 +73,16 @@ end
 
 <form method="post">
 <table style="width:50%">
+
 <tr>
 <td>Admin Password</td>
 <td><%= conf.sailor.admin_password %></td>
-<td><input type="password"  name="admin_password"/></td>
+<td><input type="text"  name="admin_password"/></td>
+</tr>
+
+<tr>
+<td>Toggle Autogen</td>
+<td><%= tostring(conf.sailor.enable_autogen) %></td>
 <td><input type="submit" /></td>
 </tr>
 
