@@ -22,7 +22,8 @@ if next(page.POST) then
 				<p>Password error. Check config file</p>
 				<?lua
 		end
-	end
+	
+end
 ?>
 <?lua	
 if access.is_guest() then ?>	
@@ -36,7 +37,7 @@ if access.is_guest() then ?>
 else ?>
 		<a href="?r=logoutadmin">Logout</a><br>
 		<a href="?r=configedit"> Config editor</a><br>
-			<a href="?r=autogen"> Autogen Fucntions</a>
+		<a href="?r=autogen"> Autogen Fucntions</a>
 
 
 
@@ -51,12 +52,32 @@ end
 
 function M.configedit()
 	local code=[[
-<?lua local conf = require "conf.conf" ?>
-	<h1> Config editor</h1><br>
-The admin password:
-	<?lua
-	print(conf.sailor.admin_password)
+<?lua
+
+local conf = require "conf.conf" 
+local form = require "sailor.form"
+
+if next(page.POST) then
+	conf.sailor.admin_password = page.POST.admin_password
+end
+
+
+
 ?>
+	<h1> Config editor</h1><br>
+
+<form method="post">
+<table style="width:50%">
+<tr>
+<td>Admin Password</td>
+<td><%= conf.sailor.admin_password %></td>
+<td><input type="password"  name="admin_password"/></td>
+<td><input type="submit" /></td>
+</tr>
+
+
+</table>
+</form>
 
 
 
