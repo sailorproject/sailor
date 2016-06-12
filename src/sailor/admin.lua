@@ -120,7 +120,7 @@ end
 
 <tr>
 <td>Route Parameter</td>
-<td><input type="text"  name="route_parameter" value="<%= conf.sailor.route_parameter %>/></td>
+<td><input type="text"  name="route_parameter" value="<%= conf.sailor.route_parameter %>" /></td>
 </tr>
 
 <tr>
@@ -135,51 +135,47 @@ end
 
 <tr>
 <td>Default Controller</td>
-<td><%= conf.sailor.default_controller %></td>
-<td><input type="text"  name="default_controller"/></td>
+<td><input type="text"  name="default_controller" value="<%= conf.sailor.default_controller %>"/></td>
 </tr>
+
 <tr>
-<td>Default Aciton</td>
-<td><%= conf.sailor.default_action %></td>
-<td><input type="text"  name="default_action"/></td>
+<td>Default Action</td>
+<td><input type="text"  name="default_action" value="<%= conf.sailor.default_action %>"/></td>
 </tr>
 
 <tr>
 <td>Default Static</td>
-<td><%= conf.sailor.default_static %></td>
-<td><input type="text"  name="default_static"/></td>
+<td><input type="text"  name="default_static" value="<%= tostring(conf.sailor.default_static) %>" /></td>
 </tr>
 
 <tr>
 <td>Toggle Autogen</td>
-<td><%= toconf.sailor.enable_autogen %></td>
 <td><input type="radio" name="enable_autogen" value="true">True<br></td>
-<td><input type="radio" name="enable_autogen" value="false">False</td>
+<td><input type="radio" name="enable_autogen" value="false" checked>False</td>
 </tr>
 
 <tr>
 <td>Toggle Admin</td>
-<td><%= conf.sailor.enable_admin %></td>
 <td><input type="radio" name="enable_admin" value="true">True<br></td>
-<td><input type="radio" name="enable_admin" value="false">False</td>
+<td><input type="radio" name="enable_admin" value="false" checked>False</td>
 </tr>
+
 <tr>
 <td>Hide Stack Trace</td>
-<td><%= conf.sailor.hide_stack_trace %></td>
-<td><input type="radio" name="hide_stack_trace" value="true">True<br></td>
+<td><input type="radio" name="hide_stack_trace" value="true" checked>True<br></td>
 <td><input type="radio" name="hide_stack_trace" value="false">False</td>
 </tr>
 
 <tr>
-<td>Toggle Autogen</td>
-<td><%= conf.sailor.friendly_urls %></td>
+<td>Toggle Friendly Urls</td>
 <td><input type="radio" name="friendly_urls" value="true">True<br></td>
-<td><input type="radio" name="friendly_urls" value="false">False</td>
+<td><input type="radio" name="friendly_urls" value="false" checked>False</td>
 </tr>
 
 
 
 </table>
+<br>
 <input type="submit" />
 
 </form>
