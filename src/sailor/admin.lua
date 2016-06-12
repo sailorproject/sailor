@@ -51,7 +51,7 @@ else ?>
 end
 
 function M.configedit()
-	local code=[[
+	local code=[=[
 <?lua
 
 local conf = require "conf.conf" 
@@ -59,9 +59,15 @@ local sailor = require "sailor"
 
 if next(page.POST) then
 	local path = sailor.path..'/conf/conf.lua'
-	
-	local  file  = io.open(path, "w")
-	file:write("conf.sailor.admin_password = " ..page.POST.admin_password)
+	string1 =[[local conf = {
+				sailor = {
+				]]
+		local  file  = io.open(path, "w")
+
+	file:write(string1)
+	file:write("conf.sailor.admin_password = " .."\""..page.POST.admin_password.."\"")
+	string2=[[ 	]]
+	file:write(string2)
 	file:close()
 
 end
@@ -93,7 +99,7 @@ end
 
 
 
-	]]
+	]=]
 
 	return code
 end
