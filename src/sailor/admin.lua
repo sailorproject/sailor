@@ -51,7 +51,7 @@ else ?>
 end
 
 function M.configedit()
-	local code=[=[
+	local code=[==[
 <?lua
 
 local conf = require "conf.conf" 
@@ -59,33 +59,75 @@ local sailor = require "sailor"
 
 if next(page.POST) then
 	local path = sailor.path..'/conf/conf.lua'
-	string1 =[[local conf = {
+
+	local t={}
+	local string1 =[[local conf = {
 				sailor = {
 
 				]]
-		local  file  = io.open(path, "w")
 
-	file:write(string1)
-	file:write("app_name = " .."\""..page.POST.app_name.."\""..",\n")
-	file:write("admin_password = " .."\""..page.POST.admin_password.."\""..",\n")
-	file:write("theme = " .."\""..page.POST.theme.."\""..",\n")
-	file:write("layout = " .."\""..page.POST.layout.."\""..",\n")
-	file:write("route_parameter = " .."\""..page.POST.route_parameter.."\""..",\n")
-	file:write("default_error404 = " .."\""..page.POST.default_error404.."\""..",\n")
-	file:write("environment = " .."\""..page.POST.environment.."\""..",\n")
-	file:write("default_controller = " .."\""..page.POST.default_controller.."\""..",\n")
-	file:write("default_action = " .."\""..page.POST.default_action.."\""..",\n")
-	file:write("default_static="..page.POST.default_static..",\n")
-	file:write("enable_autogen="..page.POST.enable_autogen..",\n")
-	file:write("friendly_urls="..page.POST.friendly_urls..",\n")
-	file:write("hide_stack_trace="..page.POST.hide_stack_trace..",\n")
-	file:write("enable_admin="..page.POST.enable_admin..",\n")
-	file:write("max_upload="..page.POST.max_upload)
-	string2=[[ }
+	table.insert(t,string1)
+	local name= "app_name = " .."\""..page.POST.app_name.."\""..",\n"
+	table.insert(t,name)
+	local password = "admin_password = " .."\""..page.POST.admin_password.."\""..",\n"
+	table.insert(t, password)
+	local theme ="theme = " .."\""..page.POST.theme.."\""..",\n"
+	table.insert(t,theme)
+	local layout = "layout = " .."\""..page.POST.layout.."\""..",\n"
+	table.insert(t,layout)
+	local parameter = "route_parameter = " .."\""..page.POST.route_parameter.."\""..",\n"
+	table.insert(t, parameter)
+	local error = "default_error404 = " .."\""..page.POST.default_error404.."\""..",\n"
+	table.insert(t, error)
+	local environment = "environment = " .."\""..page.POST.environment.."\""..",\n"
+	table.insert(t, environment)
+	local controller = "default_controller = " .."\""..page.POST.default_controller.."\""..",\n"
+	table.insert(t, controller)
+	local action = "default_action = " .."\""..page.POST.default_action.."\""..",\n"
+	table.insert(t, action)
+	local static = "default_static="..page.POST.default_static..",\n"
+	table.insert(t, static)
+	local autogen = "enable_autogen="..page.POST.enable_autogen..",\n"
+	table.insert(t, autogen)
+	local urls = "friendly_urls="..page.POST.friendly_urls..",\n"
+	table.insert(t, urls)
+	local trace = "hide_stack_trace="..page.POST.hide_stack_trace..",\n"
+	table.insert(t, trace)
+	local adminc = "enable_admin="..page.POST.enable_admin.."},\n"
+	table.insert(t, adminc)
+
+	local string2 = [=[ db = {
+		development = {
+			driver = 'mysql',
+			host = '',
+			user = '',
+			pass = '',
+			dbname = ''
+		}
+	},
+
+	smtp = {
+		server = '',
+		user = '',
+		pass = '',
+		from = ''
+	},
+
+	lua_at_client = {
+		vm = 'starlight',
+	},
+
+	debug = {
+		inspect = false
+	}
 }
 
-return conf	]]
-	file:write(string2)
+return conf
+
+]=]
+	table.insert(t, string2)
+	local  file  = io.open(path, "w")
+	file:write(table.concat(t))
 	file:close()
 
 end
@@ -150,27 +192,29 @@ end
 
 <tr>
 <td>Toggle Autogen</td>
-<td><input type="radio" name="enable_autogen" value="true">True<br></td>
-<td><input type="radio" name="enable_autogen" value="false" checked>False</td>
+<td><input type="radio" name="enable_autogen" value="true">True
+<input type="radio" name="enable_autogen" value="false" checked>False</td>
 </tr>
 
 <tr>
 <td>Toggle Admin</td>
-<td><input type="radio" name="enable_admin" value="true">True<br></td>
-<td><input type="radio" name="enable_admin" value="false" checked>False</td>
+<td><input type="radio" name="enable_admin" value="true">True
+<input type="radio" name="enable_admin" value="false" checked>False</td>
 </tr>
 
 <tr>
 <td>Hide Stack Trace</td>
-<td><input type="radio" name="hide_stack_trace" value="true" checked>True<br></td>
-<td><input type="radio" name="hide_stack_trace" value="false">False</td>
+<td><input type="radio" name="hide_stack_trace" value="true" checked>True
+<input type="radio" name="hide_stack_trace" value="false">False</td>
 </tr>
 
 <tr>
 <td>Toggle Friendly Urls</td>
-<td><input type="radio" name="friendly_urls" value="true">True<br></td>
-<td><input type="radio" name="friendly_urls" value="false" checked>False</td>
+<td><input type="radio" name="friendly_urls" value="true">True
+<input type="radio" name="friendly_urls" value="false" checked>False</td>
 </tr>
+
+
 
 
 
@@ -183,7 +227,7 @@ end
 
 
 
-	]=]
+	]==]
 
 	return code
 end
