@@ -28,7 +28,7 @@ if next(page.POST) then
 
 end
 ?>
-
+<a href="?r=admin"><-Back to Admin Center</a>
 <h2>Generate model</h2>
 
 <form method="post">

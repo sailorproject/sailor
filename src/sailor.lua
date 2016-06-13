@@ -107,12 +107,46 @@ end
 -- Auxiliary function to open the autogen page for models and CRUDs
 -- page: our page object
 local function autogen(page)
-    local autogen = require "sailor.autogen"
-
+local access = require "sailor.access"
+local autogen = require "sailor.autogen"
+if not access.is_guest() then
     local src = autogen.gen()
     src = lp.translate(src)
     page:render('sailor/autogen',{page=page},src)
+else 
+    return page:redirect('/admin')
 end
+
+end
+-- Function to open the admin page
+local function admin(page)
+    local admin = require "sailor.admin"
+
+    local src=admin.gen()
+    src = lp.translate(src)
+    page:render('sailor/admin',{page=page},src)
+
+end
+
+local function logout(page)
+    local access = require "sailor.access"
+    if access.logout() then 
+        return page:redirect('/admin')
+    else
+        return error_404()
+         
+    end
+end
+
+local function configedit(page)
+    local admin = require "sailor.admin"
+    local src = admin.configedit()
+    src = lp.translate(src)
+    page:render('sailor/admin', {page=page},src)
+
+end
+
+
 
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
 -- TODO - improve
@@ -175,13 +209,36 @@ function sailor.route(page)
         end
 
         if controller == "autogen" then 
-            if conf.sailor.enable_autogen then
+            if conf.sailor.enable_admin then
                 local _,res = xpcall(function () autogen(page) end, error_handler)
                 return res or httpd.OK or page.r.status or 200
             end
             return error_404()
         end
+        if controller == "admin" then
+            if conf.sailor.enable_admin then
+                local _,res = xpcall(function () admin(page) end, error_handler)
+                return res or httpd.OK or page.r.starts or 200
+            end
+            return error_404()
+        end
 
+        if controller == 'logoutadmin' then
+            if conf.sailor.enable_admin then
+                local _,res = xpcall(function () logout(page) end, error_handler)
+                return res or httpd.OK or page.r.status or 200
+            end
+            return error_404()
+        end
+
+        if controller == 'configedit' then
+            if conf.sailor.enable_admin then
+                local _,res = xpcall(function () configedit(page) end, error_handler)
+                return res or httpd.OK or page.r.status or 200
+            end
+            return error_404() 
+        end
+       
         local ctr
         local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
         if ctr then
