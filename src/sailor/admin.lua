@@ -51,7 +51,7 @@ else ?>
 end
 
 function M.configedit()
-	local code=[=[
+	local code=[==[
 <?lua
 
 local conf = require "conf.conf" 
@@ -93,14 +93,41 @@ if next(page.POST) then
 	table.insert(t, urls)
 	local trace = "hide_stack_trace="..page.POST.hide_stack_trace..",\n"
 	table.insert(t, trace)
-	local admin = "enable_admin="..page.POST.enable_admin..",\n"
-	local.insert(t, admin)
-	local upload = "max_upload="..page.POST.max_upload
-	local.insert(t, upload)
-	
+	local adminc = "enable_admin="..page.POST.enable_admin.."},\n"
+	table.insert(t, adminc)
 
+	local string2 = [=[ db = {
+		development = {
+			driver = 'mysql',
+			host = '',
+			user = '',
+			pass = '',
+			dbname = ''
+		}
+	},
+
+	smtp = {
+		server = '',
+		user = '',
+		pass = '',
+		from = ''
+	},
+
+	lua_at_client = {
+		vm = 'starlight',
+	},
+
+	debug = {
+		inspect = false
+	}
+}
+
+return conf
+
+]=]
+	table.insert(t, string2)
 	local  file  = io.open(path, "w")
-	file:write(t)
+	file:write(table.concat(t))
 	file:close()
 
 end
@@ -187,8 +214,7 @@ end
 <input type="radio" name="friendly_urls" value="false" checked>False</td>
 </tr>
 
-<tr>
-<td> Max upload
+
 
 
 
@@ -201,7 +227,7 @@ end
 
 
 
-	]=]
+	]==]
 
 	return code
 end
