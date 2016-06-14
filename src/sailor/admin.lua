@@ -51,7 +51,7 @@ else ?>
 end
 
 function M.configedit()
-	local code=[==[
+	local code=[=====[
 <?lua
 
 local conf = require "conf.conf" 
@@ -97,36 +97,52 @@ if next(page.POST) then
 	table.insert(t, adminc)
 
 
-	local string2 = [=[ db = {
-		development = {
-			driver = 'mysql',
-			host = '',
-			user = '',
-			pass = '',
-			dbname = ''
-		}
-	},
+	local string2 = [=[ 
+	db = {
+		development = { ]=]
 
-	smtp = {
-		server = '',
-		user = '',
-		pass = '',
-		from = ''
-	},
+	table.insert(t,string2)
 
-	lua_at_client = {
-		vm = 'starlight',
-	},
+	local driver = "driver = " .."\""..page.POST.driver.."\""..",\n"
+	table.insert(t, driver)
+	local host = "host = " .."\""..page.POST.host.."\""..",\n"
+	table.insert(t, host)
+	local user = "user = " .."\""..page.POST.user.."\""..",\n"
+	table.insert(t, user)
+	local pass = "pass = " .."\""..page.POST.pass.."\""..",\n"
+	table.insert(t, pass)
+	local dbname = "dbname = " .."\""..page.POST.dbname.."\"".."}},\n"
+	table.insert(t, dbname)
 
-	debug = {
-		inspect = false
-	}
-}
+	local string3 = [==[
+		smtp = {
+	]==]
+	local smtpserver = "server = " .."\""..page.POST.smtpserver.."\""..",\n"
+	table.insert(t, smtpserver)
+	local smtpuser = "user = " .."\""..page.POST.smtpuser.."\""..",\n"
+	table.insert(t, smtpuser)
+	local smtppass = "pass = " .."\""..page.POST.smtppass.."\""..",\n"
+	table.insert(t, smtppass)
+	local smtpfrom = "from = " .."\""..page.POST.smtpfrom.."\"".."},\n"
+	table.insert(t, smtpfrom)
 
-return conf
+	local string4="lua_at_client = {"
+	table.insert(t, string4)
 
-]=]
-	table.insert(t, string2)
+	local vm = "vm = " .."\""..page.POST.lua_at_client.."\""..",},\n"
+	table.insert(t, vm)
+
+	local string5 = "debug = { \n"
+	table.insert(t, string5)
+
+	local debug = "inspect = "..page.POST.debug.."}}\n"
+	table.insert(t, debug)
+
+	local string6 = "return conf"
+	table.insert(t, string6)
+
+
+
 	local  file  = io.open(path, "w")
 	file:write(table.concat(t))
 	file:close()
@@ -296,7 +312,7 @@ end
 
 
 
-	]==]
+	]=====]
 
 	return code
 end
