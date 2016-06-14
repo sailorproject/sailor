@@ -96,6 +96,7 @@ if next(page.POST) then
 	local adminc = "enable_admin="..page.POST.enable_admin.."},\n"
 	table.insert(t, adminc)
 
+
 	local string2 = [=[ db = {
 		development = {
 			driver = 'mysql',
@@ -137,7 +138,10 @@ end
 ?>
 	<h1> Config editor</h1><br>
 
+
 <form method="post">
+<h3><u>Sailor Settings</u></h3>
+
 <table style="width:100%">
 
 <tr>
@@ -214,12 +218,77 @@ end
 <input type="radio" name="friendly_urls" value="false" checked>False</td>
 </tr>
 
+</table>
+
+<h3> Database Settings</h3>
+
+<table style="width:100%">
+
+<tr>
+<td> Database Driver</td>
+<td><input type="text"  name="driver" value="<%= tostring(conf.db.development.driver) %>" /></td>
+</tr>
 
 
+<tr>
+<td> Host</td>
+<td><input type="text"  name="host" value="<%= tostring(conf.db.development.host) %>" /></td>
+</tr>
 
+
+<tr>
+<td> Username</td>
+<td><input type="text"  name="user" value="<%= conf.db.development.user %>" /></td>
+</tr>
+
+<tr>
+<td> Password</td>
+<td><input type="text"  name="pass" value="<%= conf.db.development.pass %>" /></td>
+</tr>
+
+<tr>
+<td> Database Name</td>
+<td><input type="text"  name="dbname" value="<%= conf.db.development.dbname %>" /></td>
+</tr>
+</table>
+
+<h3> Mail Server Settings</h3>
+
+<table style="width:100%">
+
+<tr>
+<td>Mail Server</td>
+<td><input type="text"  name="smtpserver" value="<%= conf.smtp.server %>" /></td>
+</tr>
+
+<tr>
+<td> Username</td>
+<td><input type="text"  name="smtpuser" value="<%= conf.smtp.user %>" /></td>
+</tr>
+
+<tr>
+<td> Password</td>
+<td><input type="text"  name="smtppass" value="<%= conf.smtp.pass %>" /></td>
+
+<tr>
+<td> From Address</td>
+<td><input type="text"  name="smtpfrom" value="<%= conf.smtp.from %>" /></td>
+</tr>
+
+<tr>
+<td> <u>Lua at Client VM</u></td>
+<td><input type="text"  name="lua_at_client" value="<%= conf.lua_at_client.vm %>" /></td>
+</tr>
+
+<tr>
+<td><u>Toggle Debug Mode</u></td>
+<td><input type="radio" name="debug" value="true">True
+<input type="radio" name="debug" value="false" checked>False</td>
+</tr>
 
 </table>
-<br>
+
+
 <input type="submit" />
 
 </form>

@@ -140,10 +140,14 @@ end
 
 local function configedit(page)
     local admin = require "sailor.admin"
-    local src = admin.configedit()
-    src = lp.translate(src)
-    page:render('sailor/admin', {page=page},src)
-
+    local access = require "sailor.access"
+    if not access.is_guest() then
+        local src = admin.configedit()
+        src = lp.translate(src)
+        page:render('sailor/admin', {page=page},src)
+    else
+        return page:redirect('/admin')
+    end
 end
 
 
