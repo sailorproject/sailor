@@ -117,6 +117,8 @@ if next(page.POST) then
 	local string3 = [==[
 		smtp = {
 	]==]
+
+	table.insert(t,string3)
 	local smtpserver = "server = " .."\""..page.POST.smtpserver.."\""..",\n"
 	table.insert(t, smtpserver)
 	local smtpuser = "user = " .."\""..page.POST.smtpuser.."\""..",\n"
