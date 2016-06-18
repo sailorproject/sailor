@@ -14,8 +14,8 @@ local conf = {
 		max_upload = 1024 * 1024, 
 		environment = "development",  -- this will use db configuration named development
 		hide_stack_trace = false, -- false recommended for development, true recommended for production
-		enable_admin=true, -- set true only in development. Set password below too.
-		admin_password="test"
+		enable_admin=false, -- set true only in development. Set password below too.
+		admin_password=""
 	},
 
 	db = {
