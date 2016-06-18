@@ -146,14 +146,25 @@ if next(page.POST) then
 
 
 	local  file  = io.open(path, "w")
-	file:write(table.concat(t))
+	local writeconf = file:write(table.concat(t))
 	file:close()
+	if writeconf then
+		?>
+		<p>Configuration Edited Successfully</p>
+		<?lua
+	else
+		?>
+		<p>Error in Changing conf file</p>
+		<?lua
+	end
+
+
 
 end
-
-
-
 ?>
+
+
+
 	<h1> Config editor</h1><br>
 
 
