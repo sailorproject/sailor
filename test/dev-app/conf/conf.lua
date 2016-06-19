@@ -23,6 +23,8 @@ local conf = {
 		friendly_urls = false,
 		max_upload = 1024 * 1024,
 		environment = "test", -- this will use db configuration named test
+		enable_admin = true,
+		admin_password = "" 
 	},
 
 	db = {

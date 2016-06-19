@@ -5,7 +5,6 @@ local model = require "sailor.model"
 
 
 local db = require "sailor.db"
-local helper = require "tests.helper"
 
 
 
