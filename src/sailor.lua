@@ -118,15 +118,7 @@ else
 end
 
 end
--- Function to open the admin page
-local function admin(page)
-    local admin = require "sailor.admin"
 
-    local src=admin.gen()
-    src = lp.translate(src)
-    page:render('sailor/admin',{page=page},src)
-
-end
 
 local function logout(page)
     local access = require "sailor.access"
@@ -219,13 +211,7 @@ function sailor.route(page)
             end
             return error_404()
         end
-        if controller == "admin" then
-            if conf.sailor.enable_admin then
-                local _,res = xpcall(function () admin(page) end, error_handler)
-                return res or httpd.OK or page.r.starts or 200
-            end
-            return error_404()
-        end
+        
 
         if controller == 'logoutadmin' then
             if conf.sailor.enable_admin then
