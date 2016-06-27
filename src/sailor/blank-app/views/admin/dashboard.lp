@@ -7,13 +7,13 @@ local conf = require "conf.conf"
   Autogen Functions
 
 
-
   </div>
 
 
 
   <div class="col-md-6">
     <h4>Config Editor</h4>
+    <%= test %>
     <form method="post" class="form-horizontal" role="form">
 
 <h5><u>Sailor Settings</u></h5>
@@ -65,6 +65,7 @@ local conf = require "conf.conf"
     </div>
  </div>
 
+<input type="submit" class="btn btn-primary btn-md" />
 </form>
 
   </div>
