@@ -3,13 +3,14 @@ local conf = require "conf.conf"
 ?>
 
 <div class="modal-body row">
-  <div class="col-md-6">
-  Autogen Functions
+  <div class="col-md-5">
+  <h4>Autogen Functions</h4>
 
 
   </div>
-
-
+<div class="col-md-1">
+<a href="?r=admin/logout" class="btn btn-info" role="button">Logout</a>
+</div>
 
   <div class="col-md-6">
     <h4>Config Editor</h4>

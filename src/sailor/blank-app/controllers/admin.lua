@@ -22,9 +22,15 @@ function admin.index(page)
 	end
 end
 
+function admin.logout( page )
+	if access.logout() then
+		page:redirect('admin')
+	end
+end
+
 function admin.dashboard(page)
 	local testmsg =""
-	if not access.is_guest() then -- remove the negative here while committing
+	if access.is_guest() then 
 		page:redirect('admin')
 	else
 		if next(page.POST) then
