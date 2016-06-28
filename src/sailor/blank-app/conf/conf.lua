@@ -9,7 +9,6 @@ local conf = {
 		layout = 'main',
 		route_parameter = 'r',
 		default_error404 = 'error/404',
-		enable_autogen = false, -- default is false, should be true only in development environment
 		friendly_urls = false,
 		max_upload = 1024 * 1024,
 		environment = "development",  -- this will use db configuration named development
