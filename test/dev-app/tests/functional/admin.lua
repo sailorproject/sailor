@@ -1,7 +1,7 @@
 local access = require "sailor.access"
 local conf = require "conf.conf"
 local test = require "sailor.test"
-
+local lfs = require "lfs"
 
 describe("Testing Admin", function ()
 
