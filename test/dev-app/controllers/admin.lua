@@ -33,7 +33,7 @@ function admin.dashboard(page)
 	local testmsg =""
 	local mogelgen = false
 	local crudgen = false
-	if access.is_guest() then 
+	if not access.is_guest() then 
 		page:redirect('admin')
 	else		
 		if next(page.POST) then
