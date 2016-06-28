@@ -1,6 +1,7 @@
 local access = require "sailor.access"
 local conf = require "conf.conf"
 local sailor = require "sailor"
+local model =  require "sailor.model"
 
 local admin={}
 
@@ -30,10 +31,24 @@ end
 
 function admin.dashboard(page)
 	local testmsg =""
+	local mogelgen = false
+	local crudgen = false
 	if access.is_guest() then 
 		page:redirect('admin')
-	else
+	else		
 		if next(page.POST) then
+			if (page.POST.table_name or page.POST.model_name) then
+				if page.POST.table_name then
+					modelgen = model.generate_model(page.POST.table_name)
+					page:render('dashboard',{modelgen=modelgen})
+				end
+
+				if page.POST.model_name then
+					crudgen = model.generate_crud(page.POST.model_name)
+					page:render('dashboard', {crudgen=crudgen})
+				end
+			end
+
 			local path = sailor.path..'/conf/conf.lua'
 
 			local t={}
@@ -133,7 +148,7 @@ function admin.dashboard(page)
 			
 		end
 		
-	page:render('dashboard',{test = testmsg})
+	page:render('dashboard',{test = testmsg, modelgen=modelgen,crudgen=crudgen})
 	end
 end
 

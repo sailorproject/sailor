@@ -5,6 +5,26 @@ local conf = require "conf.conf"
 <div class="modal-body row">
   <div class="col-md-5">
   <h4>Autogen Functions</h4>
+<h5><u>Generate Model</u></h5>
+  <form method="post">
+  <input type=text placeholder="Table Name..." name="table_name" class="form-control"/><br>
+  <input type="submit" class="btn btn-primary" />
+  </form>
+<?lua if modelgen then ?>
+  Model generated with success!
+<?lua end ?>
+<br/><br/>
+
+<h5><u>Generate CRUD</u></h5>
+
+  <form method="post">
+    <input type=text placeholder="Model Name..." name="model_name" class="form-control"/><br>
+    <input type="submit" class="btn btn-primary"/>
+  </form>
+
+<?lua if crudgen then ?>
+  CRUD generated with success!
+<?lua end ?>
 
 
   </div>
@@ -14,7 +34,7 @@ local conf = require "conf.conf"
 
   <div class="col-md-6">
     <h4>Config Editor</h4>
-    <%= test %>
+    <?lua if test then page:print(test) end?>
     <form method="post" class="form-horizontal" role="form">
 
 <h5><u>Sailor Settings</u></h5>

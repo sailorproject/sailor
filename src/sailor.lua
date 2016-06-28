@@ -103,33 +103,6 @@ function sailor.init(r)
     return p
 end
 
-
--- Auxiliary function to open the autogen page for models and CRUDs
--- page: our page object
-local function autogen(page)
-local access = require "sailor.access"
-local autogen = require "sailor.autogen"
-if not access.is_guest() then
-    local src = autogen.gen()
-    src = lp.translate(src)
-    page:render('sailor/autogen',{page=page},src)
-else 
-    return page:redirect('/admin')
-end
-
-end
-
-
-local function logout(page)
-    local access = require "sailor.access"
-    if access.logout() then 
-        return page:redirect('/admin')
-    else
-        return error_404()
-         
-    end
-end
-
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
 -- TODO - improve
 local function apache_friendly_url(page)
@@ -188,23 +161,6 @@ function sailor.route(page)
             controller, action = conf.sailor.default_controller, conf.sailor.default_action
         else
             controller, action = match(route_name, "([^/]+)/?([^/]*)")
-        end
-
-        if controller == "autogen" then 
-            if conf.sailor.enable_admin then
-                local _,res = xpcall(function () autogen(page) end, error_handler)
-                return res or httpd.OK or page.r.status or 200
-            end
-            return error_404()
-        end
-        
-
-        if controller == 'logoutadmin' then
-            if conf.sailor.enable_admin then
-                local _,res = xpcall(function () logout(page) end, error_handler)
-                return res or httpd.OK or page.r.status or 200
-            end
-            return error_404()
         end
 
         local ctr
