@@ -130,20 +130,6 @@ local function logout(page)
     end
 end
 
-local function configedit(page)
-    local admin = require "sailor.admin"
-    local access = require "sailor.access"
-    if not access.is_guest() then
-        local src = admin.configedit()
-        src = lp.translate(src)
-        page:render('sailor/admin', {page=page},src)
-    else
-        return page:redirect('/admin')
-    end
-end
-
-
-
 -- Gets parameter from url query and made by mod rewrite and reassembles into page.GET
 -- TODO - improve
 local function apache_friendly_url(page)
@@ -221,14 +207,6 @@ function sailor.route(page)
             return error_404()
         end
 
-        if controller == 'configedit' then
-            if conf.sailor.enable_admin then
-                local _,res = xpcall(function () configedit(page) end, error_handler)
-                return res or httpd.OK or page.r.status or 200
-            end
-            return error_404() 
-        end
-       
         local ctr
         local _, res = xpcall(function() ctr = require("controllers."..controller) end, error_handler)
         if ctr then

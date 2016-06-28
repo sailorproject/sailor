@@ -5,18 +5,21 @@ local sailor = require "sailor"
 local admin={}
 
 function admin.index(page)
-	local msg = ""
-	if next(page.POST) then
-		access.settings{default_password = conf.sailor.admin_password}
-		local login, err = access.login('admin', page.POST.password)
-		if login then
-			page:redirect('admin/dashboard')
-		else
-			msg = err
+	if conf.sailor.enable_admin then
+		local msg = ""
+		if next(page.POST) then
+			access.settings{default_password = conf.sailor.admin_password}
+			local login, err = access.login('admin', page.POST.password)
+			if login then
+				page:redirect('admin/dashboard')
+			else
+				msg = err
+			end
 		end
+		page:render('index' ,{msg = msg})
+	else
+		page:render('error')
 	end
-	page:render('index' ,{msg = msg})
-
 end
 
 function admin.dashboard(page)
