@@ -70,15 +70,15 @@ function admin.dashboard(page)
 
 			table.insert(t,string2)
 
-			local dbdriver = "dbdriver = " .."\""..tostring(page.POST.dbdriver).."\""..",\n"
+			local driver = "dbdriver = " .."\""..tostring(page.POST.driver).."\""..",\n"
 			table.insert(t, driver)
-			local dbhost = "dbhost = " .."\""..tostring(page.POST.dbhost).."\""..",\n"
+			local host = "dbhost = " .."\""..tostring(page.POST.host).."\""..",\n"
 			table.insert(t, host)
-			local dbuser = "dbuser = " .."\""..tostring(page.POST.dbuser).."\""..",\n"
+			local user = "dbuser = " .."\""..tostring(page.POST.user).."\""..",\n"
 			table.insert(t, user)
-			local dbpass = "dbpass = " .."\""..tostring(page.POST.dbpass).."\""..",\n"
+			local pass = "dbpass = " .."\""..tostring(page.POST.pass).."\""..",\n"
 			table.insert(t, pass)
-			local dbname = "dbname = " .."\""..tostring(page.POST.dbname).."\"".."}},\n"
+			local name = "dbname = " .."\""..tostring(page.POST.name).."\"".."}},\n"
 			table.insert(t, dbname)
 
 			local string3 = [==[
@@ -88,9 +88,9 @@ function admin.dashboard(page)
 			table.insert(t,string3)
 			local smtpserver = "server = " .."\""..tostring(page.POST.server).."\""..",\n"
 			table.insert(t, smtpserver)
-			local smtpuser = "user = " .."\""..tostring(page.POST.user).."\""..",\n"
+			local smtpuser = "user = " .."\""..tostring(page.POST.smtpuser).."\""..",\n"
 			table.insert(t, smtpuser)
-			local smtppass = "pass = " .."\""..tostring(page.POST.pass).."\""..",\n"
+			local smtppass = "pass = " .."\""..tostring(page.POST.smtppass).."\""..",\n"
 			table.insert(t, smtppass)
 			local smtpfrom = "from = " .."\""..tostring(page.POST.from).."\"".."},\n"
 			table.insert(t, smtpfrom)

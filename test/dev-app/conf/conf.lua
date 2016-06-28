@@ -39,8 +39,8 @@ local conf = {
 
 	smtp = {
 		server = '',
-		user = '',
-		pass = '',
+		smtpuser = '',
+		smtppass = '',
 		from = ''
 	},
 
