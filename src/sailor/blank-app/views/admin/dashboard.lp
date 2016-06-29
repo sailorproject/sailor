@@ -10,9 +10,11 @@ local conf = require "conf.conf"
   <input type=text placeholder="Table Name..." name="table_name" class="form-control"/><br>
   <input type="submit" class="btn btn-primary" />
   </form>
+<font color="red">
 <?lua if modelgen then ?>
   Model generated with success!
 <?lua end ?>
+</font>
 <br/><br/>
 
 <h5><u>Generate CRUD</u></h5>
@@ -21,11 +23,11 @@ local conf = require "conf.conf"
     <input type=text placeholder="Model Name..." name="model_name" class="form-control"/><br>
     <input type="submit" class="btn btn-primary"/>
   </form>
-
+<font color="red">
 <?lua if crudgen then ?>
   CRUD generated with success!
 <?lua end ?>
-
+</font>
 
   </div>
 <div class="col-md-1">
@@ -34,7 +36,7 @@ local conf = require "conf.conf"
 
   <div class="col-md-6">
     <h4>Config Editor</h4>
-    <?lua if test then page:print(test) end?>
+    <font color="red"><?lua if test then page:print(test) end?></font>
     <form method="post" class="form-horizontal" role="form">
 
 <h5><u>Sailor Settings</u></h5>
