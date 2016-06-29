@@ -78,8 +78,6 @@ function admin.dashboard(page)
 			table.insert(t, action)
 			local static = "default_static="..tostring(page.POST.default_static)..",\n"
 			table.insert(t, static)
-			local autogen = "enable_autogen="..tostring(page.POST.enable_autogen)..",\n"
-			table.insert(t, autogen)
 			local urls = "friendly_urls="..tostring(page.POST.friendly_urls)..",\n"
 			table.insert(t, urls)
 			local trace = "hide_stack_trace="..page.POST.hide_stack_trace..",\n"
