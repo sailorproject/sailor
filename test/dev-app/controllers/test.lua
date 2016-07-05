@@ -6,7 +6,7 @@ local sailor = require "sailor"
 local test = {}
 
 function test.index(page)
-	local stringVariable = 'this variable is being passed from a controller to a view!'
+    local stringVariable = 'this variable is being passed from a controller to a view!'
     local anotherVar = 2342 -- this one too! \o/
     
     page:write("Here we are testing basic functionalities, such as LP parsing and V-C communication.")
@@ -17,13 +17,13 @@ end
 --This will be recovered once I reorganize the mailer module
 --[[
 function test.mailer(page)
-	local message = "Hello!"
-	if page.POST['email'] then
+    local message = "Hello!"
+    if page.POST['email'] then
         local sent, err = mail.send_message("<"..page.POST['email']..">","This is the subject!","This is the body!")
         if err then
-        	message = err
+            message = err
         else
-        	message = "The email was sent!"
+            message = "The email was sent!"
         end
     end
 
@@ -31,10 +31,10 @@ function test.mailer(page)
 end]]
 
 function test.models(page)
-	--Testing Models
+    --Testing Models
     --[[
-		I'm using 'User' model for testing under a mysql db.	
-		If you want to check it out, you must import the sql files under /sql		
+        I'm using 'User' model for testing under a mysql db.    
+        If you want to check it out, you must import the sql files under /sql       
     ]]
     local User = sailor.model("user")
     local u = User:new()
@@ -44,9 +44,9 @@ function test.models(page)
 
     local res,errs = u:validate()
     if not res then
-    	page:write("failed test!<br/>")
+        page:write("failed test!<br/>")
     else
-    	page:write("passed test!<br/>")
+        page:write("passed test!<br/>")
     end
 
     if u:save() then
@@ -92,7 +92,7 @@ end
 
 function test.modelval(page)
     page.theme = nil
-	local User = sailor.model("user")
+    local User = sailor.model("user")
     local u = User:new()
     u.username = ""
     u.password = "12345"
@@ -109,20 +109,20 @@ function test.modelval(page)
 end
 
 function test.form(page)
-	local User = sailor.model("user")
-	local u = User:new()
-	
-	u.username = "test"
-	
-	if next(page.POST) then
-		u:get_post(page.POST)
-	end
+    local User = sailor.model("user")
+    local u = User:new()
+    
+    u.username = "test"
+    
+    if next(page.POST) then
+        u:get_post(page.POST)
+    end
    
     page:render('form',{user=u,form = form})
 end
 
 function test.redirect(page)
-	return page:redirect('test',{hey="blah",hue = 2})
+    return page:redirect('test',{hey="blah",hue = 2})
 end
 
 function test.include(page)
@@ -160,9 +160,10 @@ end
 function test.login(page)
     --REDO
     local access = require "sailor.access"
+    --access.settings{default_lo}
     if access.is_guest() then
         page:print("Logging in...<br/>")
-        local _,err = access.login("demo","demo")
+        local _,err = access.login("admin","demo")
         page:print(err or "Logged in.")
     else
         page:print("You are already logged in.")
@@ -231,6 +232,19 @@ function test.get(page)
     for k, v in pairs(page.GET) do
         page:write(k..": "..v)
     end
+end
+
+function test.cookie_set(page)
+    local cookie = require "sailor.cookie"
+    cookie.set(sailor.r, "SAILORTEST", "OIE")
+    page:write("Setting cookie: OIE")
+
+end
+
+function test.cookie_get(page)
+    local cookie = require "sailor.cookie"
+    local data = cookie.get(sailor.r, "SAILORTEST")
+    page:write("Getting cookie:".. (data or "no data"))
 end
 
 return test

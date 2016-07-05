@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- cookie.lua, v1.0: lib for cookies
+-- cookie.lua, v1.1: lib for cookies
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -7,15 +7,23 @@
 --------------------------------------------------------------------------------
 
 local cookie = {}
+local remy = require "remy"
 
 function cookie.set(r, key, value, path)
 	path = path or "/"
-    r.headers_out['Set-Cookie'] = ("%s=%s;Path=%s;"):format(key, value, path)
+	if remy.detect(r) == remy.MODE_CGILUA then
+		local ck = require "cgilua.cookies"
+		return ck.set(key,value,{path=path})
+	end
+  r.headers_out['Set-Cookie'] = ("%s=%s;Path=%s;"):format(key, value, path)
 end
 
 function cookie.get(r, key)
-    local value = (r.headers_in['Cookie'] or ""):match(key .. "=([^;]+)") or ""
-    return value
+	if remy.detect(r) == remy.MODE_CGILUA then
+		local ck = require "cgilua.cookies"
+		return ck.get(key)
+	end
+  return (r.headers_in['Cookie'] or ""):match(key .. "=([^;]+)") or ""
 end
 
 return cookie
