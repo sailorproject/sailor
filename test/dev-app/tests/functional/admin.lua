@@ -11,16 +11,16 @@ describe("Testing Admin", function ()
     assert.truthy(res.body:match('Enable Admin first in the config file'))
   end)
 
-  -- it("Admin page should open", function()
-  --   conf.sailor.enable_admin = true
-  --   conf.sailor.admin_password = "test"
-  --   local res = test.request('admin/index',{post={password = "test"}})
-  --   assert.same(200,res.status)
-  --   assert.truthy(res.body:match('Login to Admin Center'))
-  --   assert.is_true(res:redirected('admin/dashboard'))
-  --   assert.truthy(res.body:match('Generate CRUD'))
-  --   assert.truthy(res.body:match('Config Editor'))
-  -- end)
+  it("Admin page should open", function()
+    conf.sailor.enable_admin = true
+    conf.sailor.admin_password = "test"
+    local res = test.request('admin',{post={password = "test"}})
+    assert.same(200,res.status)
+    assert.truthy(res.body:match('Invalid username or password.'))
+    assert.is_true(res:redirected('admin/dashboard'))
+    assert.truthy(res.body:match('Generate CRUD'))
+    assert.truthy(res.body:match('Config Editor'))
+  end)
 
   it("should not generate model", function()
     local res = test.request('admin/dashboard',{post={table_name ='asdasd'}})

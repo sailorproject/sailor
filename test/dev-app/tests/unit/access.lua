@@ -64,5 +64,11 @@ describe("Testing #UserController", function()
     assert.is_false(access.login('admin','demon'))
     assert.is_true(access.is_guest())
   end)
+
+  it('access logged in fucntion', function ()
+    access.settings({model = false, hashing = false, default_login = 'admin', default_password = 'demo'})
+    assert.is_true(access.login('admin', 'demo'))
+    assert.is_true(access.is_loggedin('admin'))
+  end)
   
 end)
