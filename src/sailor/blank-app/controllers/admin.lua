@@ -33,7 +33,7 @@ function admin.dashboard(page)
 	local testmsg =""
 	local mogelgen = false
 	local crudgen = false
-	if access.is_guest() then 
+	if not access.is_loggedin('admin') then 
 		page:redirect('admin')
 	else		
 		if next(page.POST) then
@@ -87,10 +87,10 @@ function admin.dashboard(page)
 
 
 			local string2 = [=[ 
-			db = {
-				development = { ]=]
-
+			db = { ]=]
 			table.insert(t,string2)
+			local env = conf.sailor.environment.." = { "
+			table.insert(t,env) 
 
 			local driver = "driver = " .."\""..tostring(page.POST.driver).."\""..",\n"
 			table.insert(t, driver)

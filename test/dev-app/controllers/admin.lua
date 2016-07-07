@@ -87,10 +87,10 @@ function admin.dashboard(page)
 
 
 			local string2 = [=[ 
-			db = {
-				development = { ]=]
-
+			db = { ]=]
 			table.insert(t,string2)
+			local env = conf.sailor.environment.." = { "
+			table.insert(t,env) 
 
 			local driver = "driver = " .."\""..tostring(page.POST.driver).."\""..",\n"
 			table.insert(t, driver)

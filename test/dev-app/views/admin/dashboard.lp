@@ -53,15 +53,17 @@ local conf = require "conf.conf"
 
 <h5><u>Database Settings</u></h5>
 
-<?lua for k,v in pairs(conf.db.development) do ?>
+<?lua for k,v in pairs(conf.db) do ?>
+  <?lua for i,j in pairs(v) do ?>
+  
   <div class="form-group">
-    <label class="control-label col-sm-1"><%= tostring(k) %></label>
+    <label class="control-label col-sm-1"><%= tostring(i) %></label>
     <div class="col-sm-12">
-      <input type="text" class="form-control"  name="<%= tostring(k) %>" value="<%= tostring(v) %>">
+      <input type="text" class="form-control"  name="<%= tostring(i) %>" value="<%= tostring(j) %>">
     </div>
   </div>
 
-
+  <?lua end ?>
 <?lua end ?>
 
 <h5><u>Mail Server Settings</u></h5>
