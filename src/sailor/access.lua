@@ -99,4 +99,8 @@ function access.logout()
 	return session.destroy(sailor.r)
 end
 
+function access.is_loggedin(login)
+	if (session.data.login == login) then return true else return false end
+end
+
 return access
