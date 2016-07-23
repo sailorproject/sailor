@@ -27,6 +27,10 @@ describe("Testing #UserController", function()
     assert.is_true(User.authenticate(fixtures[1].username,fixtures[1].password,false))
   end)
 
+  it("should check which user is logged in", function()
+    assert.is_true(access.is_loggedin("serena"))
+  end)
+
   it("should know the user is logged in", function()
     assert.is_false(access.is_guest())
   end)
