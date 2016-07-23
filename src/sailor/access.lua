@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- access.lua, v0.4: controls user login on sailor apps
+-- access.lua, v0.5: controls user login on sailor apps
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -17,18 +17,23 @@ session.open(sailor.r)
 
 local INVALID = "Invalid username or password."
 
-local settings = {
-	default_login = 'admin',	    -- Default login details
-	default_password = 'demo',
-	grant_time = 604800, 			-- 1 week
-	model = nil,					-- Setting this field will deactivate default login details and activate below fields
-	login_attributes = {'username'},-- Allows multiple options, for example, username or email. The one used to hash the
-	password_attribute = 'password',--     password should come first.
-	hashing = true
-}
+local function default_settings()
+	return {
+		default_login = 'admin',	    -- Default login details
+		default_password = 'demo',
+		grant_time = 604800, 			-- 1 week
+		model = nil,					-- Setting this field will deactivate default login details and activate below fields
+		login_attributes = {'username'},-- Allows multiple options, for example, username or email. The one used to hash the
+		password_attribute = 'password',--     password should come first.
+		hashing = true
+	}
+end
+
+local settings = default_settings()
 
 -- Changes settings
 function access.settings(s)
+	settings = default_settings()
 	for k, v in pairs(s) do
 		settings[k] = v
 	end
