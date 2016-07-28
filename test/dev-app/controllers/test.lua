@@ -2,9 +2,6 @@ local session = require "sailor.session"
 local validation = require "valua"
 local form = require "sailor.form"
 local sailor = require "sailor"
-local elastic = require ("sailor.search")
-local elasticsearch = require "elasticsearch"
-local client = elasticsearch.client()
 
 local test = {}
 
@@ -17,14 +14,6 @@ function test.index(page)
     page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
 end
 
-function test.elastic(page)
-        local msg = ""
-    if next(page.POST) then
-        msg = elastic.search(blog, user, page.POST.search)
-    end
-    page:render('elastic', {msg= msg})
-
-end
 --This will be recovered once I reorganize the mailer module
 --[[
 function test.mailer(page)
@@ -257,7 +246,5 @@ function test.cookie_get(page)
     local data = cookie.get(sailor.r, "SAILORTEST")
     page:write("Getting cookie:".. (data or "no data"))
 end
-
-
 
 return test
