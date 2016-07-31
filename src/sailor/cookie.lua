@@ -15,15 +15,18 @@ function cookie.set(r, key, value, path)
 		local ck = require "cgilua.cookies"
 		return ck.set(key,value,{path=path})
 	end
-  r.headers_out['Set-Cookie'] = ("%s=%s;Path=%s;"):format(key, value, path)
+	r.headers_out['Set-Cookie'] = ("%s=%s;Path=%s;"):format(key, value, path)
 end
 
 function cookie.get(r, key)
-	if remy.detect(r) == remy.MODE_CGILUA then
+	local remy_mode = remy.detect(r)
+	if remy_mode == remy.MODE_CGILUA then
 		local ck = require "cgilua.cookies"
 		return ck.get(key)
+	elseif remy_mode == remy.MODE_LWAN then
+		return r.native_request:cookie(key)
 	end
-  return (r.headers_in['Cookie'] or ""):match(key .. "=([^;]+)") or ""
+	return (r.headers_in['Cookie'] or ""):match(key .. "=([^;]+)") or ""
 end
 
 return cookie
