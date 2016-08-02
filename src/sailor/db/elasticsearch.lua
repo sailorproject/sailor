@@ -9,7 +9,17 @@
 
 
 local elasticsearch = require "elasticsearch"
-local client = elasticsearch.client()
+local main_conf = require "conf.conf"
+local elastic_conf = main_conf.db[main_conf.sailor.search_database]
+local client = elasticsearch.client{
+	host={
+		protocol = elastic_conf.protocol,
+		host = elastic_conf.host,
+		port = elastic_conf.port
+	}
+}
+
+
 local elastic = {}
 
 
@@ -101,6 +111,24 @@ function elastic.delete(indexq, typeq, idq)
 end
 
 
+function elastic.update(indexq, typeq, idq, body)
+	local data, err = client:update{
+  		index = indexq,
+  	type = typeq,
+  id = idq,
+    body = {
+    doc = body
+  }
+  }
+
+	if data==nil then
+		return err
+	else
+		return data
+
+	end
+
+end
 
 
 

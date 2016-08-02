@@ -24,8 +24,9 @@ local conf = {
 		hide_stack_trace = false,
 		max_upload = 1024 * 1024,
 		environment = "test", -- this will use db configuration named test
-		enable_admin = false,
-		admin_password = "" 
+		search_database = "elasticsearch",
+		enable_admin = true,
+		admin_password = "a" 
 	},
 
 	db = {
@@ -35,6 +36,13 @@ local conf = {
 			user = db_user or '',
 			pass = db_pass or '',
 			dbname = db_name or ''
+		},
+
+		elasticsearch={
+			protocol ="http",
+			host ="localhost",
+			port=9200
+
 		}
 	},
 

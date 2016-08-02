@@ -40,5 +40,9 @@
 				  end
 					  return "{" .. table.concat( result, "," ) .. "}"
 			end
+			if type(msg) == "table" then
 			page:print(table.tostring(msg))
+			else
+			page:print(msg)
+			end			
              ?>
