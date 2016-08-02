@@ -25,8 +25,8 @@ local conf = {
 		max_upload = 1024 * 1024,
 		environment = "test", -- this will use db configuration named test
 		search_database = "elasticsearch",
-		enable_admin = true,
-		admin_password = "a" 
+		enable_admin = false,
+		admin_password = "" 
 	},
 
 	db = {
@@ -41,7 +41,8 @@ local conf = {
 		elasticsearch={
 			protocol ="http",
 			host ="localhost",
-			port=9200
+			port=9200,
+			index="test"
 
 		}
 	},

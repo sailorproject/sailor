@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------------------
 -- elasticsearch.lua: DB module for connecting, querying and serching through elasticsearch
 -- This file is a part of Sailor project
--- Copyright (c) 2016 Etiene Dalcol <dalcol@etiene.net>
+-- Copyright (c) 2016 Nikhil. R <rnikhil96@outlook.com>
 -- License: MIT
 -- http://sailorproject.org
 -------------------------------------------------------------------------------------------
@@ -11,19 +11,16 @@
 local elasticsearch = require "elasticsearch"
 local main_conf = require "conf.conf"
 local elastic_conf = main_conf.db[main_conf.sailor.search_database]
-local client = elasticsearch.client{
+
+local elastic = {}
+
+	local client = elasticsearch.client{
 	host={
 		protocol = elastic_conf.protocol,
 		host = elastic_conf.host,
 		port = elastic_conf.port
 	}
 }
-
-
-local elastic = {}
-
-
-
 
 function elastic.getinfo()
 	local data, err = client:info()
@@ -35,9 +32,9 @@ function elastic.getinfo()
 	end
 end
 
-function elastic.index(indexq, typeq, idq, body)
+function elastic.index(typeq, idq, body)
 	local data, err = client:index{
-	index = indexq,
+	index = elastic_conf.index,
 	type = typeq,
 	id = idq,
 	body = body
@@ -64,11 +61,11 @@ function elastic.get(indexq, typeq, idq)
 end
 
 function elastic.search(indexq, typeq, query)
-		local data, err = client:search{
-	  		index = indexq,
-	  		type = typeq,
-	  		q = query
-			}
+	local data, err = client:search{
+  		index = indexq,
+  		type = typeq,
+  		q = query
+		}
 	if data==nil then
 		return err
 	else
@@ -79,13 +76,13 @@ end
 
 function elastic.searchbody(indexq, typeq, body)
 	local data, err = client:search{
-  index = indexq,
-  type = typeq,
-  body = {
-    query = {
-      match = body
-    }
-  }
+	  index = indexq,
+	  type = typeq,
+	  body = {
+	    query = {
+	      match = body
+	    }
+	  }
 }
 if data==nil then
 		return err
@@ -95,11 +92,11 @@ if data==nil then
 	end
 end
 
-function elastic.delete(indexq, typeq, idq)
+function elastic.delete(typeq, idq)
 	local data, err = client:delete{
-  index = indexq,
-  type = typeq,
-  id = idq
+	  index = elastic_conf.index,
+	  type = typeq,
+	  id = idq
 }
 	if data==nil then
 		return err
@@ -114,12 +111,12 @@ end
 function elastic.update(indexq, typeq, idq, body)
 	local data, err = client:update{
   		index = indexq,
-  	type = typeq,
-  id = idq,
-    body = {
-    doc = body
+  		type = typeq,
+  		id = idq,
+    		body = {
+    		doc = body
   }
-  }
+}
 
 	if data==nil then
 		return err
@@ -129,32 +126,5 @@ function elastic.update(indexq, typeq, idq, body)
 	end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 return elastic

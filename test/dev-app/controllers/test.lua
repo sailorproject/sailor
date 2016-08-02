@@ -2,7 +2,9 @@ local session = require "sailor.session"
 local validation = require "valua"
 local form = require "sailor.form"
 local sailor = require "sailor"
-local elastic = require ("sailor.search")
+local elastic = require ("sailor.db.elasticsearch")
+local Emodel = require ('sailor.db.elastic_model')
+
 local elasticsearch = require "elasticsearch"
 local client = elasticsearch.client()
 
@@ -20,11 +22,22 @@ end
 function test.elastic(page)
         local msg = ""
     if next(page.POST) then
-        msg = elastic.search(blog, user, page.POST.search)
+        msg = elastic.search(blog, post, page.POST.search)
     end
     page:render('elastic', {msg= msg})
 
 end
+
+function test.elasticfunctions(page)
+    local body = { name = "this is test"}
+
+    local contacts = Emodel.new("test")
+    msg = contacts.index(1, body)
+    msg = contacts.delete(1)
+
+    page:render('elastic', {msg = msg})    
+end
+
 --This will be recovered once I reorganize the mailer module
 --[[
 function test.mailer(page)
