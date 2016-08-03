@@ -19,15 +19,6 @@ function test.index(page)
     page:render('index',{stringVariable = stringVariable,anotherVar = anotherVar})
 end
 
-function test.elastic(page)
-        local msg = ""
-    if next(page.POST) then
-        msg = elastic.search(blog, post, page.POST.search)
-    end
-    page:render('elastic', {msg= msg})
-
-end
-
 function test.elasticfunctions(page)
     local body = { name = "this is not a test"}
 

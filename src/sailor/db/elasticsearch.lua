@@ -60,9 +60,9 @@ function elastic.get(typeq, idq)
 	end
 end
 
-function elastic.search(indexq, typeq, query)
+function elastic.search(typeq, query)
 	local data, err = client:search{
-  		index = indexq,
+  		index = elastic_conf.index,
   		type = typeq,
   		q = query
 		}
@@ -74,9 +74,9 @@ function elastic.search(indexq, typeq, query)
 	end
 end
 
-function elastic.searchbody(indexq, typeq, body)
+function elastic.searchbody(typeq, body)
 	local data, err = client:search{
-	  index = indexq,
+	  index = elastic_conf.index,
 	  type = typeq,
 	  body = {
 	    query = {
@@ -108,9 +108,9 @@ function elastic.delete(typeq, idq)
 end
 
 
-function elastic.update(indexq, typeq, idq, body)
+function elastic.update(typeq, idq, body)
 	local data, err = client:update{
-		index = indexq,
+		index = elastic_conf.index,
 		type = typeq,
 		id = idq,
 			body = {

@@ -27,6 +27,9 @@ Emodel.new = function(model_name)
 	self.delete = function(id)
 		return elastic.delete(Etype,id)
 	end
+	self.search = function(word)
+		return elastic.search(Etype, word)
+	end
 	-- Setting metatable so that you can assign/store normal keys too instead of only tables
 
 	setmetatable(self, {
