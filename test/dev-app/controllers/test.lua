@@ -29,12 +29,14 @@ function test.elastic(page)
 end
 
 function test.elasticfunctions(page)
-    local body = { name = "this is test"}
+    local body = { name = "this is not a test"}
 
     local contacts = Emodel.new("test")
-    msg = contacts.index(1, body)
-    msg = contacts.delete(1)
-
+    contacts.name = "Test"
+    contacts.save(1)
+    msg = contacts.get(1)
+    -- msg = contacts.save(11, body)
+    -- msg = contacts.get(11)
     page:render('elastic', {msg = msg})    
 end
 

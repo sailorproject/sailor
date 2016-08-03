@@ -34,11 +34,11 @@ end
 
 function elastic.index(typeq, idq, body)
 	local data, err = client:index{
-	index = elastic_conf.index,
-	type = typeq,
-	id = idq,
-	body = body
-}
+		index = elastic_conf.index,
+		type = typeq,
+		id = idq,
+		body = body
+	}
 	if data==nil then
 		return err
 	else
@@ -47,12 +47,12 @@ function elastic.index(typeq, idq, body)
 	end
 end
 
-function elastic.get(indexq, typeq, idq)
+function elastic.get(typeq, idq)
 	local data, err = client:get{
-  	index = indexq,
-  	type = typeq,
-  	id = idq
-}
+	  	index = elastic_conf.index,
+	  	type = typeq,
+	  	id = idq
+	}
 	if data==nil then
 		return err
 	else
@@ -110,11 +110,11 @@ end
 
 function elastic.update(indexq, typeq, idq, body)
 	local data, err = client:update{
-  		index = indexq,
-  		type = typeq,
-  		id = idq,
-    		body = {
-    		doc = body
+		index = indexq,
+		type = typeq,
+		id = idq,
+			body = {
+			doc = body
   }
 }
 
