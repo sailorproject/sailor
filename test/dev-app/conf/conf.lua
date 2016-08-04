@@ -39,12 +39,14 @@ local conf = {
 		},
 
 		elasticsearch={
+		hosts={
+			{
 			protocol ="http",
 			host ="localhost",
-			port=9200,
-			index="test"
-
-		}
+			port=9200			}	
+		},
+		index = "test"
+	}
 	},
 
 	smtp = {

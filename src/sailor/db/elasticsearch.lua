@@ -11,15 +11,10 @@
 local elasticsearch = require "elasticsearch"
 local main_conf = require "conf.conf"
 local elastic_conf = main_conf.db[main_conf.sailor.search_database]
-
 local elastic = {}
 
 	local client = elasticsearch.client{
-	host={
-		protocol = elastic_conf.protocol,
-		host = elastic_conf.host,
-		port = elastic_conf.port
-	}
+	hosts=elastic_conf.hosts
 }
 
 function elastic.getinfo()
