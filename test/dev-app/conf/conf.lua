@@ -38,17 +38,28 @@ local conf = {
 			dbname = db_name or ''
 		},
 
-		elasticsearch={
-		hosts={
-			{
-			protocol ="http",
-			host ="localhost",
-			port=9200			}	
-		},
-		index = "test"
-	}
+	
 	},
+	search ={	
+		elasticsearch={
+			hosts={
+				{
+				protocol ="http",
+				host ="localhost",
+				port=9200			
+				}	
+			},
+			params={
+				pingTimeout = 1,
+				selector = 'RoundRobinSelector',
+				connectionPool = 'StaticConnectionPool',
+				maxRetryCount = 5,
+				logLevel = 'WARN'
+			},
+			index = "test"
+		}
 
+	},
 	smtp = {
 		server = '',
 		smtpuser = '',
