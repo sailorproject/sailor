@@ -20,25 +20,31 @@ local es = {}
 
 function es.getinfo()
 	local data, err = client:info()
-	if data==nil then
+	if data == nil then
 		return err
 	else
-		return data
+		return data , err
 
 	end
 end
 
-function es.index(typeq, idq, body)
+function es.index(typeq, idq, body, params)
+	local t = {}
+	-- for k, v in params do client:index{v} end
+
+	for k,v in pairs(params) do  t[v] = true end
 	local data, err = client:index{
 		index = elastic_conf.index,
 		type = typeq,
 		id = idq,
-		body = body
+		body = body,
+		
+
 	}
-	if data==nil then
+	if data == nil then
 		return err
 	else
-		return data
+		return data, err
 
 	end
 end
@@ -49,10 +55,10 @@ function es.get(typeq, idq)
 	  	type = typeq,
 	  	id = idq
 	}
-	if data==nil then
+	if data == nil then
 		return err
 	else
-		return data
+		return data, err
 	end
 end
 
@@ -62,10 +68,10 @@ function es.search(typeq, query)
   		type = typeq,
   		q = query
 		}
-	if data==nil then
+	if data == nil then
 		return err
 	else
-		return data
+		return data,err
 
 	end
 end
@@ -80,10 +86,10 @@ function es.searchbody(typeq, body)
 	    }
 	  }
 }
-if data==nil then
+if data == nil then
 		return err
 	else
-		return data
+		return data,err
 
 	end
 end
@@ -94,10 +100,10 @@ function es.delete(typeq, idq)
 	  type = typeq,
 	  id = idq
 }
-	if data==nil then
+	if data == nil then
 		return err
 	else
-		return data
+		return data, err
 
 	end
 
@@ -114,10 +120,10 @@ function es.update(typeq, idq, body)
   }
 }
 
-	if data==nil then
+	if data == nil then
 		return err
 	else
-		return data
+		return data, err
 
 	end
 
