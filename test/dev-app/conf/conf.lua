@@ -24,7 +24,7 @@ local conf = {
 		hide_stack_trace = false,
 		max_upload = 1024 * 1024,
 		environment = "test", -- this will use db configuration named test
-		search_database = "elasticsearch",
+		search_engine = "elasticsearch",
 		enable_admin = false,
 		admin_password = "" 
 	},

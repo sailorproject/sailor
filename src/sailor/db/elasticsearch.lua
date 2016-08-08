@@ -10,15 +10,15 @@
 
 local elasticsearch = require "elasticsearch"
 local main_conf = require "conf.conf"
-local elastic_conf = main_conf.search[main_conf.sailor.search_database]
-local elastic = {}
+local elastic_conf = main_conf.search[main_conf.sailor.search_engine]
+local es = {}
 
 	local client = elasticsearch.client{
 	hosts=elastic_conf.hosts,
 	params = elastic_conf.params
 }
 
-function elastic.getinfo()
+function es.getinfo()
 	local data, err = client:info()
 	if data==nil then
 		return err
@@ -28,7 +28,7 @@ function elastic.getinfo()
 	end
 end
 
-function elastic.index(typeq, idq, body)
+function es.index(typeq, idq, body)
 	local data, err = client:index{
 		index = elastic_conf.index,
 		type = typeq,
@@ -43,7 +43,7 @@ function elastic.index(typeq, idq, body)
 	end
 end
 
-function elastic.get(typeq, idq)
+function es.get(typeq, idq)
 	local data, err = client:get{
 	  	index = elastic_conf.index,
 	  	type = typeq,
@@ -56,7 +56,7 @@ function elastic.get(typeq, idq)
 	end
 end
 
-function elastic.search(typeq, query)
+function es.search(typeq, query)
 	local data, err = client:search{
   		index = elastic_conf.index,
   		type = typeq,
@@ -70,7 +70,7 @@ function elastic.search(typeq, query)
 	end
 end
 
-function elastic.searchbody(typeq, body)
+function es.searchbody(typeq, body)
 	local data, err = client:search{
 	  index = elastic_conf.index,
 	  type = typeq,
@@ -88,7 +88,7 @@ if data==nil then
 	end
 end
 
-function elastic.delete(typeq, idq)
+function es.delete(typeq, idq)
 	local data, err = client:delete{
 	  index = elastic_conf.index,
 	  type = typeq,
@@ -104,7 +104,7 @@ function elastic.delete(typeq, idq)
 end
 
 
-function elastic.update(typeq, idq, body)
+function es.update(typeq, idq, body)
 	local data, err = client:update{
 		index = elastic_conf.index,
 		type = typeq,
@@ -123,4 +123,4 @@ function elastic.update(typeq, idq, body)
 
 end
 
-return elastic
+return es

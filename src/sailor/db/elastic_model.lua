@@ -1,8 +1,8 @@
-local elastic = require "sailor.db.elasticsearch"
-local Emodel = {}
+local es = require "sailor.db.elasticsearch"
+local es_model = {}
 
 
-Emodel.new = function(model_name)
+es_model.new = function(model_name)
 	
 	local self = {}
 	local ob = require("models."..model_name)
@@ -13,22 +13,22 @@ Emodel.new = function(model_name)
 	-- it will write that value into ES
 	self.save = function(id, ...)
 		if ... ~= nil and type(...) == "table" then 
-			return elastic.index(Etype, id , ...)
+			return es.index(Etype, id , ...)
 		else
-			return elastic.index(Etype, id, parameters)
+			return es.index(Etype, id, parameters)
 		end
 	end
 
 	-- Get a document using ID
 	self.get = function(id)
-		return elastic.get(Etype, id)
+		return es.get(Etype, id)
 	end
 	-- Delete a document using ID
 	self.delete = function(id)
-		return elastic.delete(Etype,id)
+		return es.delete(Etype,id)
 	end
 	self.search = function(word)
-		return elastic.search(Etype, word)
+		return es.search(Etype, word)
 	end
 	-- Setting metatable so that you can assign/store normal keys too instead of only tables
 
@@ -47,4 +47,4 @@ Emodel.new = function(model_name)
 	return self
 
 end
-return Emodel
+return es_model
