@@ -16,10 +16,10 @@ local client = elasticsearch.client{
 	params = elastic_conf.params
 }
 
+-- Function for indexing data into elasticsearch
 function es.index(type, id, doc, params, index)
 	params = params or {}
 	local data, err = client:index{
-
 		index = index or elastic_conf.index,
 		type = type,
 		id = id,
@@ -43,11 +43,10 @@ function es.index(type, id, doc, params, index)
 
 	end
 end
-
+-- Function for getting data from ES
 function es.get(type, id, params, index)
 	params = params or {}
 	local data, err = client:get{
-
 	  	index = index or elastic_conf.index,
 	  	type = typeq,
 	  	id = idq,
@@ -69,7 +68,7 @@ function es.get(type, id, params, index)
 		return data, err
 	end
 end
-
+-- Function for searching through ES 
 function es.search(type, query, doc, params, index)
 	params = params or {}
 	doc = doc or nil
@@ -115,8 +114,7 @@ function es.search(type, query, doc, params, index)
 
 	end
 end
-
-
+-- Function for deleting documents in ES
 function es.delete(type, id, params, index)
 	params = params or {}
 	local data, err = client:delete{
@@ -139,8 +137,7 @@ function es.delete(type, id, params, index)
 	end
 
 end
-
-
+-- Function for updating documents in ES
 function es.update(type, id, doc, params, index)
 	params = params or {}
 	local data, err = client:update{
