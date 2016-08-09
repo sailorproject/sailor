@@ -2,7 +2,6 @@ local session = require "sailor.session"
 local validation = require "valua"
 local form = require "sailor.form"
 local sailor = require "sailor"
-local elastic = require ("sailor.db.elasticsearch")
 local es_model = require ('sailor.db.elastic_model')
 
 local elasticsearch = require "elasticsearch"
@@ -20,6 +19,11 @@ function test.index(page)
 end
 
 function test.elasticfunctions(page)
+    local doc = {name = "test"}
+    local params = {routing = "company@xyz.com", timeout = "2m"}
+    local contact = es_model.new("test")
+    contact.name = "nameTest"
+    msg = contact.save{id = 1, doc = doc, params = params} -- doc, params are optional named parameters
     page:render('elastic', {msg = msg})    
 end
 
