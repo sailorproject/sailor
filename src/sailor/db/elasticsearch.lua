@@ -48,8 +48,8 @@ function es.get(type, id, params, index)
 	params = params or {}
 	local data, err = client:get{
 	  	index = index or elastic_conf.index,
-	  	type = typeq,
-	  	id = idq,
+	  	type = type,
+	  	id = id,
 	  	ignore_missing = params.ignore_missing,
 	  	fields = params.fields,
 	  	parent = params.parent,
