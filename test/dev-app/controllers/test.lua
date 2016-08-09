@@ -3,7 +3,7 @@ local validation = require "valua"
 local form = require "sailor.form"
 local sailor = require "sailor"
 local elastic = require ("sailor.db.elasticsearch")
-local Emodel = require ('sailor.db.elastic_model')
+local es_model = require ('sailor.db.elastic_model')
 
 local elasticsearch = require "elasticsearch"
 local client = elasticsearch.client()
@@ -20,14 +20,6 @@ function test.index(page)
 end
 
 function test.elasticfunctions(page)
-    local body = { name = "this is not a test"}
-
-    local contacts = Emodel.new("test")
-    contacts.name = "Test"
-    contacts.save(1)
-    msg = contacts.get(1)
-    -- msg = contacts.save(11, body)
-    -- msg = contacts.get(11)
     page:render('elastic', {msg = msg})    
 end
 

@@ -16,23 +16,14 @@ local client = elasticsearch.client{
 	params = elastic_conf.params
 }
 
-function es.getinfo()
-	local data, err = client:info()
-	if data == nil then
-		return err
-	else
-		return data , err
-	end
-end
-
-function es.index(type, id, body, params)
-	params = params or {} 
+function es.index(type, id, doc, params, index)
+	params = params or {}
 	local data, err = client:index{
 
-		index = elastic_conf.index,
+		index = index or elastic_conf.index,
 		type = type,
 		id = id,
-		body = body,
+		body = doc,
 		routing = params.routing,
 		op_type = params.op_type,
 		consistency = params.consistency,
@@ -53,11 +44,11 @@ function es.index(type, id, body, params)
 	end
 end
 
-function es.get(type, id, params)
+function es.get(type, id, params, index)
 	params = params or {}
 	local data, err = client:get{
 
-	  	index = elastic_conf.index,
+	  	index = index or elastic_conf.index,
 	  	type = typeq,
 	  	id = idq,
 	  	ignore_missing = params.ignore_missing,
@@ -79,12 +70,14 @@ function es.get(type, id, params)
 	end
 end
 
-function es.search(type, query, params)
+function es.search(type, query, doc, params, index)
 	params = params or {}
+	doc = doc or nil
 	local data, err = client:search{
-  		index = elastic_conf.index,
+  		index = index or elastic_conf.index,
   		type = type,
   		q = query,
+  		body = doc,
   		_source = params._source,
 	  	_source_exclude = params._source_exclude,
 	  	_source_include = params._source_include,
@@ -124,10 +117,10 @@ function es.search(type, query, params)
 end
 
 
-function es.delete(type, id, params)
+function es.delete(type, id, params, index)
 	params = params or {}
 	local data, err = client:delete{
-	  	index = elastic_conf.index,
+	  	index = index or elastic_conf.index,
 	  	type = type,
 	  	id = id,
 	  	consistency = params.consistency,
@@ -148,10 +141,10 @@ function es.delete(type, id, params)
 end
 
 
-function es.update(type, id, body, params)
+function es.update(type, id, doc, params, index)
 	params = params or {}
 	local data, err = client:update{
-		index = elastic_conf.index,
+		index = index or elastic_conf.index,
 		type = type,
 		id = id,
 		consistency = params.consistency,
@@ -167,7 +160,7 @@ function es.update(type, id, body, params)
 		timeout = params.timeout,
 		version_type = params.version_type,
 		body = {
-			doc = body
+			doc = doc
   }
 }
 

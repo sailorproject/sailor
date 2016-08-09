@@ -7,39 +7,40 @@ es_model.new = function(model_name)
 	local self = {}
 	local ob = require("models."..model_name)
 	Etype = ob.type
-	keys = ob.keys	
-	local parameters={}
-	-- This method should be used when you are saving the parameters. If second parameter is present,
-	-- it will write that value into ES
-	self.save = function(id, ...)
-		if ... ~= nil and type(...) == "table" then 
-			return es.index(Etype, id , ...)
+	keys = ob.keys 
+	local attributes={}
+
+	self.save = function(arg)
+		if arg.doc == nil then 
+			return es.index(Etype, arg.id, attributes, arg.params, arg.index)
 		else
-			return es.index(Etype, id, parameters)
+			return es.index(Etype, arg.id, arg.doc, arg.params, arg.index)
 		end
 	end
 
-	-- Get a document using ID
-	self.get = function(id)
-		return es.get(Etype, id)
+	self.get = function(arg)
+		return es.get(Etype, arg.id, arg.params, arg.index)
 	end
-	-- Delete a document using ID
-	self.delete = function(id)
-		return es.delete(Etype,id)
-	end
-	self.search = function(word)
-		return es.search(Etype, word)
-	end
-	-- Setting metatable so that you can assign/store normal keys too instead of only tables
 
+	self.search = function(arg)
+		return es.search(Etype, arg.query, arg.doc, arg.params, arg.index)
+	end
+
+	self.delete = function(arg)
+		return es.delete(Etype, arg.id, arg.params, arg.index)
+	end
+	
+	self.update = function(arg)
+		return es.update(Etype, arg.id, arg.doc, arg.params, arg.index)
+	end
 	setmetatable(self, {
 	
 	__newindex = function(table, key, value)
-		for k,v in ipairs(keys) do if key == v then parameters[key] = value end end
+		for k,v in ipairs(keys) do if key == v then attributes[key] = value end end -- check for allowed keys -> then store it in parameters table
 		-- parameters[key] = value
 	end,
 		 
-	__index = parameters
+	__index = attributes
 
 	})
 
@@ -47,4 +48,5 @@ es_model.new = function(model_name)
 	return self
 
 end
+
 return es_model
