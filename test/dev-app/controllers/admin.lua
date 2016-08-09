@@ -82,6 +82,7 @@ function admin.dashboard(page)
 			table.insert(t, urls)
 			local trace = "hide_stack_trace="..page.POST.hide_stack_trace..",\n"
 			table.insert(t, trace)
+			table.insert(t, "search_engine = " .."\""..tostring(page.POST.search_engine).."\""..",\n")
 			local adminc = "enable_admin="..tostring(page.POST.enable_admin).."},\n"
 			table.insert(t, adminc)
 
@@ -94,7 +95,7 @@ function admin.dashboard(page)
 
 			local driver = "driver = " .."\""..tostring(page.POST.driver).."\""..",\n"
 			table.insert(t, driver)
-			local host = "host = " .."\""..tostring(page.POST.host).."\""..",\n"
+			local host = "host = " .."\""..tostring(page.POST.host[1]).."\""..",\n"
 			table.insert(t, host)
 			local user = "user = " .."\""..tostring(page.POST.user).."\""..",\n"
 			table.insert(t, user)
@@ -116,6 +117,28 @@ function admin.dashboard(page)
 			table.insert(t, smtppass)
 			local smtpfrom = "from = " .."\""..tostring(page.POST.from).."\"".."},\n"
 			table.insert(t, smtpfrom)
+
+			local string7 = [==[ 
+				search = {
+					elasticsearch = {
+						hosts = {{
+
+			]==]
+			table.insert(t, string7)
+			table.insert(t, "protocol = " .."\""..tostring(page.POST.protocol).."\""..",\n")
+			table.insert(t, "host = " .."\""..tostring(page.POST.host[2]).."\""..",\n")
+			table.insert(t, "port = " .."\""..tostring(page.POST.port).."\"".."}},\n")
+			local string8 = [=[
+				params = {
+			]=]
+			table.insert(t, string8)
+			table.insert(t, "pingTimeout = " .."\""..tostring(page.POST.pingTimeout).."\""..",\n")
+			table.insert(t, "selector = " .."\""..tostring(page.POST.selector).."\""..",\n")
+			table.insert(t, "connectionPool = " .."\""..tostring(page.POST.connectionPool).."\""..",\n")
+			table.insert(t, "maxRetryCount = " .."\""..tostring(page.POST.maxRetryCount).."\""..",\n")
+			table.insert(t, "logLevel = " .."\""..tostring(page.POST.logLevel).."\"".."},\n")
+
+			table.insert(t, "index = ".."\""..tostring(page.POST.index).."\"".."}},\n")
 
 			local string4="lua_at_client = {"
 			table.insert(t, string4)

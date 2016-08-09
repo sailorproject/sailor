@@ -104,6 +104,13 @@ local conf = require "conf.conf"
 <?lua end ?>
 
 <div class="form-group">
+    <label class="control-label col-sm-1">Index</label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control"  name="index" value="<%= conf.search.elasticsearch.index %>">
+    </div>
+</div>
+
+<div class="form-group">
     <label class="control-label col-sm-3"><u>Lua At client VM</u></label>
     <div class="col-sm-12">
       <input type="text" class="form-control"  name="lua_at_client" value="<%= conf.lua_at_client.vm %>">
