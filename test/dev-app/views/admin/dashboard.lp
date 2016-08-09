@@ -77,6 +77,32 @@ local conf = require "conf.conf"
   </div>
 <?lua end ?>
 
+
+<h5><u>Search Engine Settings</u></h5>
+<p>Host settings</p>
+
+<?lua for k,v in pairs(conf.search.elasticsearch.hosts) do ?>
+  <?lua for i,j in pairs(v) do ?>
+  <div class="form-group">
+    <label class="control-label col-sm-1"><%= tostring(i) %></label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control"  name="<%= tostring(i) %>" value="<%= tostring(j) %>">
+    </div>
+  </div>
+  <?lua end ?>
+<?lua end ?>
+
+
+<p>Search Engine Parameters</p>
+<?lua for k,v in pairs(conf.search.elasticsearch.params) do ?>
+  <div class="form-group">
+    <label class="control-label col-sm-1"><%= tostring(k) %></label>
+    <div class="col-sm-12">
+      <input type="text" class="form-control"  name="<%= tostring(k) %>" value="<%= tostring(v) %>">
+    </div>
+  </div>
+<?lua end ?>
+
 <div class="form-group">
     <label class="control-label col-sm-3"><u>Lua At client VM</u></label>
     <div class="col-sm-12">
