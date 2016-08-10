@@ -52,7 +52,6 @@ es_model.new = function(model_name)
 	self.delete = function(arg)
 		arg.index = arg.index or elastic_conf.index
 		arg.type = es_type
-		arg.id = 1
 		return  client:delete(arg)
 	end
 	-- Function for updating documents in ES
