@@ -60,9 +60,26 @@ es_model.new = function(model_name)
 		arg.type = es_type
 		return client:update(arg)
 	end
-	
+	--  Function to find number of documents given the index and type; uses client:search
+	self.getCount = function()
+		local arg = {}	
+		arg.index = arg.index or elastic_conf.index
+		arg.type = es_type
+		local data, err = client:search(arg)
+		if data ~=nil then return data.hits.total, err else return err end
+	end
+	-- Get an array of all documents in the given index and type
+	self.getAll = function()
+		local arg ={}
+		arg.index = arg.index or elastic_conf.index
+		arg.type = es_type
+		local data,err = client:search(arg)
+		if data ~=nil then return data.hits.hits, err else return err end
+	end
+
+-- Metamethod for storing attributes. Checks first if it's defined in the model. 	
+
 	setmetatable(self, {
-	
 	__newindex = function(table, key, value)
 		local found = false
 		for _,attrs in pairs(keys) do 
@@ -70,12 +87,12 @@ es_model.new = function(model_name)
 				attributes[key] = value 
 				found = true
 			end
-			if not found then
-				error(tostring(key).." is not a valid attribute for this model.")
-			end
-		end -- check for allowed keys -> then store it in parameters table
+		end 
+		if not found then
+			error(tostring(key).." is not a valid attribute for this model.")
+		end
 	end,
-		 
+-- The fallback table is also attributes.		 
 	__index = attributes
 
 	})
