@@ -43,6 +43,7 @@ install:
   - luarocks install luacov
   - luarocks install luacov-coveralls
   - luarocks make rockspecs/sailor-current-1.rockspec
+  - luarocks install elasticsearch
 
 before_script:
   - source .travis/setdatabases.sh
