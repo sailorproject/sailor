@@ -76,6 +76,10 @@ es_model.new = function(model_name)
 		local data,err = client:search(arg)
 		if data ~=nil then return data.hits.hits, err else return err end
 	end
+	-- Bulk Indexing documents. Both index and type have to be specified in the parameters.
+	self.bulkIndex = function(arg)
+		return client:bulk(arg)
+	end
 
 -- Metamethod for storing attributes. Checks first if it's defined in the model. 	
 

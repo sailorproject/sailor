@@ -80,4 +80,35 @@ describe("Testing Elasticsearch Models", function()
 
 	end)
 
+	it("should bulk index", function()
+		local data, status = user.bulkIndex{
+						  		body = {
+								    -- First action
+								    {
+								      index = {
+								        ["_index"] = "my_index1",
+								        ["_type"] = "my_type1"
+								      }
+								    },
+								    -- First body
+								    {
+								      my_key1 = "my_value1",
+								    },
+								    -- Second action
+								    {
+								      index = {
+								        ["_index"] = "my_index2",
+								        ["_type"] = "my_type2"
+								      }
+								    },
+								    -- Second body
+								    {
+								      my_key2 = "my_value2",
+							    	}
+						  		}		
+							}
+
+		assert.is_equal(status, 200)
+	end)
+
 end)

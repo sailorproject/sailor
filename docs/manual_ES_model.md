@@ -81,3 +81,34 @@ Get's documents from the database based on the parameters provided. Full list of
 
 	contact.get{id = 1, fields = {name, email}}
 
+###model.bulkIndex(arg)
+
+For indexing multiple documents at once. Uses `client:bulk()`. The index and type have to set in the parameters. For a list of parameters check <a href="https://dhavalkapil.com/elasticsearch-lua/docs/classes/Client.html#Client:bulk">here.</a>
+
+	contact.bulkIndex{
+  		body = {
+		    -- First action
+		    {
+		      index = {
+		        ["_index"] = "my_index1",
+		        ["_type"] = "my_type1"
+		      }
+		    },
+		    -- First body
+		    {
+		      my_key1 = "my_value1",
+		    },
+		    -- Second action
+		    {
+		      index = {
+		        ["_index"] = "my_index2",
+		        ["_type"] = "my_type2"
+		      }
+		    },
+		    -- Second body
+		    {
+		      my_key2 = "my_value2",
+	    	}
+  		}		
+	}
+
