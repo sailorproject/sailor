@@ -21,6 +21,7 @@ Now, you can assign attributes to `contact` like
 	
 	contact.name = "test name"
 	contact.email = "test@test.com"
+
 And save it using,
 
 	msg , code = contact.save{id = 1}
@@ -34,6 +35,16 @@ Example:
 
 If the call succeeds then `msg` contains the result table and `err` contains the status code.
 If the call fails then `msg` contains `nil` and `err` contains the error message.
+
+###Elasticsearch administration
+
+To use administrative functionalities, 
+	
+	local es_model = require("sailor.db.es_model")
+	-- To use the namespaces
+	local res, err = es_model.client.cluster:stats()
+
+Check this <a href="http://elasticsearch-lua.readthedocs.io/en/latest/namespaces/">page</a> for more functions.
 
 ###model.save(arg) 
 

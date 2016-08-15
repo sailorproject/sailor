@@ -16,6 +16,8 @@ local client = elasticsearch.client{
 	params = elastic_conf.params
 }
 
+es_model.client = client
+
 es_model.new = function(model_name)
 	
 	local self = {}
