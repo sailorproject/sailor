@@ -112,3 +112,25 @@ For indexing multiple documents at once. Uses `client:bulk()`. The index and typ
   		}		
 	}
 
+###model.mget(arg)
+
+You can get multiple documents in the form of nested table using the `client:mget()`. The allowed parameters are <a href="https://dhavalkapil.com/elasticsearch-lua/docs/classes/Client.html#Client:mget">here.</a>
+
+	contact.mget{
+		  body = {
+		    docs = {
+		      -- First document
+		      {
+		        ["_index"] = "my_index1",
+		        ["_type"] = "my_type1",
+		        ["_id"] = "my_id1"
+		      },
+		      -- Second document
+		      {
+		        ["_index"] = "my_index2",
+		        ["_type"] = "my_type2",
+		        ["_id"] = "my_id2"
+		      }
+		    }
+		  }
+	}

@@ -80,7 +80,10 @@ es_model.new = function(model_name)
 	self.bulkIndex = function(arg)
 		return client:bulk(arg)
 	end
-
+	-- For getting multiple documents at once. 
+	self.mget = function(arg)
+		return client:mget(arg)
+	end
 -- Metamethod for storing attributes. Checks first if it's defined in the model. 	
 
 	setmetatable(self, {

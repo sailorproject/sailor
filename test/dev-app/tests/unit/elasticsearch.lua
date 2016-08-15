@@ -111,4 +111,27 @@ describe("Testing Elasticsearch Models", function()
 		assert.is_equal(status, 200)
 	end)
 
+	it("should get multiple documents at once", function()
+		local data, status = user.mget{
+			body = {
+				docs = {
+			    -- First document
+			      {
+			    	["_index"] = "my_index1",
+			        ["_type"] = "my_type1",
+			        ["_id"] = "my_id1"
+			      },
+			    -- Second document
+			      {
+			        ["_index"] = "my_index2",
+			        ["_type"] = "my_type2",
+			        ["_id"] = "my_id2"
+			      }
+			    }
+			}
+		}
+
+		assert.is_equal(status, 200)
+
+	end)
 end)
