@@ -6,6 +6,7 @@ describe("Testing Elasticsearch Models", function()
 	user.name = "Test User"
 	user.email = "test@test.com"
 	user.save{id = 1}
+	user.save{id = 3, body = {doc = { name = "new test2"}}}
 	local count_before 
 
 
@@ -78,6 +79,32 @@ describe("Testing Elasticsearch Models", function()
 	it("should find all objects", function()
 		assert.is_equal(user.getCount(), #user.getAll())
 
+	end)
+
+	it("should find some objects", function()
+		local count = user.search{q = "name"}.hits.total
+		assert.is_equal(1, count)
+	end)
+
+	it("should find one object", function()
+		local count = user.search{q = "test:random"}.hits.total
+		assert.is_equal(1, count)
+	end)
+
+	it("shold create objects and then rollback", function()
+		local data, status = user.save{id = 4, body = {doc = { name = "new test4"}}}
+		assert.truthy(data)
+		local ntime = os.time() + 1
+		repeat until os.time() > ntime
+		assert.is_equal(5, user.getCount())
+		user.delete{id = 4}
+		local ntime = os.time() + 1
+		repeat until os.time() > ntime
+		data, status = user.get{id = 4}
+		assert.falsy(data)
+		local ntime = os.time() + 1
+		repeat until os.time() > ntime
+		assert.is_equal(4, user.getCount())
 	end)
 
 	it("should bulk index", function()
