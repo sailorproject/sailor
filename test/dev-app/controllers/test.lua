@@ -19,7 +19,8 @@ function test.elasticfunctions(page)
     local doc = {name = "test"}
     local contact = es_model.new("test")
     contact.name = "Tester 123"
-    msg, msg1 = contact.save{id = 101, body = doc, routing = "routing@test.com"}
+    contact.save{id = 101, body = doc, routing = "routing@test.com"}
+    if (page.POST) then msg = contact.search{q = page.POST.search} end
     page:render('elastic', {msg = msg})    
 end
 

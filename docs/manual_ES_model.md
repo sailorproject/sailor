@@ -3,10 +3,19 @@
 
 This module makes it possible to store, retrieve and search data from <a href = "https://www.elastic.co/downloads/elasticsearch">Elasticsearch </a>. It uses the <a href = "github.com/dhavalkapil/elasticsearch-lua">elasticsearch-lua</a> client for Lua. Refer the client <a href="http://elasticsearch-lua.readthedocs.io/en/latest/">here</a> to know the parameters which can be sent through the model functions if any. Return responses are also same as the one offered by this client. 
 
-After importing "es_model" we proceed to create a new instance of the model. There should be a file inside models/ which contains the keys and types defined for the particular model. 
+###Installation and getting started.
+
+To get started, install the elasticsearch-lua rock using
+	
+	luarocks install --server=http://luarocks.org/dev elasticsearch
+
+Make sure you have elasticsearch installed and running. Refer to the instructions given on the official <a href = "https://www.elastic.co/downloads/elasticsearch">website</a>.
+
+The `es_model.lua` file is the main module. After importing "es_model" we proceed to create a new instance of the model. There should be a file inside models/ which contains the keys and types defined for the particular model. 
 
 	local es_model = require "sailor.es_model"
-	local contact = contact.new("test")
+	-- test.lua should be inside models/ folder.
+	local contact = es.model.new("test")
 
 Now, you can assign attributes to `contact` like 
 	
