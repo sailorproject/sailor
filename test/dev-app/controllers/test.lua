@@ -16,12 +16,58 @@ function test.index(page)
 end
 
 function test.elasticfunctions(page)
+
+    function table.val_to_str ( v )
+    
+        if "string" == type( v ) then
+            v = string.gsub( v, "\n", "\\n" )
+            
+            if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
+                return "'" .. v .. "'"
+            end
+                return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
+            else
+                return "table" == type( v ) and table.tostring( v ) or
+                tostring( v )
+        end
+
+    end
+
+    function table.key_to_str ( k )
+        if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
+            return k
+        else
+            return "[" .. table.val_to_str( k ) .. "]"
+        end
+    end
+
+    function table.tostring( tbl )
+        local result, done = {}, {}
+            for k, v in ipairs( tbl ) do
+                table.insert( result, table.val_to_str( v ) )
+                done[ k ] = true
+            end
+            
+            for k, v in pairs( tbl ) do
+                if not done[ k ] then
+                    table.insert( result,
+                    table.key_to_str( k ) .. "=" .. table.val_to_str( v ) )
+                end
+            end
+            
+            return "{" .. table.concat( result, "," ) .. "}"
+    end        
+
     local doc = {name = "test"}
     local contact = es_model.new("test")
     contact.name = "Tester 123"
-    contact.save{id = 101, body = doc, routing = "routing@test.com"}
+    local msg = contact.save{id = 101, body = doc, routing = "routing@test.com"}
     if (page.POST) then msg = contact.search{q = page.POST.search} end
-    page:render('elastic', {msg = msg})    
+    if type(msg) == "table" then
+        page:render('elastic',{ msg = table.tostring(msg) })
+    else
+        page:render('elastic',{ msg = msg })
+    end 
 end
 
 --This will be recovered once I reorganize the mailer module
