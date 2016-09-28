@@ -145,6 +145,57 @@ function Page:json(data, args)
 	self:write(encoded)
 end
 
+-- Implementation of CORS headers. Useful for those
+-- building API servers. 
+-- MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#The_HTTP_response_headers
+--
+-- The developer can pass each CORS header needed or calling the function with empty arguments will cause
+-- it to use:
+--
+--  Access-Control-Allow-Origin = "*"
+--
+-- which should be enough for most cases.
+--
+-- OBS: This requires a patch for "remy" to work with Xavante (cgilua).
+--      PR for remy: https://github.com/felipedaragon/remy/pull/11
+--
+function Page:enable_cors(data)
+    local config = {
+        allowOrigin = data.allowOrigin or "*",
+        exposeHeaders = data.exposeHeaders or nil
+        maxAge = data.maxAge or nil,
+        allowCredentials = data.allowCredentials or nil
+        allowMethods = data.allowMethods or nil,
+        allowHeaders = data.allowHeaders or nil
+    }
+
+    self.r.headers_out['Access-Control-Allow-Origin'] = data.allowOrigin
+    
+    if data.exposeHeaders then
+        self.r.headers_out['Access-Control-Expose-Headers'] = data.exposeHeaders
+    end
+
+    if data.maxAge then
+        self.r.headers_out['Access-Control-Max-Age'] = data.maxAge
+    end
+
+    if data.allowCredentials then
+        self.r.headers_out['Access-Control-Allow-Credentials'] = data.allowCredentials
+    end
+
+    if data.allowMethods then
+        self.r.headers_out['Access-Control-Allow-Methods'] = data.allowMethods
+    end
+
+     if data.allowHeaders then
+        self.r.headers_out['Access-Control-Allow-Headers'] = data.allowHeaders
+    end
+
+    
+
+
+end
+
 -- Redirects to another action or another address
 -- route: string, '<controller name>/<action_name>'
 -- args: table, vars to be passed in url get style
@@ -270,5 +321,6 @@ function Page:to_browser(var_table)
     local client_code = vm.get_client_js(code)
     render_page('',{},lp.translate(client_code,true))
 end
+
 
 return M
