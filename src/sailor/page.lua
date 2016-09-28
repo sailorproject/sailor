@@ -171,24 +171,24 @@ function Page:enable_cors(data)
 
     self.r.headers_out['Access-Control-Allow-Origin'] = data.allowOrigin
     
-    if data.exposeHeaders then
-        self.r.headers_out['Access-Control-Expose-Headers'] = data.exposeHeaders
+    if config.exposeHeaders then
+        self.r.headers_out['Access-Control-Expose-Headers'] = config.exposeHeaders
     end
 
-    if data.maxAge then
-        self.r.headers_out['Access-Control-Max-Age'] = data.maxAge
+    if config.maxAge then
+        self.r.headers_out['Access-Control-Max-Age'] = config.maxAge
     end
 
-    if data.allowCredentials then
-        self.r.headers_out['Access-Control-Allow-Credentials'] = data.allowCredentials
+    if config.allowCredentials then
+        self.r.headers_out['Access-Control-Allow-Credentials'] = config.allowCredentials
     end
 
-    if data.allowMethods then
-        self.r.headers_out['Access-Control-Allow-Methods'] = data.allowMethods
+    if config.allowMethods then
+        self.r.headers_out['Access-Control-Allow-Methods'] = config.allowMethods
     end
 
-     if data.allowHeaders then
-        self.r.headers_out['Access-Control-Allow-Headers'] = data.allowHeaders
+     if config.allowHeaders then
+        self.r.headers_out['Access-Control-Allow-Headers'] = config.allowHeaders
     end
 end
 
