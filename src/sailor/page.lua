@@ -190,10 +190,6 @@ function Page:enable_cors(data)
      if data.allowHeaders then
         self.r.headers_out['Access-Control-Allow-Headers'] = data.allowHeaders
     end
-
-    
-
-
 end
 
 -- Redirects to another action or another address
