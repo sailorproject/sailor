@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 --------------------------------------------------------------------------------
--- sailor v0.5: Command line utility for sailor
+-- sailor v0.6: Command line utility for sailor
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -9,136 +9,37 @@
 --------------------------------------------------------------------------------
 
 local lfs = require "lfs"
---local inspect = require "inspect"
 local argparse = require "argparse"
 local colors = require "ansicolors"
+local actions = require "sailor.cli"
 
+local parser = argparse("script", colors("%{bright yellow}Sailor command line utility"))
+  :name(string.match(arg[0], "/*(%w+)/*$")) -- this file name, usually will be "sailor"
+  :epilog("For more info see http://sailorproject.org")
+  :require_command(false)
 
-local function get_sailor_path(current_dir)
-	local sailor_path = ((debug.getinfo(1).source):match("^@?(.-)/sailor$"))
+local create_cmd = parser:command("c create", "Generates web application in a directory.")
+	:action(actions.create)
+create_cmd:usage(colors("%{bright red}Usage: sailor create NAME [PATH]"))
+create_cmd:argument("name", "The name of your application.")
+create_cmd:argument("path", "The path to where you wish your app to be created."):default(".")
+create_cmd:epilog(colors([[
+    Example: %{bright red} sailor create 'Hey Arnold' /var/www %{reset}
+    This will create your web app under /var/www/hey_arnold.]]))
 
-	local f = sailor_path and io.open(sailor_path.."/src/sailor.lua", "r")
-	if not f then
-		local datafile = require("datafile")
-		sailor_path = datafile.path("sailor/cookie.lua"):match("^@?(.-)/sailor/cookie.lua$")
-	else
-		f:close()
-		if sailor_path == '.' then
-			sailor_path = current_dir.."/src"
-		elseif sailor_path:match("^.") then
-			local path = sailor_path:match(".(.-)")
-			sailor_path = current_dir.."/sailor"..tostring(path).."/src"
-		elseif not sailor_path:match("^/") then
-			sailor_path = current_dir.."/src/"..sailor_path
-		else
-			sailor_path = sailor_path.."/src"
-		end
-	end
-	return sailor_path
-end
-
-local function create(args, _)
-	local name = string.gsub(args.name:lower(),' ','_')
-	local current_dir = lfs.currentdir()
-	local destiny = args.path or current_dir
-
-	local sailor_path = get_sailor_path(current_dir)
-
-	local raw_app = sailor_path.."/sailor/blank-app"
-	local new_app = destiny.."/"..name
-	assert(os.execute("cp -a '"..raw_app.."' '"..new_app.."'"))
-
-	local htaccess = assert(io.open (new_app.."/.htaccess" , "r"))
-	local src = htaccess:read("*a")
-	htaccess:close()
-
-	htaccess = assert(io.open (new_app.."/.htaccess" , "w"))
-	src = string.gsub(src,"{{path}}",sailor_path)
-	htaccess:write(src)
-	htaccess:close()
-
-	local conf = assert(io.open (new_app.."/conf/conf.lua" , "r"))
-	src = conf:read("*a")
-	conf:close()
-	conf = assert(io.open (new_app.."/conf/conf.lua" , "w"))
-	src = string.gsub(src,"Sailor! A Lua MVC Framework", args.name)
-	conf:write(src)
-	conf:close()
-
-	print("done!")
-end
-
-local function test(args, _)
-	local ok, code
-
-    flags = table.concat(args.EXTRA_FLAGS, " ")
-
-	if args.resty then
-		ok, code = os.execute('resty tests/bootstrap_resty.lua')
-	else
-		ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..' tests/unit/* tests/functional/*')
-	end
-
-	if type(ok) == "number" then return ok end -- Lua 5.1 just returns the status code
-	exit_code = ok and 0 or 1 -- don't care about actual value
-
-    if exit_code and exit_code ~= 0 then
-    	-- exit code sometimes is > 255 and fails to be propagated
-    	os.exit(1, true)
-    end
-end
-
-local function enable(args, _)
-	local name = 'sailor-'..args.name
-	local current_dir = lfs.currentdir()
-	local sailor_path = get_sailor_path(current_dir)
-
-	assert(os.execute('luarocks install '..name))
-
-	local ext_app = sailor_path.."/sailor/"..name.."/app"
-	assert(os.execute("mkdir -p extensions"))
-	local err = assert(os.execute("cp -a '"..ext_app.."' extensions/"..name))
-	if err == 0 then
-		local index_file = assert(io.open ("index.lua" , "r"))
-		local src = index_file:read("*a")
-		index_file:close()
-
-		local package_path = "package.path =  base_dir..'extensions/"..name.."/?.lua;'..package.path"
-		src = string.gsub(src,"\nlocal sailor",package_path.."\n\nlocal sailor")
-		index_file = assert(io.open ("index.lua" , "w"))
-		index_file:write(src)
-		index_file:close()
-		print("New files:")
-		print("extensions/"..name.."/*\n")
-		print("Files modified:")
-		print("index.lua\n")
-		print("done!")
-	end
-end
-
-local parser = argparse("script", colors("%{bright yellow}Sailor commands"))
-    :name(string.match(arg[0], "/*(%w+)/*$")) -- this file name, usually will be "sailor"
-    :require_command(true)
-local create_cmd = parser:command("c create", "Generates web application in a directory."):action(create)
-    create_cmd:usage(colors("%{bright red}Usage: sailor create NAME [PATH]"))
-    create_cmd:argument("name", "The name of your application.")
-    create_cmd:argument("path", "The path to where you wish your app to be created.")
-    :default(".")
-    create_cmd:epilog(colors([[
-        Example: %{bright red} sailor create 'Hey Arnold' /var/www %{reset}
-        This will create your web app under /var/www/hey_arnold.]]))
 local test_cmd = parser:command("t test", "Will run the tests specified for an application. Must be called from the base dir of the application.")
-    :action(test)
-    test_cmd:usage(colors"%{bright red}Usage: sailor test [--resty] -- [EXTRA_FLAGS]")
-    -- Optional. Flags for the Busted library.")
-    test_cmd:argument("EXTRA_FLAGS"):action("concat"):args("*")
-    test_cmd:flag("--resty", "Run the tests using the resty bootstrap", false)
+  :action(actions.test)
+test_cmd:usage(colors"%{bright red}Usage: sailor test [--resty] [-- EXTRA_FLAGS]")
+test_cmd:argument("EXTRA_FLAGS", "Flags that will be passed to the Busted library."):args("*")
+test_cmd:flag("--resty", "Run the tests using the resty bootstrap.", false)
+
 local enable_cmd = parser:command("e enable", "Will install an extension to Sailor and copy necessary files to your app. Must be called from the base dir of the application.")
-    :action(enable)
-    enable_cmd:usage(colors("%{bright red}Usage: sailor enable NAME"))
-    enable_cmd:argument("name", "The name of the extension to be enabled.")
+  :action(actions.enable)
+enable_cmd:usage(colors("%{bright red}Usage: sailor enable NAME"))
+enable_cmd:argument("name", "The name of the extension to be enabled.")
+
+parser:flag("-v --version", "Show the current Sailor version installed and exit.", false):action(actions.version)
 
 parser:usage(parser:get_help())
 
 local args = parser:parse()
---print(inspect(args))
