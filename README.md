@@ -152,5 +152,3 @@ https://twitter.com/etiene_d
 
 
 ##### If you are having trouble to get Sailor working or if you got it working using different specs, please make contact so we can exchange info and I can improve the manual. Thanks!
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Etiene/sailor/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
