@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 --------------------------------------------------------------------------------
--- sailor v0.6: Command line utility for sailor
+-- sailor v0.6.1: Command line utility for sailor
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -27,16 +27,40 @@ create_cmd:epilog(colors([[
     Example: %{bright red} sailor create 'Hey Arnold' /var/www %{reset}
     This will create your web app under /var/www/hey_arnold.]]))
 
-local test_cmd = parser:command("t test", "Will run the tests specified for an application. Must be called from the base dir of the application.")
+local test_cmd = parser:command("t test", "Runs the tests specified for an application. Must be called from the base dir of the application.")
   :action(actions.test)
 test_cmd:usage(colors"%{bright red}Usage: sailor test [--resty] [-- EXTRA_FLAGS]")
 test_cmd:argument("EXTRA_FLAGS", "Flags that will be passed to the Busted library."):args("*")
 test_cmd:flag("--resty", "Run the tests using the resty bootstrap.", false)
 
-local enable_cmd = parser:command("e enable", "Will install an extension to Sailor and copy necessary files to your app. Must be called from the base dir of the application.")
+local enable_cmd = parser:command("e enable", "Installs an extension to Sailor and copy necessary files to your app. Must be called from the base dir of the application.")
   :action(actions.enable)
 enable_cmd:usage(colors("%{bright red}Usage: sailor enable NAME"))
 enable_cmd:argument("name", "The name of the extension to be enabled.")
+
+
+local gen_cmd = parser:command("g gen", "Generates some scaffolding for your app.")
+gen_cmd:usage(colors("%{bright red}Usage: sailor gen COMMAND ARG"))
+gen_cmd:epilog(colors([[
+    Example: %{bright red} sailor gen model users%{reset}
+    Given a table called 'users' exist in the database, this will generate a model based on it.]]))
+
+local model_cmd = gen_cmd:command("m model", "Generates a basic model based on an existing table on the database.")
+	:action(actions.gen_model)
+model_cmd:argument("table_name", "The name of the database table that the model should reflect.")
+model_cmd:usage(colors("%{bright red}Usage: sailor gen model TABLE_NAME"))
+
+local crud_cmd = gen_cmd:command("crud c", "Generates Create-Read-Update-Delete scaffolding for a given model name.")
+	:action(actions.gen_crud)
+crud_cmd:argument("model_name", "The name of the model table that CRUD should act on.")
+crud_cmd:usage(colors("%{bright red}Usage: sailor gen crud MODEL_NAME"))
+
+local all_cmd = gen_cmd:command("a all", "Generates both the model and a CRUD for an existing table name.")
+	:action(actions.gen_all)
+all_cmd:argument("table_name", "The name of the database table that the model and the CRUD should reflect.")
+all_cmd:usage(colors("%{bright red}Usage: sailor gen all TABLE_NAME"))
+
+
 
 parser:flag("-v --version", "Show the current Sailor version installed and exit.", false):action(actions.version)
 
