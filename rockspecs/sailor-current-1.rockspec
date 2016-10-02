@@ -25,6 +25,8 @@ dependencies = {
    'remy >= 0.2',
    'latclient >= 0.4',
    'dkjson ~> 2.5',
+   'argparse',
+   'ansicolors'
 }
 build = {
    type = "builtin",
