@@ -158,6 +158,11 @@ end
 --
 --
 function Page:enable_cors(data)
+
+    if data == nil then
+        data = {}
+    end
+
     local config = {
         allow_origin = data.allow_origin or "*",
         expose_headers = data.expose_headers or nil,
