@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- cli.lua v0.1: Functions for sailor's command line utility
+-- cli.lua v0.1.1: Functions for sailor's command line utility
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -63,26 +63,6 @@ function cli.create(args, _)
 	os.exit(0)
 end
 
-function cli.test(args, _)
-	local ok, code
-
-   flags = table.concat(args.EXTRA_FLAGS, " ")
-
-	if args.resty then
-		ok, code = os.execute('resty tests/bootstrap_resty.lua')
-	else
-		ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..' tests/unit/* tests/functional/*')
-	end
-
-	if type(ok) == "number" then return ok end -- Lua 5.1 just returns the status code
-	exit_code = ok and 0 or 1 -- don't care about actual value
-
-    if exit_code and exit_code ~= 0 then
-    	-- exit code sometimes is > 255 and fails to be propagated
-    	os.exit(1, true)
-    end
-end
-
 function cli.enable(args, _)
 	local name = 'sailor-'..args.name
 	local current_dir = lfs.currentdir()
@@ -110,6 +90,42 @@ function cli.enable(args, _)
 		print("done!")
 		os.exit(0)
 	end
+end
+
+function cli.gen_all(args)
+	local model =  require "sailor.model"
+	model.generate_model(args.table_name)
+	model.generate_crud(args.table_name)
+end
+
+function cli.gen_crud(args)
+	local model =  require "sailor.model"
+	model.generate_crud(args.model_name)
+end
+
+function cli.gen_model(args)
+	local model =  require "sailor.model"
+	model.generate_model(args.table_name)
+end
+
+function cli.test(args, _)
+	local ok, code
+
+   flags = table.concat(args.EXTRA_FLAGS, " ")
+
+	if args.resty then
+		ok, code = os.execute('resty tests/bootstrap_resty.lua')
+	else
+		ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..' tests/unit/* tests/functional/*')
+	end
+
+	if type(ok) == "number" then return ok end -- Lua 5.1 just returns the status code
+	exit_code = ok and 0 or 1 -- don't care about actual value
+
+    if exit_code and exit_code ~= 0 then
+    	-- exit code sometimes is > 255 and fails to be propagated
+    	os.exit(1, true)
+    end
 end
 
 function cli.version()

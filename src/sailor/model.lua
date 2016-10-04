@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- model.lua, v0.10.3: basic model creator, uses db module
+-- model.lua, v0.10.4: basic model creator, uses db module
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -347,7 +347,7 @@ end
 -- Generates a CRUD based on the given model, model must already exist
 -- model_name: string, the name of the model
 function model.generate_crud(model_name)
-	local f=io.open(sailor.path.."/models/"..model_name..".lua","r")
+	local f=io.open("models/"..model_name..".lua","r")
 	if f == nil then
    		error("The model '"..model_name.."'does not exist")
    	else
