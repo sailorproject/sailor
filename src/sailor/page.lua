@@ -149,46 +149,44 @@ end
 -- building API servers. 
 -- MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#The_HTTP_response_headers
 --
--- The developer can pass each CORS header needed or calling the function with empty arguments will cause
+-- The developer can pass each CORS header needed. Calling the function with empty arguments will cause
 -- it to use:
 --
 --  Access-Control-Allow-Origin = "*"
 --
 -- which should be enough for most cases.
 --
--- OBS: This requires a patch for "remy" to work with Xavante (cgilua).
---      PR for remy: https://github.com/felipedaragon/remy/pull/11
 --
 function Page:enable_cors(data)
     local config = {
-        allowOrigin = data.allowOrigin or "*",
-        exposeHeaders = data.exposeHeaders or nil
-        maxAge = data.maxAge or nil,
-        allowCredentials = data.allowCredentials or nil
-        allowMethods = data.allowMethods or nil,
-        allowHeaders = data.allowHeaders or nil
+        allow_origin = data.allow_origin or "*",
+        expose_headers = data.expose_headers or nil
+        max_age = data.max_age or nil,
+        allow_credentials = data.allow_credentials or nil
+        allow_methods = data.allow_methods or nil,
+        allow_headers = data.allow_headers or nil
     }
 
-    self.r.headers_out['Access-Control-Allow-Origin'] = data.allowOrigin
+    self.r.headers_out['Access-Control-Allow-Origin'] = data.allow_origin
     
-    if config.exposeHeaders then
-        self.r.headers_out['Access-Control-Expose-Headers'] = config.exposeHeaders
+    if config.expose_headers then
+        self.r.headers_out['Access-Control-Expose-Headers'] = config.expose_headers
     end
 
-    if config.maxAge then
-        self.r.headers_out['Access-Control-Max-Age'] = config.maxAge
+    if config.max_age then
+        self.r.headers_out['Access-Control-Max-Age'] = config.max_age
     end
 
-    if config.allowCredentials then
-        self.r.headers_out['Access-Control-Allow-Credentials'] = config.allowCredentials
+    if config.allow_credentials then
+        self.r.headers_out['Access-Control-Allow-Credentials'] = config.allow_credentials
     end
 
-    if config.allowMethods then
-        self.r.headers_out['Access-Control-Allow-Methods'] = config.allowMethods
+    if config.allow_methods then
+        self.r.headers_out['Access-Control-Allow-Methods'] = config.allow_methods
     end
 
-     if config.allowHeaders then
-        self.r.headers_out['Access-Control-Allow-Headers'] = config.allowHeaders
+     if config.allow_headers then
+        self.r.headers_out['Access-Control-Allow-Headers'] = config.allow_headers
     end
 end
 
