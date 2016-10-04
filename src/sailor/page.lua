@@ -160,9 +160,9 @@ end
 function Page:enable_cors(data)
     local config = {
         allow_origin = data.allow_origin or "*",
-        expose_headers = data.expose_headers or nil
+        expose_headers = data.expose_headers or nil,
         max_age = data.max_age or nil,
-        allow_credentials = data.allow_credentials or nil
+        allow_credentials = data.allow_credentials or nil,
         allow_methods = data.allow_methods or nil,
         allow_headers = data.allow_headers or nil
     }
