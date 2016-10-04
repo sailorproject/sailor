@@ -167,7 +167,7 @@ function Page:enable_cors(data)
         allow_headers = data.allow_headers or nil
     }
 
-    self.r.headers_out['Access-Control-Allow-Origin'] = data.allow_origin
+    self.r.headers_out['Access-Control-Allow-Origin'] = config.allow_origin
     
     if config.expose_headers then
         self.r.headers_out['Access-Control-Expose-Headers'] = config.expose_headers
