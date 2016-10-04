@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- cli.lua v0.1.1: Functions for sailor's command line utility
+-- cli.lua v0.1.2: Functions for sailor's command line utility
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -106,6 +106,14 @@ end
 function cli.gen_model(args)
 	local model =  require "sailor.model"
 	model.generate_model(args.table_name)
+end
+
+function cli.start()
+	local ok, _ = xpcall(require "start-server")
+	if not ok then
+		print("Start script not found. Please run this command from the root dir of your Sailor app.")
+		os.exit(1, true)
+	end
 end
 
 function cli.test(args, _)
