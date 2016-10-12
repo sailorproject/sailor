@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 --------------------------------------------------------------------------------
--- sailor v0.6.1: Command line utility for sailor
+-- sailor v0.6.2: Command line utility for sailor
 -- This file is a part of Sailor project
 -- Copyright (c) 2014 Etiene Dalcol <dalcol@etiene.net>
 -- License: MIT
@@ -13,13 +13,14 @@ local argparse = require "argparse"
 local colors = require "ansicolors"
 local actions = require "sailor.cli"
 
+
 local parser = argparse("script", colors("%{bright yellow}Sailor command line utility"))
   :name(string.match(arg[0], "/*(%w+)/*$")) -- this file name, usually will be "sailor"
   :epilog("For more info see http://sailorproject.org")
   :require_command(false)
 
 local create_cmd = parser:command("c create", "Generates web application in a directory.")
-	:action(actions.create)
+  :action(actions.create)
 create_cmd:usage(colors("%{bright red}Usage: sailor create NAME [PATH]"))
 create_cmd:argument("name", "The name of your application.")
 create_cmd:argument("path", "The path to where you wish your app to be created."):default(".")
@@ -46,21 +47,23 @@ gen_cmd:epilog(colors([[
     Given a table called 'users' exist in the database, this will generate a model based on it.]]))
 
 local model_cmd = gen_cmd:command("m model", "Generates a basic model based on an existing table on the database.")
-	:action(actions.gen_model)
+  :action(actions.gen_model)
 model_cmd:argument("table_name", "The name of the database table that the model should reflect.")
 model_cmd:usage(colors("%{bright red}Usage: sailor gen model TABLE_NAME"))
 
 local crud_cmd = gen_cmd:command("crud c", "Generates Create-Read-Update-Delete scaffolding for a given model name.")
-	:action(actions.gen_crud)
+  :action(actions.gen_crud)
 crud_cmd:argument("model_name", "The name of the model table that CRUD should act on.")
 crud_cmd:usage(colors("%{bright red}Usage: sailor gen crud MODEL_NAME"))
 
 local all_cmd = gen_cmd:command("a all", "Generates both the model and a CRUD for an existing table name.")
-	:action(actions.gen_all)
+  :action(actions.gen_all)
 all_cmd:argument("table_name", "The name of the database table that the model and the CRUD should reflect.")
 all_cmd:usage(colors("%{bright red}Usage: sailor gen all TABLE_NAME"))
 
-
+local start_cmd = parser:command("s start", "Runs a Sailor app starting Xavante webserver.")
+  :action(actions.start)
+enable_cmd:usage(colors("%{bright red}Usage: sailor start"))
 
 parser:flag("-v --version", "Show the current Sailor version installed and exit.", false):action(actions.version)
 
