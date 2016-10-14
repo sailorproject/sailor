@@ -109,7 +109,7 @@ function cli.gen_model(args)
 end
 
 function cli.start()
-	local ok, _ = xpcall(require "start-server")
+	local ok, _ = pcall(require, "start-server")
 	if not ok then
 		print("Start script not found. Please run this command from the root dir of your Sailor app.")
 		os.exit(1, true)
