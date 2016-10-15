@@ -49,14 +49,15 @@ end
 -- parms: table, the parameters being passed ahead to the rendered page
 -- src: the parsed string
 local function render_page(path,parms,src)
+    for k, v in pairs(_G) do
+        parms[k] = v
+    end
+
     local f
     if _VERSION == "Lua 5.1" then
         f = assert(loadstring(src,'@'..path))
-        local env = getfenv(f)
-        for k,v in pairs(parms) do env[k] = v end
-        setfenv(f,env)
+        setfenv(f,parms)
     else
-        for k,v in pairs(_G) do parms[k] = v end
         f = assert(load(src,'@'..path,'t',parms))
     end
 
