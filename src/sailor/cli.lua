@@ -6,6 +6,8 @@
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
 
+local lfs = require "lfs"
+
 local cli = {}
 
 local function get_sailor_path(current_dir)
@@ -117,18 +119,18 @@ function cli.start()
 end
 
 function cli.test(args, _)
-	local ok, code
+	local ok
 
-   flags = table.concat(args.EXTRA_FLAGS, " ")
+   local flags = table.concat(args.EXTRA_FLAGS, " ")
 
 	if args.resty then
-		ok, code = os.execute('resty tests/bootstrap_resty.lua')
+		ok = os.execute('resty tests/bootstrap_resty.lua')
 	else
-		ok, code = os.execute('busted --helper=tests/bootstrap.lua '..flags..' tests/unit/* tests/functional/*')
+		ok = os.execute('busted --helper=tests/bootstrap.lua '..flags..' tests/unit/* tests/functional/*')
 	end
 
 	if type(ok) == "number" then return ok end -- Lua 5.1 just returns the status code
-	exit_code = ok and 0 or 1 -- don't care about actual value
+	local exit_code = ok and 0 or 1 -- don't care about actual value
 
     if exit_code and exit_code ~= 0 then
     	-- exit code sometimes is > 255 and fails to be propagated
