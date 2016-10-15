@@ -8,7 +8,6 @@
 -- http://sailorproject.org
 --------------------------------------------------------------------------------
 
-local lfs = require "lfs"
 local argparse = require "argparse"
 local colors = require "ansicolors"
 local actions = require "sailor.cli"
