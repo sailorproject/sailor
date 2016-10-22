@@ -25,6 +25,8 @@ dependencies = {
    'remy >= 0.2',
    'latclient >= 0.4',
    'dkjson ~> 2.5',
+   'argparse',
+   'ansicolors'
 }
 build = {
    type = "builtin",
@@ -47,11 +49,13 @@ build = {
       ['sailor.blank-app.tests.functional.dummy'] = "src/sailor/blank-app/tests/functional/dummy.lua",
       ['sailor.blank-app.index'] = "src/sailor/blank-app/index.lua",
       ['sailor.blank-app.index-magnet'] = "src/sailor/blank-app/index-magnet.lua",
+      ['sailor.cli'] = "src/sailor/cli.lua",
       ['sailor.form'] = "src/sailor/form.lua",
       ['sailor.model'] = "src/sailor/model.lua",
       ['sailor.session'] = "src/sailor/session.lua",
       ['sailor.page'] = "src/sailor/page.lua",
       ['sailor.test'] = "src/sailor/test.lua",
+      ['sailor.version'] = "src/sailor/version.lua",
       ['web_utils.lp'] = "src/web_utils/lp.lua",
       ['web_utils.lp_ex'] = "src/web_utils/lp_ex.lua",
       ['web_utils.serialize'] = "src/web_utils/serialize.lua",

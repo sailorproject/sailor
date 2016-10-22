@@ -50,7 +50,7 @@ before_script:
 
 script:
   - cd test/dev-app
-  - if [ "$SERVER" != "openresty" ]; then sailor test --verbose --coverage; fi
+  - if [ "$SERVER" != "openresty" ]; then sailor test -- --verbose --coverage; fi
   - if [ "$SERVER" == "openresty" ]; then sailor test --resty; fi
 
 after_success:

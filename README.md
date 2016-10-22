@@ -40,7 +40,7 @@ A Lua MVC Framework. www.sailorproject.org
   * Relations
   * Model generation (reading from DB)
   * CRUD generation (reading from model)
-  * Theme and layout (now you can have multiple layouts inside a theme. e.g. 1-column and 2-column)
+  * Theme and layout (now you can have multiple layouts within a theme. e.g. 1-column and 2-column)
   * Integration with Busted for unit and functional tests for your app
 
 
@@ -52,9 +52,9 @@ More about the motivation to build this project can be found here: http://etiene
 
 ### Directory tree info
 * /docs - this one is supposed to have documentation
-* /lua-to-js-vms - different Lua->Javascript virtual machines for use of Lua on the browser with Sailor
+* /lua-to-js-vms - different Lua->Javascript virtual machines for use of Lua in the browser with Sailor
 * /rockspecs - Rockspec files for LuaRocks install
-* /src - Lua modules with nice stuff from sailor and other places.
+* /src - Lua modules with nice stuff from Sailor and other places.
  * /sailor - Sailor modules
  * /sailor/blank-app - blank Sailor web app, can be copy-pasted as base for your own apps
 * /test - apps for testing and demonstration purposes
@@ -152,5 +152,3 @@ https://twitter.com/etiene_d
 
 
 ##### If you are having trouble to get Sailor working or if you got it working using different specs, please make contact so we can exchange info and I can improve the manual. Thanks!
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Etiene/sailor/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
