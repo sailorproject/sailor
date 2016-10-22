@@ -49,14 +49,15 @@ end
 -- parms: table, the parameters being passed ahead to the rendered page
 -- src: the parsed string
 local function render_page(path,parms,src)
+    for k, v in pairs(_G) do
+        parms[k] = v
+    end
+
     local f
     if _VERSION == "Lua 5.1" then
         f = assert(loadstring(src,'@'..path))
-        local env = getfenv(f)
-        for k,v in pairs(parms) do env[k] = v end
-        setfenv(f,env)
+        setfenv(f,parms)
     else
-        for k,v in pairs(_G) do parms[k] = v end
         f = assert(load(src,'@'..path,'t',parms))
     end
 
@@ -142,6 +143,56 @@ function Page:json(data, args)
 
 	self.r.content_type = 'application/json'
 	self:write(encoded)
+end
+
+-- Implementation of CORS headers. Useful for those
+-- building API servers. 
+-- MDN: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#The_HTTP_response_headers
+--
+-- The developer can pass each CORS header needed. Calling the function with empty arguments will cause
+-- it to use:
+--
+--  Access-Control-Allow-Origin = "*"
+--
+-- which should be enough for most cases.
+--
+--
+function Page:enable_cors(data)
+
+    if data == nil then
+        data = {}
+    end
+
+    local config = {
+        allow_origin = data.allow_origin or "*",
+        expose_headers = data.expose_headers or nil,
+        max_age = data.max_age or nil,
+        allow_credentials = data.allow_credentials or nil,
+        allow_methods = data.allow_methods or nil,
+        allow_headers = data.allow_headers or nil
+    }
+
+    self.r.headers_out['Access-Control-Allow-Origin'] = config.allow_origin
+    
+    if config.expose_headers then
+        self.r.headers_out['Access-Control-Expose-Headers'] = config.expose_headers
+    end
+
+    if config.max_age then
+        self.r.headers_out['Access-Control-Max-Age'] = config.max_age
+    end
+
+    if config.allow_credentials then
+        self.r.headers_out['Access-Control-Allow-Credentials'] = config.allow_credentials
+    end
+
+    if config.allow_methods then
+        self.r.headers_out['Access-Control-Allow-Methods'] = config.allow_methods
+    end
+
+     if config.allow_headers then
+        self.r.headers_out['Access-Control-Allow-Headers'] = config.allow_headers
+    end
 end
 
 -- Redirects to another action or another address
@@ -269,5 +320,6 @@ function Page:to_browser(var_table)
     local client_code = vm.get_client_js(code)
     render_page('',{},lp.translate(client_code,true))
 end
+
 
 return M

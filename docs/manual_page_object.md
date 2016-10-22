@@ -62,6 +62,15 @@ Will inspect a var and print the result on the bottom of the page. It can be tog
 
 Example 1: `page:inspect( page.POST )`
 
+####page:enable_cors([headers] )
+Sends [CORS headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#The_HTTP_response_headers) to the client. 
+
+* headers: [optional] table, contains which headers to pass, if nil then `Access-Control-Allow-Origin = "*"` is used. They keys are (allow_origin, expose_headers, max_age, allow_credentials, allow_methods, allow_headers).
+
+Example 1: `page:enable_cors()`
+
+Example 2: `page:enable_cors({allow_origin = "http://sailorproject.org"})`
+
 ####page.POST
 * table: contains the POST data, empty table if there is no POST data.
 
