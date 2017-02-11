@@ -9,7 +9,7 @@
 local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local mysql = require "resty.mysql"
-local query_logger = require "query_logger"
+local query_logger = require "sailor.db.query_logger"
 
 local db = {instance = nil, transaction = false}
 
