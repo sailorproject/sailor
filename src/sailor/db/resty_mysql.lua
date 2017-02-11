@@ -9,6 +9,7 @@
 local main_conf = require "conf.conf"
 local conf = main_conf.db[main_conf.sailor.environment]
 local mysql = require "resty.mysql"
+local query_logger = require "query_logger"
 
 local db = {instance = nil, transaction = false}
 
@@ -53,6 +54,11 @@ end
 -- @param query string: the query to be executed
 -- @return table: a cursor
 function db.query(query)
+	
+	if query_logger.is_logger_enabled() then
+		query_logger.write(query)
+	end
+
 	local res, err, errno, sqlstate = db.instance:query(query)
     if not res then
     	error(query)

@@ -22,7 +22,8 @@ local conf = {
 			host = '',
 			user = '',
 			pass = '',
-			dbname = ''
+			dbname = '',
+			log_database_queries = true
 		}
 	},
 

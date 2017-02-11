@@ -11,6 +11,7 @@ local conf = main_conf.db[main_conf.sailor.environment]
 local luasql = require("luasql."..conf.driver)
 local db = { transaction = false}
 local utils = require "web_utils.utils"
+local query_logger = require "query_logger"
 
 -- Reads the cursor information after reading from db and returns a table
 local function fetch_row(cur, res)
@@ -54,6 +55,10 @@ end
 -- @param query string: the query to be executed
 -- @return table: the rows with the results
 function db.query(query)
+	if query_logger.is_logger_enabled() then
+		query_logger.write(query)
+	end
+
 	local cur = assert(db.con:execute(query))
 	if type(cur) == 'number' then
 		return cur
@@ -134,6 +139,11 @@ local function query_insert_postgres(query,key)
 	key = key or 'id'
 	
 	query = query .. " RETURNING id; "
+
+	if query_logger.is_logger_enabled() then
+		query_logger.write(query)
+	end
+
 	local cur = assert(db.con:execute(query))
 
 	if type(cur) == 'number' then
@@ -152,6 +162,11 @@ local function query_insert_common(query,key)
 	local id
 	
 	query  = query .. "; "
+
+	if query_logger.is_logger_enabled() then
+		query_logger.write(query)
+	end
+	
 	assert(db.con:execute(query))
 	id = db.con:getlastautoid()
 
