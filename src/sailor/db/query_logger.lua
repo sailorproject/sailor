@@ -16,7 +16,7 @@ local query_logger = {
     outfile = "query.log"
 }
 
-function query_logger.write(query) {
+local function query_logger.write(query) {
     local fp,err = io.open(logger.outfile, "a")
     local str = string.format("[QUERY %s] %s\n",
                             os.date(), query)
@@ -29,7 +29,7 @@ function query_logger.write(query) {
     end
 }
 
-function query_logger.is_logger_enabled() {
+local function query_logger.is_logger_enabled() {
     return conf.log_database_queries or false
 }
 
