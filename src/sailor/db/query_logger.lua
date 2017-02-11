@@ -13,7 +13,7 @@ local conf = main_conf.db[main_conf.sailor.environment]
 local log_file_path = (sailor.path..'/runtime/logs')
 
 local query_logger = {
-    outfile = "query.log"
+    outfile = log_file_path .. "/query.log"
 }
 
 function query_logger.write(query)
