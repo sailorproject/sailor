@@ -17,7 +17,7 @@ local query_logger = {
 }
 
 function query_logger.write(query)
-    local fp,err = io.open(logger.outfile, "a")
+    local fp,err = io.open(query_logger.outfile, "a")
     local str = string.format("[QUERY %s] %s\n",
                             os.date(), query)
 
