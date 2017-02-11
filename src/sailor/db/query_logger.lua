@@ -30,7 +30,7 @@ function query_logger.write(query) {
 }
 
 function query_logger.is_logger_enabled() {
-    return conf.log_database_queries
+    return conf.log_database_queries or false
 }
 
 return query_logger
