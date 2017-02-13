@@ -75,7 +75,7 @@ Example 2: `page:enable_cors({allow_origin = "http://sailorproject.org"})`
 * table: contains the POST data, empty table if there is no POST data.
 
 ####page.GET
-* table: contains the POST data, empty table if there is no POST data.
+* table: contains the GET data, empty table if there is no GET data.
 
 ####page.title
 * string *writeable*: By default it is set to the same as conf.sailor.app_name, but you can modify it before rendering a page, for example.
