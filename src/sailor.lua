@@ -142,7 +142,7 @@ function sailor.route(page)
     -- Error for controller or action not found
     error_404 = function()
         local _, res
-        if sailor.conf.default_error404 and sailor.conf.default_error404 ~= '' then
+        if sailor.conf.default_error404 ~= '' then
             page.controller_view_path = nil
             _, res = xpcall(function () page:render(sailor.conf.default_error404) end, error_handler)
             return res or httpd.OK or page.r.status or 200
