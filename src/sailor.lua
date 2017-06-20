@@ -145,7 +145,7 @@ function sailor.route(page)
         if sailor.conf.default_error404 and sailor.conf.default_error404 ~= '' then
             page.controller_view_path = nil
             _, res = xpcall(function () page:render(sailor.conf.default_error404) end, error_handler)
-            return res or httpd.OK or page.r.status or 200
+            return res or httpd.OK or page.r.status or 404
         end
         page.r.status = 404
         return res or page.r.status
