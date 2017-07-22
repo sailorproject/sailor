@@ -91,7 +91,6 @@ end
 -- parms: table, vars being passed ahead.
 function Page:render(filename,parms,src)
     parms = parms or {}
-    if src ~= nil then return render_page(filename,parms,src) end -- shortcut for autogen module
 
     local src
     local filepath

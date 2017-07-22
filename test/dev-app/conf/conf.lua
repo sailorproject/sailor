@@ -21,8 +21,12 @@ local conf = {
 		default_error404 = 'error/404',
 		enable_autogen = true, -- default is false, should be true only in development environment
 		friendly_urls = false,
+		hide_stack_trace = false,
 		max_upload = 1024 * 1024,
 		environment = "test", -- this will use db configuration named test
+		search_engine = "elasticsearch",
+		enable_admin = false,
+		admin_password = "" 
 	},
 
 	db = {
@@ -32,13 +36,34 @@ local conf = {
 			user = db_user or '',
 			pass = db_pass or '',
 			dbname = db_name or ''
-		}
-	},
+		},
 
+	
+	},
+	search ={	
+		elasticsearch={
+			hosts={
+				{
+				protocol ="http",
+				host ="localhost",
+				port=9200			
+				}	
+			},
+			params={
+				pingTimeout = 1,
+				selector = 'RoundRobinSelector',
+				connectionPool = 'StaticConnectionPool',
+				maxRetryCount = 5,
+				logLevel = 'WARN'
+			},
+			index = "test"
+		}
+
+	},
 	smtp = {
 		server = '',
-		user = '',
-		pass = '',
+		smtpuser = '',
+		smtppass = '',
 		from = ''
 	},
 

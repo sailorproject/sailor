@@ -27,6 +27,10 @@ describe("Testing #UserController", function()
     assert.is_true(User.authenticate(fixtures[1].username,fixtures[1].password,false))
   end)
 
+  it("should check which user is logged in", function()
+    assert.is_true(access.is_loggedin("serena"))
+  end)
+
   it("should know the user is logged in", function()
     assert.is_false(access.is_guest())
   end)
@@ -63,6 +67,12 @@ describe("Testing #UserController", function()
   it("should not login with default settings", function()
     assert.is_false(access.login('admin','demon'))
     assert.is_true(access.is_guest())
+  end)
+
+  it('access logged in fucntion', function ()
+    access.settings({model = false, hashing = false, default_login = 'admin', default_password = 'demo'})
+    assert.is_true(access.login('admin', 'demo'))
+    assert.is_true(access.is_loggedin('admin'))
   end)
   
 end)
