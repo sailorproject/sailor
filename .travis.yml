@@ -1,5 +1,4 @@
-language: c
-
+language: python
 sudo: false
 
 addons:
@@ -7,54 +6,80 @@ addons:
     packages:
     - libmysqlclient-dev
     - libpq-dev
+    - libsqlite3-dev
 
 services:
   - mysql
   - postgresql
 
 env:
-  global:
-    - LUAROCKS=2.2.2
-  matrix:
-      # Lua 5.1 on different DBs
-      - LUA=lua5.1 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-      - LUA=lua5.1 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
-      - LUA=lua5.1 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
-      # Lua 5.2 on different DBs
-      - LUA=lua5.2 DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-      - LUA=lua5.2 DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
-      - LUA=lua5.2 DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
-      # LuaJIT latest stable version (2.0.4) on different DBs
-      - LUA=luajit DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test
-      - LUA=luajit DB_DRIVER=postgres DB_USER=postgres DB_NAME=sailor_test
-      - LUA=luajit DB_DRIVER=sqlite3 DB_USER="" DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
-      # Openresty + LuaJIT + mysql
-      - LUA=luajit SERVER=openresty DB_DRIVER=mysql DB_USER=travis DB_NAME=sailor_test 
-      # - LUA=luajit2.0  # current head of 2.0 branch
-      # - LUA=luajit2.1  # current head of 2.1 branch
-      # Not supported
-      # - LUA=lua5.2 
+  # Lua 5.1 on different DBs
+  - LUA="lua 5.1"       DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test
+  - LUA="lua 5.1"       DB_DRIVER=postgres  DB_USER=postgres    DB_NAME=sailor_test
+  - LUA="lua 5.1"       DB_DRIVER=sqlite3   DB_USER=""          DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+  # Lua 5.2 on different DBs
+  - LUA="lua 5.2"       DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test
+  - LUA="lua 5.2"       DB_DRIVER=postgres  DB_USER=postgres    DB_NAME=sailor_test
+  - LUA="lua 5.2"       DB_DRIVER=sqlite3   DB_USER=""          DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+  # LuaJIT 2.0.x on different DBs
+  - LUA="luajit 2.0"    DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test
+  - LUA="luajit 2.0"    DB_DRIVER=postgres  DB_USER=postgres    DB_NAME=sailor_test
+  - LUA="luajit 2.0"    DB_DRIVER=sqlite3   DB_USER=""          DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+  # Openresty + LuaJIT 2.1.x + mysql
+  - LUA="luajit 2.1"    DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test     SERVER=openresty
 
 before_install:
-  - source .travis/setenv_lua.sh
+  - pip install hererocks
+  - hererocks HERE --$LUA --no-readline --luarocks latest --verbose
+  - hererocks HERE --show
+  - source HERE/bin/activate
 
 install:
   - luarocks install luacov
   - luarocks install luacov-coveralls
   - luarocks make rockspecs/sailor-current-1.rockspec
+  - if [ "$DB_DRIVER" == "mysql" ];    then luarocks install luasql-mysql MYSQL_INCDIR=/usr/include/mysql; fi
+  - if [ "$DB_DRIVER" == "postgres" ]; then luarocks install luasql-postgres PGSQL_INCDIR=/usr/include/postgresql; fi
+  - if [ "$DB_DRIVER" == "sqlite3" ];  then luarocks install luasql-sqlite3; fi
+  - luarocks list
+  - |
+    if [ "$SERVER" == "openresty" ]; then
+      OPENRESTY_VERSION="1.11.2.5"
+      wget https://openresty.org/download/openresty-$OPENRESTY_VERSION.tar.gz
+      tar xzf openresty-$OPENRESTY_VERSION.tar.gz
+      cd openresty-$OPENRESTY_VERSION/
+      ln -s $TRAVIS_BUILD_DIR/HERE/include $TRAVIS_BUILD_DIR/HERE/include/luajit-2.1
+      ./configure --prefix=$TRAVIS_BUILD_DIR/HERE --with-luajit=$TRAVIS_BUILD_DIR/HERE
+      make
+      make install
+      ln -s $TRAVIS_BUILD_DIR/HERE/nginx/sbin/nginx $TRAVIS_BUILD_DIR/HERE/bin/nginx
+      cd ..
+      rm -rf openresty-$OPENRESTY_VERSION
+      nginx -v
+      resty -V
+    fi
 
 before_script:
-  - source .travis/setdatabases.sh
+  - mysql -e 'create database sailor_test;'
+  - mysql sailor_test < test/dev-app/sql/mysql.sql
+  - psql -c 'create database sailor_test;' -U postgres
+  - psql sailor_test < test/dev-app/sql/pgsql.sql
+  - sqlite3 $TRAVIS_BUILD_DIR/sailor_test < test/dev-app/sql/sqlite3.sql
 
-script:
-  - cd test/dev-app
-  - if [ "$SERVER" != "openresty" ]; then sailor test -- --verbose --coverage; fi
-  - if [ "$SERVER" == "openresty" ]; then sailor test --resty; fi
+script: |
+    cd test/dev-app
+    if [ "$SERVER" != "openresty" ]; then
+      sailor test -- --verbose --coverage
+    else
+      sailor test --resty
+    fi
+    cd ../..
 
-after_success:
-  - mv luacov.stats.out ../..
-  - cd ../..
-  - luacov-coveralls -c test/dev-app/.luacov
+after_success: |
+    if [ "$SERVER" != "openresty" ]; then
+      mv test/dev-app/luacov.stats.out .
+      luacov-coveralls -c test/dev-app/.luacov
+    fi
 
 notifications:
   email:
