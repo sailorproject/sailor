@@ -21,6 +21,10 @@ env:
   - LUA="lua 5.2"       DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test
   - LUA="lua 5.2"       DB_DRIVER=postgres  DB_USER=postgres    DB_NAME=sailor_test
   - LUA="lua 5.2"       DB_DRIVER=sqlite3   DB_USER=""          DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
+  # Lua 5.3 on different DBs
+  - LUA="lua 5.3"       DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test
+  - LUA="lua 5.3"       DB_DRIVER=postgres  DB_USER=postgres    DB_NAME=sailor_test
+  - LUA="lua 5.3"       DB_DRIVER=sqlite3   DB_USER=""          DB_NAME=$TRAVIS_BUILD_DIR/sailor_test
   # LuaJIT 2.0.x on different DBs
   - LUA="luajit 2.0"    DB_DRIVER=mysql     DB_USER=travis      DB_NAME=sailor_test
   - LUA="luajit 2.0"    DB_DRIVER=postgres  DB_USER=postgres    DB_NAME=sailor_test
