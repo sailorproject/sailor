@@ -73,11 +73,11 @@ script: |
     else
       sailor test --resty
     fi
-    cd ../..
 
 after_success: |
     if [ "$SERVER" != "openresty" ]; then
-      mv test/dev-app/luacov.stats.out .
+      mv luacov.stats.out ../..
+      cd ../..
       luacov-coveralls -c test/dev-app/.luacov
     fi
 
