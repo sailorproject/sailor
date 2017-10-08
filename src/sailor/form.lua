@@ -54,7 +54,7 @@ local pack = function(...)
 end
 
 -- Inputs that work exactly the same changing only the type
-meta.__index = function(table,key)
+meta.__index = function(_,key)
 	if generic_input_types[key] then
 		return function(...)
 				local t = pack(defaults(...))
