@@ -42,7 +42,7 @@ function test.models(page)
     u.username = "maria"
     u.password = "12345678"
 
-    local res,errs = u:validate()
+    local res = u:validate()
     if not res then
         page:write("failed test!<br/>")
     else
@@ -96,15 +96,15 @@ function test.modelval(page)
     local u = User:new()
     u.username = ""
     u.password = "12345"
-    local res,err = u:validate()
+    local _,err = u:validate()
     page:write(table.concat(err,'<br/>'), '<br/>')
     u.username = "Lala"
     u.password = "12345"
-    local res,err = u:validate()
+    local _,err = u:validate()
     page:print("<br/>",unpack(err))
     u.username = "Lala"
     u.password = "12345678"
-    local res,err = u:validate()
+    local _,err = u:validate()
     page:print("<br/>",unpack(err or {}))
 end
 

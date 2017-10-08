@@ -7,7 +7,7 @@
 --------------------------------------------------------------------------------
 
 local form = {}
-local tinsert, tconcat, tremove = table.insert, table.concat, table.remove
+local tinsert, tconcat = table.insert, table.concat
 local model_name
 
 local meta = {}
@@ -105,7 +105,7 @@ end
 
 -- layout: horizontal(default) or vertical
 function form.radio_list(model,attribute,list,default,layout,html_options)
-	local name, _, html_options = defaults(model,attribute,html_options)
+	local _, _, html_options = defaults(model,attribute,html_options)
 	local value = model[attribute]
 	list = list or {}
 

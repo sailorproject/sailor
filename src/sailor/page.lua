@@ -10,7 +10,7 @@ local conf = require "conf.conf"
 local lp = require "web_utils.lp_ex"
 
 local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
-local match,tostring,gsub = string.match,tostring,string.gsub
+local tostring,gsub = tostring,string.gsub
 
 local M = {}
 

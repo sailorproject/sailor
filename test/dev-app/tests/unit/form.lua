@@ -7,7 +7,7 @@ describe("Testing form generator", function()
 
 	it("should not create fields that don't exist", function ()
 	assert.has_error(
-		function() local html = form.blah(u,'password') end
+		function() form.blah(u,'password') end
 	)
 	end)
 
