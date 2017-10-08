@@ -138,7 +138,7 @@ function test.newsession(page)
     session.open(page.r)
     session.save({username = "john lennon"})             
     if session.data then
-        for k,v in pairs(session.data) do
+        for _,v in pairs(session.data) do
             page:write(v)
         end
     end
@@ -147,7 +147,7 @@ end
 function test.opensession(page) 
     session.open(page.r)
     if session.data then
-        for k,v in pairs(session.data) do
+        for _,v in pairs(session.data) do
             page:write(v)
         end
     end

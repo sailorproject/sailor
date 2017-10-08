@@ -139,7 +139,7 @@ function M.generate_index(model)
 ]]
 
 	for _,attributes in pairs (model.attributes) do
-		for attr,rules in pairs(attributes) do
+		for attr in pairs(attributes) do
 			code = code .. [[		<th&gt;]] .. attr ..  [[</th&gt;
 ]]
 		end
@@ -152,7 +152,7 @@ function M.generate_index(model)
 ]]
 
 	for _,attributes in pairs (model.attributes) do
-		for attr,rules in pairs(attributes) do
+		for attr in pairs(attributes) do
 			code = code .. [[			<td&gt; <%= v.]]..attr..[[ %&gt; </td&gt;
 ]]
 		end
@@ -188,7 +188,7 @@ function M.generate_view(model)
 <table class="table"&gt;
 ]]
 	for _,attributes in pairs (model.attributes) do
-		for attr,rules in pairs(attributes) do
+		for attr in pairs(attributes) do
 			code = code .. [[	<tr&gt;<td&gt;]]..attr..[[</td&gt;<td&gt;<%= ]]..model["@name"].."."..attr..[[ %&gt; </td&gt;</tr&gt;
 ]]
 		end
@@ -220,7 +220,7 @@ function M.generate_create(model)
 <form method="post"&gt;
 ]]
 	for _,attributes in pairs (model.attributes) do
-		for attr,rules in pairs(attributes) do
+		for attr in pairs(attributes) do
 			code = code ..[[	<div class="form-group"&gt;
 		<label&gt;]]..attr..[[:</label&gt;
 		<%= form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') %&gt;
@@ -257,7 +257,7 @@ function M.generate_update(model)
 <form method="post"&gt;
 ]]
 	for _,attributes in pairs (model.attributes) do
-		for attr,rules in pairs(attributes) do
+		for attr in pairs(attributes) do
 			code = code ..[[	<div class="form-group"&gt;
 		<label&gt;]]..attr..[[:</label&gt;
 		<%= form.text(]]..model["@name"]..",'"..attr..[[', 'class="form-control" placeholder="]]..attr..[["') %&gt;

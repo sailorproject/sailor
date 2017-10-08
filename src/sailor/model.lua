@@ -390,7 +390,7 @@ M.attributes = {
 		local collumns,key = db.get_columns(table_name)
 		db_close()
 
-		for k,col in ipairs(collumns) do
+		for _,col in ipairs(collumns) do
 
 			code = code..[[
 	{ ]]..col..[[ = "safe" },
