@@ -158,8 +158,8 @@ function model:insert()
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..")"
 
-	local id = db.query_insert(query,self.db.key)
-	self[self.db.key] = id
+	local id = db.query_insert(query,key)
+	self[key] = id
 	db_close()
 	return true
 end
