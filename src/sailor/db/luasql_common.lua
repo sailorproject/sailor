@@ -245,7 +245,7 @@ end
 
 function db.get_columns(table_name)
 	local columns = {}
-	local key
+	local key = nil
 
 	if not db.table_exists(table_name) then 
 		return columns, key 
