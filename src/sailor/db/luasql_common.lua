@@ -76,7 +76,7 @@ end
 -- Truncates a table
 -- @param table_name string: the name of the table to be truncated
 function db.truncate(table_name)
-	local query = ''
+	local query
 	if conf.driver == "postgres" then 
 		query = 'truncate table ' .. table_name .. ' RESTART IDENTITY CASCADE;' 
 	elseif conf.driver == "sqlite3" then
