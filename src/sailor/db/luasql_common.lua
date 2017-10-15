@@ -228,7 +228,7 @@ local function get_columns_sqlite3(table_name)
 	local key
 	local query = [[SELECT sql FROM sqlite_master WHERE type='table' AND name = ']]..table_name..[[';]]
 	local res = db.query_one(query)
-	local res = res:match("%((.*)%)")
+	res = res:match("%((.*)%)")
 	local s = utils.split(res,',')
 	for _,s2 in pairs(s) do
 		local words = utils.split(s2,' ')

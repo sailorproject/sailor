@@ -70,7 +70,7 @@ function test.models(page)
         page:write("saved! "..u.id.."<br/>")
     end
 
-    local users = User:find_all()
+    users = User:find_all()
     for _, user in pairs(users) do 
         page:write(user.id.." - "..user.username.."<br/>")
     end
@@ -82,7 +82,7 @@ function test.models(page)
     end
 
     page:write("Finding user with id 47:<br/>")
-    local some_user = User:find_by_id(47)
+    some_user = User:find_by_id(47)
     if some_user then
         page:write(some_user.id.." - "..some_user.username.."<br/>")
     else
@@ -100,11 +100,11 @@ function test.modelval(page)
     page:write(table.concat(err,'<br/>'), '<br/>')
     u.username = "Lala"
     u.password = "12345"
-    local _,err = u:validate()
+    _,err = u:validate()
     page:print("<br/>",unpack(err))
     u.username = "Lala"
     u.password = "12345678"
-    local _,err = u:validate()
+    _,err = u:validate()
     page:print("<br/>",unpack(err or {}))
 end
 
