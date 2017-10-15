@@ -148,7 +148,6 @@ local function query_insert_postgres(query,key)
 end
 
 local function query_insert_common(query,key)
-	key = key or 'id'
 	local id
 	
 	query  = query .. "; "
