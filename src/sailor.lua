@@ -201,8 +201,6 @@ function sailor.route(page)
 
         return res or httpd.OK or page.r.status or 200
     end
-    -- No route specified and no defaults or something went wrong
-    return 500
 end
 
 -- DEPRECATED - it was moved to the page object
