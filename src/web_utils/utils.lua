@@ -31,7 +31,8 @@ end
 
 -- performs string split
 function M.split(str,sep)
-    local sep, fields = sep or ":", {}
+    sep = sep or ":"
+    local fields = {}
     local pattern = string.format("([^%s]+)", sep)
     str:gsub(pattern, function(c) fields[#fields+1] = c end)
     return fields

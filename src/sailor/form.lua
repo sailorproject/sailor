@@ -105,7 +105,8 @@ end
 
 -- layout: horizontal(default) or vertical
 function form.radio_list(model,attribute,list,default,layout,html_options)
-	local _, _, html_options = defaults(model,attribute,html_options)
+	local _
+	_, _, html_options = defaults(model,attribute,html_options)
 	local value = model[attribute]
 	list = list or {}
 
