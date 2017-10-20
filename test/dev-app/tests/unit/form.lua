@@ -6,10 +6,9 @@ describe("Testing form generator", function()
 	local u = User:new()
 
 	it("should not create fields that don't exist", function ()
-    	assert.has_error(
-    		function() local html = form.blah(u,'password') end, 
-    		"attempt to call field 'blah' (a nil value)"
-    	)
+	assert.has_error(
+		function() local html = form.blah(u,'password') end
+	)
 	end)
 
 	it("should create a generic field accordingly", function()
