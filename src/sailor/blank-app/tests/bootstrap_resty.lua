@@ -21,8 +21,6 @@ local busted_lib = {
 	spy = spy,
 	stub = stub,
 	mock = mock,
-	async = async,
-	done = done
 }
 
 local test_dirs = {
