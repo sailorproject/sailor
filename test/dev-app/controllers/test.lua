@@ -194,7 +194,7 @@ function test.upload(page)
     page:inspect(page.POST)
 
     if page.POST.datafile then
-        file = io.open ('/Users/ecdalcol/Desktop/tuxedo/test' , 'w')
+        local file = io.open ('/Users/ecdalcol/Desktop/tuxedo/test' , 'w')
         io.output(file)
         io.write(page.POST.datafile)
         io.close(file)
