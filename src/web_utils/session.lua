@@ -9,7 +9,7 @@ local lfs = require"lfs"
 local serialize = require"web_utils.serialize".serialize
 
 local assert, error, ipairs, loadfile, next, tostring, type = assert, error, ipairs, loadfile, next, tostring, type
-local format, gsub, strfind, strsub = string.format, string.gsub, string.find, string.sub
+local format, gsub, strfind = string.format, string.gsub, string.find
 local tinsert = table.insert
 local _open = io.open
 local remove, time = os.remove, os.time

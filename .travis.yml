@@ -39,6 +39,7 @@ before_install:
   - source HERE/bin/activate
 
 install:
+  - luarocks install luacheck
   - luarocks install luacov
   - luarocks install luacov-coveralls
   - luarocks make rockspecs/sailor-current-1.rockspec
@@ -70,7 +71,9 @@ before_script:
   - psql sailor_test < test/dev-app/sql/pgsql.sql
   - sqlite3 $TRAVIS_BUILD_DIR/sailor_test < test/dev-app/sql/sqlite3.sql
 
-script: |
+script:
+  - luacheck src test
+  - |
     cd test/dev-app
     if [ "$SERVER" != "openresty" ]; then
       sailor test -- --verbose --coverage

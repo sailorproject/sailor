@@ -201,8 +201,6 @@ function sailor.route(page)
 
         return res or httpd.OK or page.r.status or 200
     end
-    -- No route specified and no defaults or something went wrong
-    return 500
 end
 
 -- DEPRECATED - it was moved to the page object
@@ -242,7 +240,7 @@ function sailor.new(model_name)
     local model = require "sailor.model"
     local obj = {errors = {}}
     obj["@name"] = model_name
-    return sailor.model(model_name):new(obj)
+    return model(model_name):new(obj)
 end
 
 -- DEPRECATED, moved to __call on model module

@@ -60,7 +60,7 @@ describe("Testing Sailor core functions", function()
     assert.is_equal(exp,url)
 
     url = page:make_url('test/etc',parms)
-    local exp = '/test/etc'
+    exp = '/test/etc'
     for k,v in pairs(parms) do exp = exp .. '/' .. k .. '/' .. v end
     assert.is_equal(exp,url)
 

@@ -76,7 +76,7 @@ end
 -- Truncates a table
 -- @param table_name string: the name of the table to be truncated
 function db.truncate(table_name)
-	local query = ''
+	local query
 	if conf.driver == "postgres" then 
 		query = 'truncate table ' .. table_name .. ' RESTART IDENTITY CASCADE;' 
 	elseif conf.driver == "sqlite3" then
@@ -148,7 +148,6 @@ local function query_insert_postgres(query,key)
 end
 
 local function query_insert_common(query,key)
-	key = key or 'id'
 	local id
 	
 	query  = query .. "; "
@@ -229,7 +228,7 @@ local function get_columns_sqlite3(table_name)
 	local key
 	local query = [[SELECT sql FROM sqlite_master WHERE type='table' AND name = ']]..table_name..[[';]]
 	local res = db.query_one(query)
-	local res = res:match("%((.*)%)")
+	res = res:match("%((.*)%)")
 	local s = utils.split(res,',')
 	for _,s2 in pairs(s) do
 		local words = utils.split(s2,' ')
@@ -245,7 +244,7 @@ end
 
 function db.get_columns(table_name)
 	local columns = {}
-	local key
+	local key = nil
 
 	if not db.table_exists(table_name) then 
 		return columns, key 

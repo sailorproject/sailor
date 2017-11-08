@@ -105,7 +105,6 @@ function model:get_relation(key)
 
 		if relation.relation == "BELONGS_TO" then
 			obj = Model:find_by_id(self[relation.attribute])
-			local attr = relation.attribute
 		elseif relation.relation == "HAS_ONE" then
 			local attributes = {}
 			attributes[relation.attribute] = self[self.db.key]
@@ -136,8 +135,6 @@ end
 function model:insert()
 	db_connect()
 	local key = self.db.key
-	local attributes = self.attributes
-
 	local attrs = {}
 	local values = {}
 	for _,n in pairs(self.attributes) do
@@ -161,8 +158,8 @@ function model:insert()
 
 	local query = "insert into "..self.db.table.."("..attr_string..") values ("..value_string..")"
 
-	local id = db.query_insert(query,self.db.key)
-	self[self.db.key] = id
+	local id = db.query_insert(query,key)
+	self[key] = id
 	db_close()
 	return true
 end
@@ -170,7 +167,6 @@ end
 -- (escaped) Updates our model values in the db table!
 function model:update()
 	db_connect()
-	local attributes = self.attributes
 	local key = self.db.key
 	local updates = {}
 	for _,n in pairs(self.attributes) do
@@ -272,7 +268,6 @@ end
 -- Returns a table containing all objects found or empty table
 function model:find_all(where_string)
 	db_connect()
-	local key = self.db.key
 	if where_string then
 		where_string = " where "..where_string
 	else
@@ -390,7 +385,7 @@ M.attributes = {
 		local collumns,key = db.get_columns(table_name)
 		db_close()
 
-		for k,col in ipairs(collumns) do
+		for _,col in ipairs(collumns) do
 
 			code = code..[[
 	{ ]]..col..[[ = "safe" },

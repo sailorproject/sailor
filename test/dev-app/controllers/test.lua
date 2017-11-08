@@ -42,7 +42,7 @@ function test.models(page)
     u.username = "maria"
     u.password = "12345678"
 
-    local res,errs = u:validate()
+    local res = u:validate()
     if not res then
         page:write("failed test!<br/>")
     else
@@ -70,7 +70,7 @@ function test.models(page)
         page:write("saved! "..u.id.."<br/>")
     end
 
-    local users = User:find_all()
+    users = User:find_all()
     for _, user in pairs(users) do 
         page:write(user.id.." - "..user.username.."<br/>")
     end
@@ -82,7 +82,7 @@ function test.models(page)
     end
 
     page:write("Finding user with id 47:<br/>")
-    local some_user = User:find_by_id(47)
+    some_user = User:find_by_id(47)
     if some_user then
         page:write(some_user.id.." - "..some_user.username.."<br/>")
     else
@@ -96,15 +96,15 @@ function test.modelval(page)
     local u = User:new()
     u.username = ""
     u.password = "12345"
-    local res,err = u:validate()
+    local _,err = u:validate()
     page:write(table.concat(err,'<br/>'), '<br/>')
     u.username = "Lala"
     u.password = "12345"
-    local res,err = u:validate()
+    _,err = u:validate()
     page:print("<br/>",unpack(err))
     u.username = "Lala"
     u.password = "12345678"
-    local res,err = u:validate()
+    _,err = u:validate()
     page:print("<br/>",unpack(err or {}))
 end
 
@@ -138,7 +138,7 @@ function test.newsession(page)
     session.open(page.r)
     session.save({username = "john lennon"})             
     if session.data then
-        for k,v in pairs(session.data) do
+        for _,v in pairs(session.data) do
             page:write(v)
         end
     end
@@ -147,7 +147,7 @@ end
 function test.opensession(page) 
     session.open(page.r)
     if session.data then
-        for k,v in pairs(session.data) do
+        for _,v in pairs(session.data) do
             page:write(v)
         end
     end
@@ -194,7 +194,7 @@ function test.upload(page)
     page:inspect(page.POST)
 
     if page.POST.datafile then
-        file = io.open ('/Users/ecdalcol/Desktop/tuxedo/test' , 'w')
+        local file = io.open ('/Users/ecdalcol/Desktop/tuxedo/test' , 'w')
         io.output(file)
         io.write(page.POST.datafile)
         io.close(file)

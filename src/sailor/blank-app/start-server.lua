@@ -15,7 +15,7 @@ if conf.friendly_urls then
         with = redirect,
         params = {
             "/",
-            function(req,res,cap)
+            function(req,_,cap)
                 local vars = {}
 
                 for var in string.gmatch(cap[1], '([^/]+)') do

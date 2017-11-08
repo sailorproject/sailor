@@ -24,8 +24,6 @@ local busted_lib = {
 	spy = spy,
 	stub = stub,
 	mock = mock,
-	async = async,
-	done = done
 }
 
 local test_dirs = {
@@ -47,14 +45,14 @@ for _,dir in pairs(test_dirs) do
 	dir = sailor.path..'/'..dir
 	for file in lfs.dir(dir) do
 		if file ~= '.' and file ~= '..' then
-	    	local t 
+		local test
 	    	if _VERSION == "Lua 5.1" then
-	    		t = assert(loadfile(dir..'/'..file))
-		        setfenv(t,env)
+			test = assert(loadfile(dir..'/'..file))
+			setfenv(test,env)
 		    else
-		        t = assert(loadfile(dir..'/'..file, env))
+			test = assert(loadfile(dir..'/'..file, env))
 		    end
-			t()
+			test()
 	    end
 	end
 end

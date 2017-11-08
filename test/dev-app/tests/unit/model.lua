@@ -99,7 +99,7 @@ describe("Testing #UserModel", function()
   it("should find user has many relations", function()
     u = User:find_by_id(1)
     local amount = 0
-    for k, v in ipairs(post_fixtures) do
+    for _, v in ipairs(post_fixtures) do
       if v.author_id == 1 then
         amount = amount + 1
         assert.is_equal(u.posts[amount].body,v.body)

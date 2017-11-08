@@ -10,7 +10,7 @@ local conf = require "conf.conf"
 local lp = require "web_utils.lp_ex"
 
 local open,assert,loadstring,setfenv,load,random = io.open,assert,loadstring,setfenv,load,math.random
-local match,tostring,gsub = string.match,tostring,string.gsub
+local tostring,gsub = tostring,string.gsub
 
 local M = {}
 
@@ -93,7 +93,6 @@ function Page:render(filename,parms,src)
     parms = parms or {}
     if src ~= nil then return render_page(filename,parms,src) end -- shortcut for autogen module
 
-    local src
     local filepath
 
     -- If there's a default theme, parse the theme first
