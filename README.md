@@ -1,4 +1,4 @@
-#Sailor
+# Sailor
 
 A Lua MVC Framework. www.sailorproject.org
 
