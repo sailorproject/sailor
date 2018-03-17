@@ -18,11 +18,12 @@ local conf = {
 
 	db = {
 		development = { -- current environment
-			driver = 'mysql',
+			driver = '', -- mysql, postgres or sqlite3
 			host = '',
-			user = '',
-			pass = '',
-			dbname = ''
+			port = '', -- optional
+			user = '', -- no need with sqlite3
+			pass = '', -- no need with sqlite3
+			dbname = '' -- filename.db for sqlite3
 		}
 	},
 

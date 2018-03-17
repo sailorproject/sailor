@@ -6,7 +6,7 @@ source = {
 description = {
    summary = "A Lua MVC Framework",
    detailed = [[
-      Sailor is a web framework written in Lua that follows the MVC design pattern.
+      Sailor! is a web framework written in Lua that follows the MVC design pattern.
    ]],
    homepage = "http://sailorproject.org",
    license = "MIT"

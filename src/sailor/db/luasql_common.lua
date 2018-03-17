@@ -40,7 +40,7 @@ end
 function db.connect()
 	if db.transaction then return end
 	db.env = assert (luasql[conf.driver]())
-	db.con = assert (db.env:connect(conf.dbname,conf.user,conf.pass,conf.host))
+	db.con = assert (db.env:connect(conf.dbname,conf.user,conf.pass,conf.host, conf.port))
 end
 
 -- Closes the connection of the instance
