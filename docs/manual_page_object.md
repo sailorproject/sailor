@@ -12,7 +12,7 @@ Renders a view from a controller action, if there's a default layout configured,
 Example: `page:render( 'index', {msg = 'hello'} )`
 
 ####page:include( path [*, parms*] )
-Includes a .lp file from a .lp file
+Includes a .lp file from a .lp file.
 
  * path: string, full file path
 
@@ -34,14 +34,14 @@ Example 2: `page:redirect( 'http://google.com' )`
 ####page:json( data, [*, parms*] )
 Serializes data as JSON and sends it to the response body.
 
-* data: any serializable value (table, string, number)
+* data: any serializable value (table, string, number).
 
 * parms: [optional] table, vars being passed to the dkjson.encode function. Refer to the [dkjson documentation](http://dkolf.de/src/dkjson-lua.fsl/wiki?name=Documentation) for details. Useful parameters are (indent, keyorder, level).
 
 ####page:write( data )
 Writes a single string to the response body.
 
- * data: string
+ * data: string.
 
 Example 1: `page:write( "Hello world!")`
 
@@ -50,7 +50,7 @@ Example 1: `page:write( "Hello world!")`
 
 (Other webservers): Does the same as page:write does and writes a single string to the response body.
 
- * data: string
+ * data: string.
 
 Example 1: `page:print( "Hello world!")`
 
@@ -65,7 +65,7 @@ Example 1: `page:inspect( page.POST )`
 ####page:enable_cors([headers] )
 Sends [CORS headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#The_HTTP_response_headers) to the client. 
 
-* headers: [optional] table, contains which headers to pass, if nil then `Access-Control-Allow-Origin = "*"` is used. They keys are (allow_origin, expose_headers, max_age, allow_credentials, allow_methods, allow_headers).
+* headers: [optional] table, contains which headers to pass, if nil then `Access-Control-Allow-Origin = "*"` is used. The keys are (allow_origin, expose_headers, max_age, allow_credentials, allow_methods, allow_headers).
 
 Example 1: `page:enable_cors()`
 
@@ -81,10 +81,10 @@ Example 2: `page:enable_cors({allow_origin = "http://sailorproject.org"})`
 * string *writeable*: By default it is set to the same as conf.sailor.app_name, but you can modify it before rendering a page, for example.
 
 ####page.theme
-* string *writeable*: Sailor comes bundled with a default theme, using Bootstrap. This is the name of a folder inside /themes folder. You can modify the default theme of your application by edditing conf.sailor.theme. You can modify the theme of just one page by setting page.theme to something else on the controller action before rendering your page. You can set it to nil for displaying no theme at all, like for serving a JSON, for example.
+* string *writeable*: Sailor comes bundled with a default theme, using Bootstrap. This is the name of a folder inside /themes folder. You can modify the default theme of your application by editing conf.sailor.theme. You can modify the theme of just one page by setting page.theme to something else on the controller action before rendering your page. You can set it to nil for displaying no theme at all, like for serving a JSON, for example.
 
 ####page.layout
- * string *writeable*: Sailor default's theme only comes with one layout, main. This refers to a .lp file inside the theme folder. You can create multiple layouts inside one same theme, like 1-column and 2-columns, for example.  You can modify the default layout of your application by edditing conf.sailor.layout. You can modify the layout of just one page by setting page.layout to something else on the controller action before rendering your page.
+ * string *writeable*: Sailor default's theme only comes with one layout, main. This refers to a .lp file inside the theme folder. You can create multiple layouts inside one same theme, like 1-column and 2-columns, for example.  You can modify the default layout of your application by editing conf.sailor.layout. You can modify the layout of just one page by setting page.layout to something else on the controller action before rendering your page.
 
 ####page.r
  * userdata: request_rec structure that varies according to the webserver, comes with built-in functions.

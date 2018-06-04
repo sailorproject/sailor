@@ -27,16 +27,16 @@ Sets a default view for 404 errors. It can be deactivated by setting it to nil.
 Turns Sailor's autogen on or off by setting it to true or false. The autogen is a tool to autogenerate models and CRUDs. You can find more about it under the Autogen section. The default value is false for avoiding accidental overwriting of files.
 
 ###`sailor.friendly_urls`
-turns friendly urls on or off by setting it to true or false. Normally, to access the view action of the article controller passing 4 as id via get variables, you would have to type in your address bar `http://your_url.com/?r=article/view&id=4`. However, when friendly urls are set yto true, you can access it on `http://your_url.com/article/view/id/4` which is way cleaner. If you want to personalize it, for Xavante, you need to edit /start-server.lua and for Apache2, .htaccess
+turns friendly urls on or off by setting it to true or false. Normally, to access the view action of the article controller passing 4 as id via get variables, you would have to type in your address bar `http://your_url.com/?r=article/view&id=4`. However, when friendly urls are set to true, you can access it on `http://your_url.com/article/view/id/4` which is way cleaner. If you want to personalize it, for Xavante, you need to edit /start-server.lua and for Apache2, .htaccess.
 
 ###`sailor.max_upload`
 Sets, in bytes, the max size of files to be uploaded using file inputs on forms.
 
 ###`environment`
-Is a string with the name of your current environment. Example: 'test'
+Is a string with the name of your current environment. Example: 'test'.
 
 ###`hide_stack_trace`
-Is a boolean that if set to true will make Sailor not throw the full stack trace on errors but a default 500 Internal Server Error message
+Is a boolean that if set to true will make Sailor not throw the full stack trace on errors but a default 500 Internal Server Error message.
 
 ###`db`
 Contains a table with your different database setups. They must contain the following fields:

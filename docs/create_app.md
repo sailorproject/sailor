@@ -16,7 +16,7 @@ This will create the directory /var/www/hey_arnold with the base of your app. I'
 
 
 ####Sailor by direct download / git clone in Unix system
-Sailor comes bundled with lua a file called sailor_create. To create your app, on terminal, you cd to where Sailor is and execute sailor_create using the app name and the installation dir as parameters. Example: 
+Sailor comes bundled with a lua file called sailor. To create your app, on terminal, you cd to where Sailor is and execute `sailor create` using the app name and the installation dir as parameters. Example: 
 
 
 

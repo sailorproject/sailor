@@ -1,6 +1,6 @@
 ##Controllers
 
-When you access a Sailor application, you will be routed to your page depending on the url. If there is nothing to route, sailor will load the default action specified in your conf.lua. Supose the accessed url is `localhost/your_application/?r=main/index` (no friendly urls) or `localhost/your_application/main/index` (friendly urls activated). That means Sailor will try to find an action named 'index' inside a controller named 'main' on your application and run that function.
+When you access a Sailor application, you will be routed to your page depending on the url. If there is nothing to route, sailor will load the default action specified in your conf.lua. Suppose the accessed url is `localhost/your_application/?r=main/index` (no friendly urls) or `localhost/your_application/main/index` (friendly urls activated). That means Sailor will try to find an action named 'index' inside a controller named 'main' on your application and run that function.
 
 A controller is a .lua file inside `/controllers` on your app's directory tree named after your controller's name.  This is the basic structure of our `main.lua`:
 

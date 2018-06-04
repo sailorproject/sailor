@@ -36,7 +36,7 @@ Example:
     -- This will find the first user with age greater or equal than 42, ordered by descending order.
     local u = User:find( "age >= 42 ORDER BY age DESC" )
 
-####model:find_all( )
+####model:find_all( where_string )
 (NOT ESCAPED, DO NOT USE THIS FUNCTION UNLESS YOU WRITE THE WHERE_STRING YOURSELF) Finds all objects based on the given part of the SQL query after the WHERE. Returns a table with the objects found or an empty table.
 
  * where_string: string that will go after 'WHERE' on your query.
@@ -60,7 +60,7 @@ Example:
     local u = User:find_by_attributes( { name = 'Carolina', age = 42 } )
 
 ####model:find_by_id( id )
-(The alue passed will be escaped) Finds one object with the given id. Returns the object found or nil.
+(The value passed will be escaped) Finds one object with the given id. Returns the object found or nil.
 
  * id: string or number. The id that will be compared to whatever attribute name that is set on your model as db.key.
 

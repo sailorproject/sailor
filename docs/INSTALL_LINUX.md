@@ -75,9 +75,9 @@ or
 
 ###Alternative Installation with Nginx
 
-Install Nginx as explained at <http://wiki.nginx.org/Install#Official_Debian.2FUbuntu_packages>
+Install Nginx as explained at <http://wiki.nginx.org/Install#Official_Debian.2FUbuntu_packages>.
 
-Install the ngx_lua module (aka HttpLuaModule) as explained at <http://wiki.nginx.org/HttpLuaModule#Installation>
+Install the ngx_lua module (aka HttpLuaModule) as explained at <http://wiki.nginx.org/HttpLuaModule#Installation>.
 
 Open the nginx.conf file and add to the http block:
 

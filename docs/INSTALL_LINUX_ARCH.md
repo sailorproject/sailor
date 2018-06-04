@@ -14,7 +14,7 @@ Use the following command to install Apache 2.4.x:
 
     sudo pacman -S apache
 
-Enable mod_lua
+Enable mod_lua:
 
 Edit httpd.conf and enable the mod_lua.so module:
 
@@ -34,7 +34,7 @@ Add the SetHandler directive:
       SetHandler lua-script
     </FilesMatch>
 
-Enable Apache
+Enable Apache:
 
     systemctl enable httpd.service
     
@@ -48,7 +48,7 @@ You can either clone it directly from the repository, download the zip containin
     sudo pacman -S luarocks
     sudo luarocks install sailor
 
-We are almost done! You can now use `sailor` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on http://localhost/hey_arnold
+We are almost done! You can now use `sailor` to create your web applications. In this example, we will create an app called "Hey Arnold" on the directory Apache is reading from (usually /var/www). After you're done, you can open your browser and access it on <http://localhost/hey_arnold>.
 
     sailor create 'Hey Arnold' /srv/http
 

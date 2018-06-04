@@ -1,5 +1,5 @@
 ##Views
-Sailor's views are Lua Page files (.lp) contained inside your `/views`folder. They are valid HTML files in all aspects, except for the .lp extension and the fact that you can also use `<?lua >` tags inside it to execute lua scripts. 
+Sailor's views are Lua Page files (.lp) contained inside your `/views` folder. They are valid HTML files in all aspects, except for the .lp extension and the fact that you can also use `<?lua >` tags inside it to execute lua scripts. 
 
 Let's create our `/views/main/index.lp`: 
 
