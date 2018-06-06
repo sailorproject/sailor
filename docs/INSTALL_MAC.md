@@ -39,7 +39,7 @@ This guide assumes that you have already completed Sailor's basic installation t
 	brew install djl/apache2/apache24
     brew edit apache24
 
-Find the list of enabled flags, after `args = [`, add `--enable-lua` and save the file. You can add other flags to the argument list if necessary. The file is ususally localted at "/usr/local/Library/Taps/djl/homebrew-apache2/apache24.rb"
+Find the list of enabled flags, after `args = [`, add `--enable-lua` and save the file. You can add other flags to the argument list if necessary. The file is ususally localted at "/usr/local/Library/Taps/djl/homebrew-apache2/apache24.rb".
 
     brew install apache24
 

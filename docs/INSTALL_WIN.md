@@ -6,15 +6,15 @@ First, download and install Lua for Windows. You can get it from:
 
 <https://github.com/rjpcomputing/luaforwindows>
 
-Copy the files in the `src` directory of this repository to C:/Program Files/Lua/5.1/lua/
+Copy the files in the `src` directory of this repository to C:/Program Files/Lua/5.1/lua/.
 
 You will also need the LuaSec's ssl library, which is included in this ZIP:
 
 <https://github.com/pkulchenko/ZeroBraneStudio/archive/0.35.zip>
 
-Unzip it and copy the `ssl.dll` file in the bin\clibs directory of the archive to C:/Program Files/Lua/5.1/clibs/
+Unzip it and copy the `ssl.dll` file in the bin\clibs directory of the archive to C:/Program Files/Lua/5.1/clibs/.
 
-Copy the `ssl.lua` file and the `ssl` subdir in the lualibs directory to C:/Program Files/Lua/5.1/lua/
+Copy the `ssl.lua` file and the `ssl` subdir in the lualibs directory to C:/Program Files/Lua/5.1/lua/.
 
 Alternatively, you may want to try to install it via luarocks:
 
@@ -28,9 +28,9 @@ Windows 7, 8/8.1, Vista, Server 2008, Server 2012 - <http://www.apachelounge.com
 
 Windows XP - <http://www.apachelounge.com/download/win32/>
 
-Unzip the package (eg: httpd-2.4.9-win32.zip) to C:\Apache24\
+Unzip the package (eg: httpd-2.4.9-win32.zip) to `C:\Apache24\`.
 
-Copy the files in the `src/sailor/blank-app` directory of this repository to C:/Apache24/htdocs/sailor/
+Copy the files in the `src/sailor/blank-app` directory of this repository to C:/Apache24/htdocs/sailor/.
 
 ####Configuring mod_lua
 
@@ -65,9 +65,9 @@ Add the LuaPackage* directives:
 
 ####Alternative Installation with mod_plua
 
-Download mod_plua from <http://sourceforge.net/projects/modplua/files/>
+Download mod_plua from <http://sourceforge.net/projects/modplua/files/>.
 
-Install and configure it as explained at <http://sourceforge.net/p/modplua/wiki/Setting%20up%20mod_pLua/>
+Install and configure it as explained at <http://sourceforge.net/p/modplua/wiki/Setting%20up%20mod_pLua/>.
 
 ####Alternative Installation with CGILua
 

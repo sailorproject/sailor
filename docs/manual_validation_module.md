@@ -36,7 +36,7 @@ Example 3 - On a model:
 
 `empty()` - Checks if a value is empty.
 
-`integer()` - Checks if a number is an integer;
+`integer()` - Checks if a number is an integer.
 
 `in_list(list)` - Checks if a value is inside an array.
 

@@ -101,7 +101,7 @@ If you have a form built with Sailor's form module and want to send an object in
 ##### form.ify(object)
 
 #### Example
-Suppose we have a controller with actions to create, read, update and delete our users, for example, and we want to see if things work fine. We start by creating a file under `/tests/functional`. This file does not have to be named in a particular way, but `user_controller_test.lua` sounds reasonable.  Remember that if you defined some shared code on /tests/helper.lua to be used among various tests, it needs to be required here using `local helper = require "tests.helper"`
+Suppose we have a controller with actions to create, read, update and delete our users, for example, and we want to see if things work fine. We start by creating a file under `/tests/functional`. This file does not have to be named in a particular way, but `user_controller_test.lua` sounds reasonable.  Remember that if you defined some shared code on /tests/helper.lua to be used among various tests, it needs to be required here using `local helper = require "tests.helper"`.
 
     -- /tests/functional/user_controller_test.lua 
     describe("Testing User Controller", function()
