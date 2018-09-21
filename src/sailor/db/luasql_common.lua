@@ -232,10 +232,11 @@ local function get_columns_sqlite3(table_name)
 	local s = utils.split(res,',')
 	for _,s2 in pairs(s) do
 		local words = utils.split(s2,' ')
-		columns[#columns+1] = (words[1]:gsub("^%s*(.-)%s*$", "%1")) --trim
+		words[1] = words[1]:gsub("^%s*(.-)%s+.+%s*$", "%1"):gsub('"', ''):gsub('`', ''):gsub("'", "")  -- trim
+		columns[#columns+1] = words[1]
 		for i,w in ipairs(words) do
-			if w == 'primary' and words[i+1] == 'key' then
-				key = (words[1]:gsub("^%s*(.-)%s*$", "%1")) --trim
+			if (w == 'primary' or w == 'PRIMARY') and (words[i+1] == 'key' or words[i+1] == 'KEY') then
+				key = words[1]
 			end
 		end
 	end
