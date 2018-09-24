@@ -38,6 +38,7 @@ build = {
       ['sailor.db'] = "src/sailor/db.lua",
       ['sailor.db.resty_mysql'] = "src/sailor/db/resty_mysql.lua",
       ['sailor.db.luasql_common'] = "src/sailor/db/luasql_common.lua",
+      ['sailor.db.query_logger'] = "src/sailor/db/query_logger.lua",
       ['sailor.blank-app.conf.conf'] = "src/sailor/blank-app/conf/conf.lua",
       ['sailor.blank-app.start-server'] = "src/sailor/blank-app/start-server.lua",
       ['sailor.blank-app.controllers.main'] = "src/sailor/blank-app/controllers/main.lua",
