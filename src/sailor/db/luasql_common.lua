@@ -231,11 +231,12 @@ local function get_columns_sqlite3(table_name)
 	res = res:match("%((.*)%)")
 	local s = utils.split(res,',')
 	for _,s2 in pairs(s) do
-		local words = utils.split(s2,' ')
-		columns[#columns+1] = (words[1]:gsub("^%s*(.-)%s*$", "%1")) --trim
+		local words = utils.split(s2:gsub('[^^]\t', ' '),' ')
+		local column = words[1]:gsub("^%s*`?(.-)%s*$", "%1") --trim
+		columns[#columns+1] = column
 		for i,w in ipairs(words) do
-			if w == 'primary' and words[i+1] == 'key' then
-				key = (words[1]:gsub("^%s*(.-)%s*$", "%1")) --trim
+			if w:lower() == 'primary' and words[i+1]:lower() == 'key' then
+				key = column
 			end
 		end
 	end

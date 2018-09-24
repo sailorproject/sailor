@@ -1,16 +1,16 @@
 -- SQLite3
 drop table if exists users;
 create table users(
-	id integer primary key autoincrement,
-	username varchar(20),
-	password varchar(64)
+	'id'	integer primary key autoincrement,
+	'username'	varchar(20),
+	'password'	varchar(64)
 );
 
 drop table if exists post;
 create table post(
-	id integer primary key autoincrement,
-	body text,
-	author_id integer references users (id)
+	`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`body`	TEXT,
+	`author_id`	INTEGER REFERENCES users (id)
 );
 
 drop table if exists comment;
