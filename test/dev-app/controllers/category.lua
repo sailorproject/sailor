@@ -1,14 +1,12 @@
-local sailor = require "sailor"
-
 local M = {}
 
 function M.index(page)
-	local categorys = sailor.model("category"):find_all()
+	local categorys = require "sailor.model"("category"):find_all()
 	page:render('index',{categorys = categorys})
 end
 
 function M.create(page)
-	local category = sailor.model("category"):new()
+	local category = require "sailor.model"("category"):new()
 	local saved
 	if next(page.POST) then
 		category:get_post(page.POST)
@@ -21,7 +19,7 @@ function M.create(page)
 end
 
 function M.update(page)
-	local category = sailor.model("category"):find_by_id(page.GET.id)
+	local category = require "sailor.model"("category"):find_by_id(page.GET.id)
 	if not category then
 		return 404
 	end
@@ -37,7 +35,7 @@ function M.update(page)
 end
 
 function M.view(page)
-	local category = sailor.model("category"):find_by_id(page.GET.id)
+	local category = require "sailor.model"("category"):find_by_id(page.GET.id)
 	if not category then
 		return 404
 	end
@@ -45,7 +43,7 @@ function M.view(page)
 end
 
 function M.delete(page)
-	local category = sailor.model("category"):find_by_id(page.GET.id)
+	local category = require "sailor.model"("category"):find_by_id(page.GET.id)
 	if not category then
 		return 404
 	end

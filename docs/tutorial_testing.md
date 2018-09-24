@@ -51,7 +51,7 @@ Let's suppose we have a User model and we want to unit test some of the User met
 
 The fixture is a regular Lua script that will be required. This for multiple possibilities, such as making loops for inserting many entries, as long as in the end you return a table containing samples of your model.
 
-After creating your fixture, you must add this on the bottom of your bootstrap file so they are loaded before running your tests.
+After creating your fixture, you must add this on the bottom of your bootstrap file so they are loaded before running your tests. Also don't forget to set the package.path to the sailor directory you want to test.
 
     --/tests/bootstrap.lua
     ...
