@@ -20,6 +20,7 @@ setmetatable(form,meta)
 local generic_input_types = {
 	file = true,
 	text = true,
+	hidden = true,
 	password = true,
 	color = true,
 	date = true,
