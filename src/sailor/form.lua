@@ -72,9 +72,7 @@ end
 function form.textarea(model,attribute,html_options)
 	local t = pack(defaults(model,attribute,html_options))
 	tinsert(t,1,'<textarea')
-	tinsert(t,'>')
-	tinsert(t,model[attribute] or 'asadas')
-	tinsert(t,'</textarea>')
+	tinsert(t,'>' .. (model[attribute] or '') .. '</textarea>')
 
 	return tconcat(t,' ')
 end
