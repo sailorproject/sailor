@@ -18,7 +18,7 @@ describe("Testing form generator", function()
 
 	it("should create textarea field accordingly", function()
 		local html = form.textarea(u,'password')
-		assert.equal(html,'<textarea name="user:password" id="user:password" > asadas </textarea>')
+		assert.equal(html,'<textarea name="user:password" id="user:password" ></textarea>')
 	end)
 
 	it("should create a dropdown list accordingly", function()
