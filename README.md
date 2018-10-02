@@ -3,16 +3,17 @@
 A Lua MVC Framework. www.sailorproject.org
 
 [![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE) [![Bountysource](https://img.shields.io/bountysource/team/sailor/activity.svg)](https://www.bountysource.com/teams/sailor)
-[![Support via Gratipay](http://img.shields.io/gratipay/Etiene.svg)](https://gratipay.com/Etiene) 
 
 [![Build Status](https://travis-ci.org/sailorproject/sailor.svg?branch=master)](https://travis-ci.org/sailorproject/sailor)
 [![Coverage Status](https://coveralls.io/repos/github/sailorproject/sailor/badge.svg?branch=master)](https://coveralls.io/github/sailorproject/sailor?branch=master)
-[![Issue Stats](http://issuestats.com/github/sailorproject/sailor/badge/pr)](http://issuestats.com/github/sailorproject/sailor)
 
 [![LuaRocks](https://img.shields.io/badge/LuaRocks-0.5.0-blue.svg)](https://luarocks.org/modules/etiene/sailor)
 [![Lua](https://img.shields.io/badge/Lua-5.1%2C%20JIT%2C%205.2-blue.svg)](https://img.shields.io/badge/Lua-5.1%2C%20JIT%2C%205.2-blue.svg)
 
 [![Join the chat at https://gitter.im/sailorproject/sailor](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sailorproject/sailor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Twitter Follow](https://img.shields.io/twitter/follow/sailor_lua.svg?style=social)](https://twitter.com/sailor_lua)
+
+
+# [WE ARE LOOKING FOR NEW MAINTAINERS!](https://github.com/sailorproject/sailor/issues/173) 
 
 
 ### Features
