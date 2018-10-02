@@ -49,9 +49,7 @@ end
 -- parms: table, the parameters being passed ahead to the rendered page
 -- src: the parsed string
 local function render_page(path,parms,src)
-    for k, v in pairs(_G) do
-        parms[k] = v
-    end
+    setmetatable(parms, {__index = _G})
 
     local f
     if _VERSION == "Lua 5.1" then
