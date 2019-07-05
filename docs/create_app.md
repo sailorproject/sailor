@@ -37,7 +37,7 @@ Sailor values convention over configuration to make our tasks easier. That's why
 `/conf` - Contains configuration files, open and edit them to suit your needs.
 
 
-`/controllers` - Contais a default controller and will contain other controllers you will make!
+`/controllers` - Contains a default controller and will contain other controllers you will make!
 
 
 `/themes` - Contains themes. Themes are folders that contain regular HTML +  CSS + Javascript. Except that pages are named .lp instead of .html and you will place one {{content}} where you want your app views to be rendered.
