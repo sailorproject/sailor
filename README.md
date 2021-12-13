@@ -1,7 +1,5 @@
 # Sailor
 
-A Lua MVC Framework. www.sailorproject.org
-
 [![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE) [![Bountysource](https://img.shields.io/bountysource/team/sailor/activity.svg)](https://www.bountysource.com/teams/sailor)
 
 [![Build Status](https://travis-ci.org/sailorproject/sailor.svg?branch=master)](https://travis-ci.org/sailorproject/sailor)
